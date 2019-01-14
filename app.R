@@ -10,6 +10,18 @@ admin_1 <- shapefile('data/districts/admin_1.shp')
 # define a UI use a fluid bootstrap layout
 ui <- fluidPage(    
   
+  # set a margin for the checkbox
+  tags$head(
+    tags$style(
+      HTML(".checkbox-inline { 
+        margin-left: 0px;
+        margin-right: 10px;
+        }
+        .checkbox-inline+.checkbox-inline {
+        margin-left: 0px;
+        margin-right: 10px;
+        }"))),
+  
   # page title
   titlePanel("Malaria Atlas Project - District comparison"),
   
@@ -25,9 +37,7 @@ ui <- fluidPage(
                   choices = unique(africa$COUNTRY),
                   selected = "Benin"),
 
-      selectInput("selected_dist", "Select districts to compare:",
-                  choices = c("Test", "To populate"),
-                  selected = "Test"), 
+      uiOutput("select_dist"), 
       
       selectInput("years_to_compare", "Select year of interest:",
                   choices = c(2015),
@@ -44,9 +54,7 @@ ui <- fluidPage(
                               "Non-malarial fever",
                               "All-cause fever", 
                               "Accessibility: travel time to cities"),
-                  selected = "Plasmodium falciparum Incidence"),
-      
-      uiOutput("select_dist")),
+                  selected = "Plasmodium falciparum Incidence")),
   
     # main panel (tabs) for the outputs
     mainPanel(
@@ -87,9 +95,9 @@ server <- function(input, output) {
     renderUI({
     reactive_input <- isolate(input)
     selected_dist <- unlist(district_select(input = reactive_input)())
-    selectInput("selected_dist", "Select districts",
-                choices = selected_dist, label = label,
-                multiple = TRUE)
+    checkboxGroupInput("selected_dist", "Select districts",
+                       choices = selected_dist,
+                       inline = TRUE)
     })
   }
   
