@@ -78,23 +78,23 @@ server <- function(input, output) {
   
   # update available district choices
   district_select <- function(input) {
-    
-    # return a reactive list of input values 
+
+    # return a reactive list of input values
     reactive({
       select_id <- as.character(input)
       country_id <- as.character(africa$CODE[africa$COUNTRY == select_id])
-      admin_1$NAME[admin_1$COUNTRY_ID == country_id]
+      admin_1[[1]][admin_1[[2]] == country_id]
     })
-    
+
   }
-  
+
   render_select <- function(input, label = "Select districts") {
-    
+
     renderUI({
-    reactive_input <- isolate(input$country)
+    reactive_input <- isolate(input)
     selected_dist <- unlist(district_select(input = reactive_input)())
-    selectInput("selected_dist", "Select districts", 
-                choices = selected_dist, label = label, 
+    selectInput("selected_dist", "Select districts",
+                choices = selected_dist, label = label,
                 multiple = TRUE)
     })
   }
