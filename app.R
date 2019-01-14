@@ -58,7 +58,7 @@ ui <- fluidPage(
     mainPanel(
     
     tabsetPanel(type = "tabs",
-                tabPanel(title = "Selected country and districts", plotOutput("")),
+                tabPanel(title = "Selected country and districts", plotOutput("select_country")),
                 tabPanel(title = "Raw variables of interest", plotOutput("")),
                 tabPanel(title = "Selected district statistics - map", plotOutput("")),
                 tabPanel(title = "Selected district statistics - ranking", plotOutput("")))
@@ -67,7 +67,8 @@ ui <- fluidPage(
   
   ), 
   
-  actionButton(inputId = "processStats", label = "Generate statistics")
+  actionButton(inputId = "processStats", label = "Generate statistics"),
+  actionButton(inputId = "genReport", label = "Generate a summary report")
   )
 
 # define the server logic
@@ -97,6 +98,14 @@ server <- function(input, output) {
                 multiple = TRUE)
     })
   }
+  
+  output$select_country <- renderPlot({
+    plot(africa[africa$COUNTRY == input$country, ],
+         axes = FALSE,
+         box = FALSE,
+         main = "Selected country")
+    
+  })
   
   output$select_dist <- render_select(input$country)
 
