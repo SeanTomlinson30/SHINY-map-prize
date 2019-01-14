@@ -58,11 +58,17 @@ ui <- fluidPage(
     mainPanel(
     
     tabsetPanel(type = "tabs",
-                tabPanel(title = "Selected country", plotOutput("")))
+                tabPanel(title = "Selected country and districts", plotOutput("")),
+                tabPanel(title = "Raw variables of interest", plotOutput("")),
+                tabPanel(title = "Selected district statistics - map", plotOutput("")),
+                tabPanel(title = "Selected district statistics - ranking", plotOutput("")))
     
   )
   
-  ))
+  ), 
+  
+  actionButton(inputId = "processStats", label = "Generate statistics")
+  )
 
 # define the server logic
 server <- function(input, output) {
