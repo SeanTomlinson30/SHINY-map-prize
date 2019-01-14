@@ -104,7 +104,6 @@ server <- function(input, output) {
   output$select_country <- renderPlot({
     plot(africa[africa$COUNTRY == input$country, ],
          axes = FALSE,
-         box = FALSE,
          main = "Selected country")
     
   })
@@ -112,7 +111,7 @@ server <- function(input, output) {
   output$select_dist <- render_select(input$country)
 
   # using the input country, grab the rasters produced by MAP
-  input_rasters <- malariaAtlas::getRaster()
+  # input_rasters <- malariaAtlas::getRaster()
   
   
 }
