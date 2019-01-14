@@ -29,12 +29,40 @@ ui <- fluidPage(
       # country of interest selection (only one country allowed at a time)
       selectInput("country", "Select country of interest:",
                   choices = unique(africa$COUNTRY),
-                  selected = "Benin")),
+                  selected = "Benin"),
+
+      selectInput("selected_dist", "Select districts to compare:",
+                  choices = c("Test", "To populate"),
+                  selected = "Test"), 
+      
+      selectInput("years_to_compare", "Select year of interest:",
+                  choices = c(2015),
+                  selected = 2015),
+      
+      checkboxGroupInput("var_selection", "Select variables to compare:",
+                  choices = c("Plasmodium falciparum Incidence",
+                              "Plasmodium knowlesi Risk",
+                              "Indoor residual spraying (IRS) coverage",
+                              "Insecticide-treated bednet (ITN) coverage",
+                              "Artemisinin-based combination therapy (ACT) coverage",
+                              "Dominant Vectors",
+                              "Malaria-attributable fever as a proportion of all-cause fever",
+                              "Non-malarial fever",
+                              "All-cause fever", 
+                              "Accessibility: travel time to cities"),
+                  selected = "Plasmodium falciparum Incidence"),
+      
+      uiOutput("select_dist")),
+  
+    # main panel (tabs) for the outputs
+    mainPanel(
     
-      uiOutput("select_dist")
+    tabsetPanel(type = "tabs",
+                tabPanel(title = "Selected country", plotOutput("")))
     
-        )
   )
+  
+  ))
 
 # define the server logic
 server <- function(input, output) {
@@ -66,6 +94,10 @@ server <- function(input, output) {
   
   output$select_dist <- render_select(input$country)
 
+  # using the input country, grab the rasters produced by MAP
+  input_rasters <- malariaAtlas::getRaster()
+  
+  
 }
 
 # create Shiny app
