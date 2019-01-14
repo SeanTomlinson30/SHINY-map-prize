@@ -1,11 +1,5 @@
 # load required libraries
-# install custom github libraries if not already installed
-if(!require(pacman)){
-  install.packages('pacman')
-  library(pacman)
-}
-
-pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard)
+source("packages.R")
 
 # generate a list of countries for which MAP data exists
 africa <- suppressWarnings(shapefile('data/countries/Africa.shp'))
