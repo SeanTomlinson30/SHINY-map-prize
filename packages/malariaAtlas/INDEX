@@ -1,0 +1,46 @@
+as.MAPraster            Convert Raster objects into MAPraster objects
+as.MAPshp               Convert SpatialPolygon objects into MAPshp
+                        objects
+as.pr.points            Convert data.frames to pr.points objects.
+as.vectorpoints         Convert data.frames to vector.points objects.
+autoplot.MAPraster      Quickly visualise Rasters downloaded from MAP
+autoplot.MAPshp         Create a basic plot to visualise downloaded
+                        shapefiles
+autoplot.pr.points      Create a basic plot showing locations of
+                        downloaded PR points
+autoplot.vector.points
+                        Create a basic plot showing locations of
+                        downloaded Vector points
+autoplot_MAPraster      Quickly visualise Rasters downloaded from MAP
+convertPrevalence       convert prevalences from one age range to
+                        another
+extractRaster           Extract pixel values from MAP rasters using
+                        point coordinates.
+getPR                   Download PR points from the MAP database
+getRaster               Download Rasters produced by the Malaria Atlas
+                        Project
+getShp                  Download MAPadmin2013 Administrative Boundary
+                        Shapefiles from the MAP geoserver
+getVecOcc               Download Vector Occurrence points from the MAP
+                        database 'getVecOcc' downloads all publicly
+                        available vector occurrence points for a
+                        specified country (or countries) and returns
+                        this as a dataframe. 'country' and 'ISO' refer
+                        to countries and a lower-level administrative
+                        regions such as French Guiana.
+isAvailable             Available data to download from the MAP
+                        geoserver.
+isAvailable_pr          Check whether PR points are available for a
+                        given location
+isAvailable_vec         Check whether Vector Occurrence points are
+                        available for a given location
+listData                List data available to download from the MAP
+                        geoserver.
+listPoints              List countries with available MAP Point data.
+listRaster              List all MAP Rasters available to download.
+listShp                 List administrative units for which shapefiles
+                        are stored on the MAP geoserver.
+listSpecies             list all species which have occurrence data
+                        within the MAP database.
+malariaAtlas            An R interface to open-access malaria data,
+                        hosted by the Malaria Atlas Project.

@@ -1,0 +1,35 @@
+Package: pacman
+Type: Package
+Title: Package Management Tool
+Version: 0.4.6
+Date: 2017-05-02
+Authors@R: 
+  c(person("Tyler", "Rinker", role = c("aut", "cre", "ctb"), email = "tyler.rinker@gmail.com"),
+    person("Dason", "Kurkiewicz", role = c("aut", "ctb"), email = "dasonk@gmail.com"),
+    person("Keith", "Hughitt", role = c("ctb")),
+    person("Albert", "Wang", role = c("ctb")),
+    person("Jim", "Hester", role = c("ctb")))
+Depends: R (>= 3.0.2)
+Imports: devtools (>= 1.13.0), methods, stats, utils
+Suggests: knitr, lattice, testthat (>= 0.9.0), XML
+BugReports: https://github.com/trinker/pacman/issues?state=open
+Description: Tools to more conveniently perform tasks associated with
+        add-on packages.  pacman conveniently wraps library and package
+        related functions and names them in an intuitive and consistent
+        fashion.  It seeks to combine functionality from lower level
+        functions which can speed up workflow.
+License: GPL-2
+URL: https://github.com/trinker/pacman
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1
+NeedsCompilation: no
+Packaged: 2017-05-13 15:39:12 UTC; Tyler
+Author: Tyler Rinker [aut, cre, ctb],
+  Dason Kurkiewicz [aut, ctb],
+  Keith Hughitt [ctb],
+  Albert Wang [ctb],
+  Jim Hester [ctb]
+Maintainer: Tyler Rinker <tyler.rinker@gmail.com>
+Repository: CRAN
+Date/Publication: 2017-05-14 18:02:48 UTC
+Built: R 3.5.0; ; 2018-06-22 10:30:03 UTC; windows
