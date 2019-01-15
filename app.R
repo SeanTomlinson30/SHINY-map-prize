@@ -1,5 +1,5 @@
 # load required libraries
-source("packages.R")
+pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard)
 
 # generate a list of countries for which MAP data exists
 africa <- suppressWarnings(shapefile('data/countries/Africa.shp'))
