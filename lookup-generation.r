@@ -1,6 +1,6 @@
 # load required libraries
 pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, rgdal, googledrive)
-
+##
 # load in shapefile
 admin0shapefile <- shapefile('data/countries/admin2013_0.shp')
 
