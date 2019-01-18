@@ -1,6 +1,6 @@
 # load required libraries
 pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, rgdal, googledrive)
-
+##
 # load in shapefile
 admin0shapefile <- shapefile('data/countries/admin2013_0.shp')
 
@@ -31,6 +31,7 @@ raster_list <- lapply(raster_name_list, getRaster)
 # u_extents <- unique(extents)
 
 # loop through surfaces and generate info for each country; can't stack as there's 43 unique extents
+
 for(i in 1:length(raster_list)){
   
   # grab the raster for that iteration
@@ -47,7 +48,7 @@ for(i in 1:length(raster_list)){
     
     message(paste0("Resampling raster ", i, " to align with master grid"))
     
-    r_i <- resample(r_i, admin0raster, method = "bilinear")
+    r_i <- projectRaster(r_i, admin0raster, method = "bilinear", crs="+init=epsg:4326")
     
   }
   
@@ -60,8 +61,8 @@ for(i in 1:length(raster_list)){
   
   poly_mean <- as.data.frame(poly_mean)
   
-  # convert to a binary surface indicating values for a country
-  poly_mean[[2]] <- ifelse(poly_mean[[2]] >0, 1, NA)
+  # convert to a binary surface indicating values for a country 
+  poly_mean[[2]] <- ifelse(is.na(poly_mean[[2]]), 0, 1)
   
   # combine results across each raster
   if(i == 1){
@@ -71,7 +72,8 @@ for(i in 1:length(raster_list)){
   } else {
     
     combined <- merge(combined, poly_mean, by = "country_id_raster")
-    
+    # convert to a binary surface indicating values for a country 
+    poly_mean[[2]] <- ifelse(is.na(poly_mean[[2]]), 0, 1) 
   }
   
 }
@@ -85,3 +87,4 @@ combined <- merge(combined, iso3, by = "GAUL_CODE")
 write.csv(combined,
           'combined_lookup.csv',
           row.names = FALSE)
+
