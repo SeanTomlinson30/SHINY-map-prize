@@ -79,27 +79,29 @@ server <- function(input, output) {
   countries <- unique(africa$NAME)
   
   # update available district choices
-  district_select <- function(input) {
+  # district_select <- function(input) {
+  # 
+  #   # return a reactive list of input values
+  #   reactive({
+  #     select_id <- as.character(input)
+  #     country_id <- as.character(africa$CODE[africa$COUNTRY == select_id])
+  #     admin_1[[1]][admin_1[[2]] == country_id]
+  #   })
+  # }
 
-    # return a reactive list of input values
-    reactive({
-      select_id <- as.character(input)
-      country_id <- as.character(africa$CODE[africa$COUNTRY == select_id])
-      admin_1[[1]][admin_1[[2]] == country_id]
-    })
 
-  }
-
-  render_select <- function(input, label = "Select districts") {
-
-    renderUI({
-    reactive_input <- isolate(input)
-    selected_dist <- unlist(district_select(input = reactive_input)())
+    
+  output$select_dist <- renderUI({
+    
+    select_id <- as.character(input$country)
+    country_id <- africa$CODE[africa$COUNTRY == select_id][1]
+    selected_dist <- admin_1$NAME[admin_1$COUNTRY_ID==country_id]
+      
     checkboxGroupInput("selected_dist", "Select districts",
                        choices = selected_dist,
                        inline = TRUE)
     })
-  }
+
   
   output$select_country <- renderPlot({
     plot(africa[africa$COUNTRY == input$country, ],
@@ -108,7 +110,6 @@ server <- function(input, output) {
     
   })
   
-  output$select_dist <- render_select(input$country)
 
   # using the input country, grab the rasters produced by MAP
   # input_rasters <- malariaAtlas::getRaster()
