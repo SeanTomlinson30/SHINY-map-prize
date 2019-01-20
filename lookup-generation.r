@@ -48,7 +48,7 @@ for(i in 1:length(raster_list)){
     
     message(paste0("Resampling raster ", i, " to align with master grid"))
     
-    r_i <- projectRaster(r_i, admin0raster, method = "bilinear", crs="+init=epsg:4326")
+    r_i <- resample(r_i, admin0raster, method = "bilinear")
     
   }
   
@@ -56,10 +56,10 @@ for(i in 1:length(raster_list)){
   poly_mean <- zonal(r_i, admin0raster, fun = 'mean')
   
   # create a dataframe with the zonal output
+  poly_mean <- as.data.frame(poly_mean)
+  
   names(poly_mean) <- c("country_id_raster",
                         names(raster_list[[i]]))
-  
-  poly_mean <- as.data.frame(poly_mean)
   
   # convert to a binary surface indicating values for a country 
   poly_mean[[2]] <- ifelse(is.na(poly_mean[[2]]), 0, 1)
@@ -72,19 +72,22 @@ for(i in 1:length(raster_list)){
   } else {
     
     combined <- merge(combined, poly_mean, by = "country_id_raster")
-    # convert to a binary surface indicating values for a country 
-    poly_mean[[2]] <- ifelse(is.na(poly_mean[[2]]), 0, 1) 
+ 
   }
   
 }
 
 # add back ISO code 
-iso3 <- as.data.frame(admin0shapefile[, 1:2])
+iso3 <- as.data.frame(admin0shapefile[, c(1:2, 5)])
+
 names(combined)[1] <- "GAUL_CODE"
 combined <- merge(combined, iso3, by = "GAUL_CODE")
+# combined$COUNTRY_ID.x <- NULL
+# drop countries which are XXX
+combined_trim <- combined[!combined$COUNTRY_ID.y == "XXX", ]
 
 # write out combined dataset
 write.csv(combined,
-          'combined_lookup.csv',
+          'D:/Dropbox/PhD/collaboration projects/Wellcome Trust data re-use/SHINY-map-prize/data/combined_lookup.csv',
           row.names = FALSE)
 
