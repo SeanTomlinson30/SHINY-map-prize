@@ -2,10 +2,13 @@
 pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard)
 
 # generate a list of countries for which MAP data exists
-africa <- suppressWarnings(shapefile('data/countries/Africa.shp'))
-
-# load unique admin one and admin two locations
+countries <- shapefile('data/countries/admin2013_0.shp')
+africa <- shapefile('data/countries/Africa.shp')
 admin_1 <- shapefile('data/districts/admin_1.shp')
+
+africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
+africa$COUNTRY[africa$COUNTRY == "Democratic Republic of Congo"] <- "Democratic Republic of the Congo"
+africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
 # define a UI use a fluid bootstrap layout
 ui <- fluidPage(    
@@ -75,36 +78,31 @@ ui <- fluidPage(
 
 # define the server logic
 server <- function(input, output) {
-  
-  countries <- unique(africa$NAME)
-  
-  # update available district choices
-  # district_select <- function(input) {
-  # 
-  #   # return a reactive list of input values
-  #   reactive({
-  #     select_id <- as.character(input)
-  #     country_id <- as.character(africa$CODE[africa$COUNTRY == select_id])
-  #     admin_1[[1]][admin_1[[2]] == country_id]
-  #   })
-  # }
 
-
-    
   output$select_dist <- renderUI({
     
     select_id <- as.character(input$country)
-    country_id <- africa$CODE[africa$COUNTRY == select_id][1]
-    selected_dist <- admin_1$NAME[admin_1$COUNTRY_ID==country_id]
+    
+    if(select_id == "Cote d`Ivoire"){
       
-    checkboxGroupInput("selected_dist", "Select districts",
+      country_id <- "CIV"
+      
+    }else{
+      
+      country_id <- countries$COUNTRY_ID[countries$name == select_id][1]
+    
+    }
+    
+    selected_dist <- admin_1$NAME[admin_1$COUNTRY_ID == country_id]
+      
+    checkboxGroupInput("selected_dist", "Select first-level administrative division:",
                        choices = selected_dist,
                        inline = TRUE)
     })
 
   
   output$select_country <- renderPlot({
-    plot(africa[africa$COUNTRY == input$country, ],
+    plot(countries[countries$name == input$country, ],
          axes = FALSE,
          main = "Selected country")
     
