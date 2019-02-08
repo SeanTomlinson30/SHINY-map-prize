@@ -78,7 +78,8 @@ ui <- fluidPage(
 
 # define the server logic
 server <- function(input, output) {
-
+  
+  # create dynamic reactive list of districts, per input country
   output$select_dist <- renderUI({
     
     select_id <- as.character(input$country)
@@ -100,11 +101,23 @@ server <- function(input, output) {
                        inline = TRUE)
     })
 
-  
+  # plot selected country, with selected districts overlayed
   output$select_country <- renderPlot({
+    
+    country_select <- countries[countries$name == input$country, ]
+    country_id <- country_select$COUNTRY_ID
+    dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
+    dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
+    
     plot(countries[countries$name == input$country, ],
          axes = FALSE,
+         col = "#d9d9d9",
          main = "Selected country")
+    
+    plot(dist_select,
+         add = TRUE,
+         col = "#41b6c4",
+         lty = 3)
     
   })
   
