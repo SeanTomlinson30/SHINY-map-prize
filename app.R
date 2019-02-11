@@ -1,5 +1,5 @@
 # load required libraries
-pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard)
+pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyBS)
 
 # generate a list of countries for which MAP data exists
 countries <- shapefile('data/countries/admin2013_0.shp')
@@ -39,26 +39,28 @@ ui <- fluidPage(
       selectInput("country", "Select country of interest:",
                   choices = unique(africa$COUNTRY),
                   selected = "Benin"),
-
-      uiOutput("select_dist"), 
       
-      selectInput("years_to_compare", "Select year of interest:",
-                  choices = c(2015),
-                  selected = 2015),
+      # hover-over tooltip
+      bsTooltip(id = "country", 
+                title = "Please select the country of interest, available districts will update based on this selection.", 
+                placement = "right", trigger = "hover", options = list(container = "body")),
       
+      # dynamic district selection
+      uiOutput("select_dist"),
+      
+      # hover-over tooltip
+      bsTooltip(id = "select_dist", 
+                title = "Please select the districts to feature within the comparison/ranking.", 
+                placement = "right", trigger = "hover", options = list(container = "body")),
+      
+      # variable of interest selection
       checkboxGroupInput("var_selection", "Select variables to compare:",
-                  choices = c("Plasmodium falciparum Incidence",
-                              "Plasmodium knowlesi Risk",
-                              "Indoor residual spraying (IRS) coverage",
-                              "Insecticide-treated bednet (ITN) coverage",
-                              "Artemisinin-based combination therapy (ACT) coverage",
-                              "Dominant Vectors",
-                              "Malaria-attributable fever as a proportion of all-cause fever",
-                              "Non-malarial fever",
-                              "All-cause fever", 
-                              "Accessibility: travel time to cities"),
+                  choices = c("All cause fever",
+                              "Indoor residual spraying IRS coverage",
+                              "Insecticide treated bednet ITN coverage",
+                              "Plasmodium falciparum Incidence"),
                   selected = "Plasmodium falciparum Incidence")),
-  
+    
     # main panel (tabs) for the outputs
     mainPanel(
     
@@ -72,13 +74,21 @@ ui <- fluidPage(
   
   ), 
   
+  # event to observe re statistics/ranking generation
   actionButton(inputId = "processStats", label = "Generate statistics"),
+  # tooltip for 'Generate statistics'
+  bsTooltip(id = "processStats", 
+            title = "Run generation of statistics and ranking system. This will produce results which feature in the tabs to the right.", 
+            placement = "right", trigger = "hover", options = list(container = "body")),
+  
+  # event to observe the generation of a summary report featuring stats outputs
   actionButton(inputId = "genReport", label = "Generate a summary report")
   )
 
 # define the server logic
 server <- function(input, output) {
-
+  
+  # create dynamic reactive list of districts, per input country
   output$select_dist <- renderUI({
     
     select_id <- as.character(input$country)
@@ -100,18 +110,62 @@ server <- function(input, output) {
                        inline = TRUE)
     })
 
-  
+  # plot selected country, with selected districts overlayed
   output$select_country <- renderPlot({
+    
+    country_select <- countries[countries$name == input$country, ]
+    country_id <- country_select$COUNTRY_ID
+    dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
+    dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
+    
     plot(countries[countries$name == input$country, ],
          axes = FALSE,
+         col = "#d9d9d9",
          main = "Selected country")
+    
+    plot(dist_select,
+         add = TRUE,
+         col = "#41b6c4",
+         lty = 3)
     
   })
   
-
-  # using the input country, grab the rasters produced by MAP
-  # input_rasters <- malariaAtlas::getRaster()
+  # observeEvent for "processStats"
+  observeEvent(input$processStats, {
   
+    # 1. using the input country, grab the rasters produced by MAP
+    # create a covariate dataframe
+    withProgress(message = "Downloading requested covariates from MAP API", value = 0, {
+    
+      for(i in 1:length(input$var_selection)){
+      
+      # grab raster from MAP API
+      raster_i <- malariaAtlas::getRaster(surface = input$var_selection[i],
+                                        year = NA)
+      
+      # update progress bar
+      incProgress(1/length(input$var_selection)) 
+      
+      # stack the surfaces, if there's more than one selected
+      if(length(input$var_selection > 1)){
+      
+      if(i == 1){
+        
+        stack <- raster_i
+        
+      } else {
+        
+        stack <- stack(stack, raster_i)  
+        
+      }
+      
+      } else {
+      
+      stack <- raster_i
+    
+      }
+  
+    }})})
   
 }
 
