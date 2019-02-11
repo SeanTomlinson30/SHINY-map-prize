@@ -62,7 +62,7 @@ ui <- fluidPage(
       
       # hover-over tooltip
       bsTooltip(id = "select_raster", 
-                title = "Please select the raters to compare.", 
+                title = "Please select the rasters to compare.", 
                 placement = "right", trigger = "hover", options = list(container = "body"))),
     
     
@@ -137,8 +137,6 @@ server <- function(input, output) {
     c_lookup = lookup[lookup$name == input$country,]
     c_rasters <- colnames(c_lookup)[which(c_lookup==1)]
     c_rasters <- gsub('\\.', ' ', c_rasters) # Replace periods with spaces
-    
-    #selected_dist <- admin_1$NAME[admin_1$COUNTRY_ID == country_id]
     
     checkboxGroupInput("c_rasters", "Select rasters:",
                        choices = c_rasters,
