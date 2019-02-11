@@ -6,6 +6,10 @@ countries <- shapefile('data/countries/admin2013_0.shp')
 africa <- shapefile('data/countries/Africa.shp')
 admin_1 <- shapefile('data/districts/admin_1.shp')
 
+# Read in lookup ##Sean
+lookup <- read.csv('data/combined_lookup.csv', sep=',', check.names = F)
+
+###
 africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
 africa$COUNTRY[africa$COUNTRY == "Democratic Republic of Congo"] <- "Democratic Republic of the Congo"
 africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
@@ -53,13 +57,19 @@ ui <- fluidPage(
                 title = "Please select the districts to feature within the comparison/ranking.", 
                 placement = "right", trigger = "hover", options = list(container = "body")),
       
+      # dynamic district selection
+      uiOutput("select_raster"),
+      
+      # hover-over tooltip
+      bsTooltip(id = "select_raster", 
+                title = "Please select the raters to compare.", 
+                placement = "right", trigger = "hover", options = list(container = "body"))),
+    
+      
       # variable of interest selection
-      checkboxGroupInput("var_selection", "Select variables to compare:",
-                  choices = c("All cause fever",
-                              "Indoor residual spraying IRS coverage",
-                              "Insecticide treated bednet ITN coverage",
-                              "Plasmodium falciparum Incidence"),
-                  selected = "Plasmodium falciparum Incidence")),
+      #checkboxGroupInput("var_selection", "Select variables to compare:",
+      #            choices = c_rasters,
+      #            selected = "Plasmodium falciparum Incidence")),
     
     # main panel (tabs) for the outputs
     mainPanel(
@@ -100,16 +110,40 @@ server <- function(input, output) {
     }else{
       
       country_id <- countries$COUNTRY_ID[countries$name == select_id][1]
-    
+      
     }
     
     selected_dist <- admin_1$NAME[admin_1$COUNTRY_ID == country_id]
-      
+    
     checkboxGroupInput("selected_dist", "Select first-level administrative division:",
                        choices = selected_dist,
                        inline = TRUE)
-    })
-
+  })
+  
+  output$select_raster <- renderUI({
+    
+    select_id <- as.character(input$country)
+    
+    if(select_id == "Cote d`Ivoire"){
+      
+      country_id <- "CIV"
+      
+    }else{
+      
+      country_id <- countries$COUNTRY_ID[countries$name == select_id][1]
+      
+    }
+    
+    c_lookup = lookup[lookup$COUNTRY_ID.y == 'ARG',]
+    c_rasters <- colnames(c_lookup)[which(c_lookup==1)]
+    
+    #selected_dist <- admin_1$NAME[admin_1$COUNTRY_ID == country_id]
+    
+    checkboxGroupInput("c_rasters", "Select rasters:",
+                       choices = c_rasters,
+                       inline = TRUE)
+  })
+  
   # plot selected country, with selected districts overlayed
   output$select_country <- renderPlot({
     
