@@ -2,3 +2,6 @@
 .Rhistory
 *.lock
 data/getRaster
+mapR manuscript/.dropbox
+mapR manuscript/desktop.ini
+mapR manuscript/MAPr - Manuscript draft.docx
