@@ -1,5 +1,5 @@
 # load required libraries
-pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyBS)
+pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyBS, stringr)
 
 # generate a list of countries for which MAP data exists
 countries <- shapefile('data/countries/admin2013_0.shp')
@@ -134,9 +134,9 @@ server <- function(input, output) {
       
     }
     
-    c_lookup = lookup[lookup$name == input$country,]
+    c_lookup <- lookup[lookup$COUNTRY_ID == country_id,]
     c_rasters <- colnames(c_lookup)[which(c_lookup==1)]
-    c_rasters <- gsub('\\.', ' ', c_rasters) # Replace periods with spaces
+    c_rasters = str_replace_all(c_rasters, '\\.', ' ') # Replace periods with spaces
     
     checkboxGroupInput("c_rasters", "Select rasters:",
                        choices = c_rasters,
