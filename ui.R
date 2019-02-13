@@ -7,6 +7,7 @@ africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
 africa$COUNTRY[africa$COUNTRY == "Democratic Republic of Congo"] <- "Democratic Republic of the Congo"
 africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
+
 # define a UI use a fluid bootstrap layout
 fluidPage(    
   
@@ -23,7 +24,10 @@ fluidPage(
            }"))),
   
   # page title
-  titlePanel("Malaria Atlas Project - District comparison"),
+  titlePanel(HTML(paste("Malaria Atlas Project - District comparison", " ", " ", sep = "<br/>"))),
+  
+  actionButton(inputId = "help", label = "Help"),
+  actionButton(inputId = "about", label = "About"),
   
   # create a sidebar where the user can select a country, and districts (etc.)
   # we may change this to a header once basic functionality is resolved
@@ -62,10 +66,8 @@ fluidPage(
       
       tabsetPanel(type = "tabs",
                   tabPanel(title = "Selected country and districts", plotOutput("select_country")),
-                  tabPanel(title = "Raw variables of interest", plotOutput("")),
                   tabPanel(title = "Selected district statistics - map", plotOutput("")),
                   tabPanel(title = "Selected district statistics - ranking", plotOutput("")))
-      
     )
     
   ), 
