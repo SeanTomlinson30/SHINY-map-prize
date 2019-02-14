@@ -60,7 +60,7 @@ function(input, output) {
     c_rasters <- colnames(c_lookup)[which(c_lookup==1)]
     c_rasters = str_replace_all(c_rasters, '\\.', ' ') # Replace periods with spaces
     
-    checkboxGroupInput("c_rasters", "Select rasters:",
+    checkboxGroupInput("select_raster", "Select rasters:",
                        choices = c_rasters,
                        inline = TRUE)
   })
@@ -93,35 +93,66 @@ function(input, output) {
     withProgress(message = "Generating statistics for selected covariates", value = 0, {
       
       lookup_processed$surface_name <- str_replace_all(lookup_processed$surface_name, '\\.', ' ')
-      
-      for(i in 1:length(input$var_selection)){
+
+      for(i in 1:length(input$select_raster)){
         
         # grab csv with the stats
         # 1. get a path to the stats csv
-        
-        stats_i_idx <- which(lookup_processed$surface_name == input$var_selection[[i]])
+        stats_i_idx <- which(lookup_processed$surface_name == input$select_raster[[i]])
         stats_i_path <- lookup_processed$stats_path[stats_i_idx]
         
-        ## DEBUGGING 
-        write(x = input$varselection, file='test_input_var_select.txt')
-        write(x = lookup_processed$surface_name, file='test_surface_name.txt')
-        write(x = stats_i_path, file='test_stats_i_path.txt')
-        write(x = stats_i_idx, file='test_stats_idx.txt')
-        write(x = lookup_processed$stats_path, file='test_stats_path')
-        
         # 2. read in the csv 
-        stats_i <- read.csv(stats_i_path, stringsAsFactors = FALSE, sep=",")
+        stats_i <- read.csv(stats_i_path, stringsAsFactors = FALSE)
         
+        # 3. subset csv to only retain selected_dist
+        # create a selection based off of input
+        country_select <- countries[countries$name == input$country, ]
+        country_id <- country_select$COUNTRY_ID
+        dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
+        dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
         
+        # subset
+        stats_i_sub <- stats_i[stats_i$zone %in% dist_select$GAUL_CODE, ]
+        
+        # add a variable which is the district name
+        index <- which(dist_select$GAUL_CODE == stats_i_sub$zone)
+        stats_i_sub$District <- dist_select$NAME[index]
+        dist_select$mean <- stats_i$mean[index]
+        
+        # reorder stats_i_sub
+        stats_i_sub <- stats_i_sub[c(6, 2:5)]
+        names(stats_i_sub) <- c('District',
+                                paste0(input$select_raster[[i]], " (mean)"),
+                                paste0(input$select_raster[[i]], " (max)"),
+                                paste0(input$select_raster[[i]], " (min)"),
+                                paste0(input$select_raster[[i]], " (sd)"))
         
         # update progress bar
-        # incProgress(1/length(input$var_selection)) 
+        incProgress(1/length(input$select_raster)) 
         
         # render table
+        output$stats_table <- renderTable(stats_i_sub,
+                                          hover = TRUE,
+                                          na = "NA", 
+                                          main = input$select_raster[[i]])
+        # render plot
+        output$stats_plot <- renderPlot({
+          
+          # define colour ramp for plot
+          n <- length(levels(dist_select$mean))
+          colours <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(n)
+          mean_colours <- colours[dist_select$mean]
+            
+          plot(countries[countries$name == input$country, ],
+               axes = FALSE,
+               col = "#d9d9d9",
+               main = input$select_raster[[i]])
+          
+          plot(dist_select,
+               add = TRUE,
+               col = mean_colours,
+               lty = 3)})
         
-        output$stats_table <- renderTable({head(stats_i, n = -1)},
-                                           hover = TRUE,
-                                           na = "NA")
         }
       })})
   
