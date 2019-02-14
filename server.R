@@ -101,14 +101,24 @@ function(input, output) {
         
         stats_i_idx <- which(lookup_processed$surface_name == input$var_selection[[i]])
         stats_i_path <- lookup_processed$stats_path[stats_i_idx]
-
+        
+        ## DEBUGGING 
+        write(x = input$varselection, file='test_input_var_select.txt')
+        write(x = lookup_processed$surface_name, file='test_surface_name.txt')
+        write(x = stats_i_path, file='test_stats_i_path.txt')
+        write(x = stats_i_idx, file='test_stats_idx.txt')
+        write(x = lookup_processed$stats_path, file='test_stats_path')
+        
         # 2. read in the csv 
-        stats_i <- read.csv(stats_i_path, stringsAsFactors = FALSE)
+        stats_i <- read.csv(stats_i_path, stringsAsFactors = FALSE, sep=",")
+        
+        
         
         # update progress bar
         # incProgress(1/length(input$var_selection)) 
         
         # render table
+        
         output$stats_table <- renderTable({head(stats_i, n = -1)},
                                            hover = TRUE,
                                            na = "NA")
