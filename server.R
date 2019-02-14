@@ -5,9 +5,13 @@ pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyB
 countries <- shapefile('data/countries/admin2013_0.shp')
 admin_1 <- shapefile('data/districts/admin_1.shp')
 
-# read in lookup
+# read in MAP availability lookup table
 lookup <- read.csv('data/combined_lookup.csv', sep = ',', check.names = FALSE)
 
+# read in the processed data lookup table
+lookup_processed <- read.csv('data/raster_stats_paths.csv', stringsAsFactors = FALSE)
+
+# read in Africa shapefile and correct a few naming issues
 africa <- shapefile('data/countries/Africa.shp')
 africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
 africa$COUNTRY[africa$COUNTRY == "Democratic Republic of Congo"] <- "Democratic Republic of the Congo"
@@ -84,39 +88,32 @@ function(input, output) {
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
     
-    # 1. using the input country, grab the rasters produced by MAP
-    # create a covariate dataframe
-    withProgress(message = "Downloading requested covariates from MAP API", value = 0, {
+    # 1. using the input 'selected_dist' and 'select_raster', grab the raster stats
+    # include a progress bar to inform users 
+    withProgress(message = "Generating statistics for selected covariates", value = 0, {
+      
+      lookup_processed$surface_name <- str_replace_all(lookup_processed$surface_name, '\\.', ' ')
       
       for(i in 1:length(input$var_selection)){
         
-        # grab raster from MAP API
-        raster_i <- malariaAtlas::getRaster(surface = input$var_selection[i],
-                                            year = NA)
+        # grab csv with the stats
+        # 1. get a path to the stats csv
+        
+        stats_i_idx <- which(lookup_processed$surface_name == input$var_selection[[i]])
+        stats_i_path <- lookup_processed$stats_path[stats_i_idx]
+
+        # 2. read in the csv 
+        stats_i <- read.csv(stats_i_path, stringsAsFactors = FALSE)
         
         # update progress bar
-        incProgress(1/length(input$var_selection)) 
+        # incProgress(1/length(input$var_selection)) 
         
-        # stack the surfaces, if there's more than one selected
-        if(length(input$var_selection > 1)){
-          
-          if(i == 1){
-            
-            stack <- raster_i
-            
-          } else {
-            
-            stack <- stack(stack, raster_i)  
-            
-          }
-          
-        } else {
-          
-          stack <- raster_i
-          
+        # render table
+        output$stats_table <- renderTable({head(stats_i, n = -1)},
+                                           hover = TRUE,
+                                           na = "NA")
         }
-        
-      }})})
+      })})
   
 }
 
