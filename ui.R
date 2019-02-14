@@ -65,7 +65,8 @@ navbarPage("Malaria Atlas Project - District comparison",
                         mainPanel(
                           
                           tabsetPanel(type = "tabs",
-                                      tabPanel(title = "Selected country and districts", plotOutput("select_country")),
+                                      
+                                      tabPanel(title = "Selected country and districts", plotOutput("select_country", height = '800px', width = '800px')),
                                       tabPanel(title = "Selected district statistics - map", plotOutput("")),
                                       tabPanel(title = "Selected district statistics - ranking", plotOutput("")))
                         )
