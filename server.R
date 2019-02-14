@@ -80,7 +80,7 @@ function(input, output) {
          lty = 3)
     
   })
-  
+
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
     
@@ -119,3 +119,4 @@ function(input, output) {
       }})})
   
 }
+
