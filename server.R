@@ -5,9 +5,13 @@ pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyB
 countries <- shapefile('data/countries/admin2013_0.shp')
 admin_1 <- shapefile('data/districts/admin_1.shp')
 
-# read in lookup
+# read in MAP availability lookup table
 lookup <- read.csv('data/combined_lookup.csv', sep = ',', check.names = FALSE)
 
+# read in the processed data lookup table
+lookup_processed <- read.csv('data/raster_stats_paths.csv', stringsAsFactors = FALSE)
+
+# read in Africa shapefile and correct a few naming issues
 africa <- shapefile('data/countries/Africa.shp')
 africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
 africa$COUNTRY[africa$COUNTRY == "Democratic Republic of Congo"] <- "Democratic Republic of the Congo"
@@ -56,7 +60,7 @@ function(input, output) {
     c_rasters <- colnames(c_lookup)[which(c_lookup==1)]
     c_rasters = str_replace_all(c_rasters, '\\.', ' ') # Replace periods with spaces
     
-    checkboxGroupInput("c_rasters", "Select rasters:",
+    checkboxGroupInput("select_raster", "Select rasters:",
                        choices = c_rasters,
                        inline = TRUE)
   })
@@ -84,39 +88,73 @@ function(input, output) {
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
     
-    # 1. using the input country, grab the rasters produced by MAP
-    # create a covariate dataframe
-    withProgress(message = "Downloading requested covariates from MAP API", value = 0, {
+    # 1. using the input 'selected_dist' and 'select_raster', grab the raster stats
+    # include a progress bar to inform users 
+    withProgress(message = "Generating statistics for selected covariates", value = 0, {
       
-      for(i in 1:length(input$var_selection)){
+      lookup_processed$surface_name <- str_replace_all(lookup_processed$surface_name, '\\.', ' ')
+
+      for(i in 1:length(input$select_raster)){
         
-        # grab raster from MAP API
-        raster_i <- malariaAtlas::getRaster(surface = input$var_selection[i],
-                                            year = NA)
+        # grab csv with the stats
+        # 1. get a path to the stats csv
+        stats_i_idx <- which(lookup_processed$surface_name == input$select_raster[[i]])
+        stats_i_path <- lookup_processed$stats_path[stats_i_idx]
+        
+        # 2. read in the csv 
+        stats_i <- read.csv(stats_i_path, stringsAsFactors = FALSE)
+        
+        # 3. subset csv to only retain selected_dist
+        # create a selection based off of input
+        country_select <- countries[countries$name == input$country, ]
+        country_id <- country_select$COUNTRY_ID
+        dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
+        dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
+        
+        # subset
+        stats_i_sub <- stats_i[stats_i$zone %in% dist_select$GAUL_CODE, ]
+        
+        # add a variable which is the district name
+        index <- which(dist_select$GAUL_CODE == stats_i_sub$zone)
+        stats_i_sub$District <- dist_select$NAME[index]
+        dist_select$mean <- stats_i$mean[index]
+        
+        # reorder stats_i_sub
+        stats_i_sub <- stats_i_sub[c(6, 2:5)]
+        names(stats_i_sub) <- c('District',
+                                paste0(input$select_raster[[i]], " (mean)"),
+                                paste0(input$select_raster[[i]], " (max)"),
+                                paste0(input$select_raster[[i]], " (min)"),
+                                paste0(input$select_raster[[i]], " (sd)"))
         
         # update progress bar
-        incProgress(1/length(input$var_selection)) 
+        incProgress(1/length(input$select_raster)) 
         
-        # stack the surfaces, if there's more than one selected
-        if(length(input$var_selection > 1)){
+        # render table
+        output$stats_table <- renderTable(stats_i_sub,
+                                          hover = TRUE,
+                                          na = "NA", 
+                                          main = input$select_raster[[i]])
+        # render plot
+        output$stats_plot <- renderPlot({
           
-          if(i == 1){
+          # define colour ramp for plot
+          n <- length(levels(dist_select$mean))
+          colours <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(n)
+          mean_colours <- colours[dist_select$mean]
             
-            stack <- raster_i
-            
-          } else {
-            
-            stack <- stack(stack, raster_i)  
-            
-          }
+          plot(countries[countries$name == input$country, ],
+               axes = FALSE,
+               col = "#d9d9d9",
+               main = input$select_raster[[i]])
           
-        } else {
-          
-          stack <- raster_i
-          
+          plot(dist_select,
+               add = TRUE,
+               col = mean_colours,
+               lty = 3)})
+        
         }
-        
-      }})})
+      })})
   
 }
 
