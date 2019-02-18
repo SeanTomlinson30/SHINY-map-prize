@@ -1,0 +1,63 @@
+---
+title: "render_stats"
+output: html_document
+params:
+    select_raster: NA
+    country: NA
+    selected_dist: NA
+---
+
+
+```{r gen_tables, echo=FALSE}    
+require(raster)
+stats_i_sub <- NULL
+lookup_processed <- read.csv('data/raster_stats_paths.csv', stringsAsFactors = FALSE)
+lookup_processed$surface_name <- str_replace_all(lookup_processed$surface_name, '\\.', ' ')
+countries <- shapefile('data/countries/admin2013_0.shp')
+admin_1 <- shapefile('data/districts/admin_1.shp')
+
+for(i in 1:length(params$select_raster)){
+      
+  # grab csv with the stats
+  # 1. get a path to the stats csv
+  stats_i_idx <- which(lookup_processed$surface_name == params$select_raster[[i]])
+  stats_i_path <- lookup_processed$stats_path[stats_i_idx]
+      
+  # 2. read in the csv 
+  stats_i <- read.csv(stats_i_path, stringsAsFactors = FALSE)
+      
+  # 3. subset csv to only retain selected_dist
+  # create a selection based off of input
+  country_select <- countries[countries$name == params$country, ]
+  country_id <- country_select$COUNTRY_ID
+  dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
+  dist_select <- dist_select[dist_select$NAME %in% params$selected_dist, ]
+      
+  # subset
+  stats_i_sub <- stats_i[stats_i$zone %in% dist_select$GAUL_CODE, ]
+      
+  # add a variable which is the district name
+  index <- which(dist_select$GAUL_CODE == stats_i_sub$zone)
+  stats_i_sub$District <- dist_select$NAME[index]
+  dist_select$mean <- stats_i$mean[index]
+      
+  # reorder stats_i_sub
+  stats_i_sub[[i]] <- stats_i_sub[c(6, 2:5)]
+  names(stats_i_sub[[i]]) <- c('District',
+                                paste0(input$select_raster[[i]], " (mean)"),
+                                paste0(input$select_raster[[i]], " (max)"),
+                                paste0(input$select_raster[[i]], " (min)"),
+                                paste0(input$select_raster[[i]], " (sd)"))
+      
+    }
+```
+
+
+```{r pop_stats, results = "axis", echo = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+for(i in 1:length(stats_i_sub)){
+  
+  knitr::kable(stats_i_sub[[i]])
+  
+}
+```
