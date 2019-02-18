@@ -27,7 +27,7 @@ africa$COUNTRY[africa$COUNTRY == "Democratic Republic of Congo"] <- "Democratic 
 africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
 # define the server logic
-function(input, output) {
+function(input, output, session) {
   
   # create dynamic reactive list of districts, per input country
   output$select_dist <- renderUI({
@@ -110,6 +110,8 @@ function(input, output) {
   
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
+    
+    updateTabsetPanel(session=session, inputId = 'main0', selected = 'tab3')
   
     # check for max four inputs   
     observe({
