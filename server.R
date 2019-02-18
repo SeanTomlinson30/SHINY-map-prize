@@ -1,5 +1,13 @@
 # load required libraries
-pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyBS, stringr)
+#pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyBS, stringr)
+
+library(raster)
+library(shiny)
+library(RColorBrewer)
+library(malariaAtlas)
+library(shinydashboard)
+library(shinyBS)
+library(stringr)
 
 # generate a list of countries for which MAP data exists
 countries <- shapefile('data/countries/admin2013_0.shp')
