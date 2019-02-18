@@ -69,9 +69,10 @@ function(input, output, session) {
     c_rasters <- colnames(c_lookup)[which(c_lookup==1)]
     c_rasters = str_replace_all(c_rasters, '\\.', ' ') # Replace periods with spaces
     
-    checkboxGroupInput("select_raster", "Select rasters:",
-                       choices = c_rasters,
-                       inline = TRUE)
+    selectizeInput("select_raster", "Select rasters:", c_rasters, options = list(maxItems = 4))
+    # checkboxGroupInput("select_raster", "Select rasters:",
+    #                    choices = c_rasters,
+    #                    inline = TRUE)
   })
   
   # plot selected country, with selected districts overlayed
