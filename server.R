@@ -6,8 +6,9 @@ library(shiny)
 library(RColorBrewer)
 library(malariaAtlas)
 library(shinydashboard)
-library(shinyBS)
 library(stringr)
+library(shinyalert)
+library(shinyBS)
 
 # generate a list of countries for which MAP data exists
 countries <- shapefile('data/countries/admin2013_0.shp')
@@ -93,8 +94,30 @@ function(input, output) {
     
   })
 
+  my_max=4
+  my_min=1
+  observe({
+    if(length(input$select_raster) > my_max)
+    {
+      shinyalert("Oops!", "We are currently limited to a max of 4 rasters selections \n Please adjust raster selections", type = "warning")
+      #showNotification('Please only select a maximum of 4 surfaces', type = 'warning')
+    }})
+    # if(length(input$select_raster) < )
+    # {
+    #   print('Error')
+    # }
+    # })
+  
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
+  
+    # check for max four inputs   
+    observe({
+      if(length(input$select_raster) > my_max)
+      {
+        shinyalert("Oops!", "We are currently limited to a max of 4 rasters selections \n Please adjust raster selections", type = "warning")
+        #showNotification('Please only select a maximum of 4 surfaces', type = 'warning')
+      }})
     
     # 1. using the input 'selected_dist' and 'select_raster', grab the raster stats
     # include a progress bar to inform users 
