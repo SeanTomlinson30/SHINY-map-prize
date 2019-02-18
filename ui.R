@@ -8,6 +8,7 @@ library(malariaAtlas)
 library(shinydashboard)
 library(shinyBS)
 library(stringr)
+library(shinyalert)
 
 # generate a list of countries for which MAP data exists
 africa <- shapefile('data/countries/Africa.shp')
@@ -20,8 +21,8 @@ africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
 navbarPage("Malaria Atlas Project - District comparison",
            tabPanel("Application",
-                    fluidPage(    
-                      
+                    fluidPage(
+                      useShinyalert(),
                       # set a margin for the checkbox
                       tags$head(
                         tags$style(
@@ -68,35 +69,33 @@ navbarPage("Malaria Atlas Project - District comparison",
                           # hover-over tooltip
                           bsTooltip(id = "select_raster", 
                                     title = "Please select the rasters to compare.", 
-                                    placement = "right", trigger = "hover", options = list(container = "body"))),
+                                    placement = "right", trigger = "hover", options = list(container = "body")),
+                          
+                          actionButton(inputId = "processStats", label = "Generate statistics"),
+                          bsTooltip(id = "processStats", 
+                                    title = "Run generation of statistics and ranking system. This will produce results which feature in the tabs to the right.", 
+                                    placement = "right", trigger = "hover", options = list(container = "body"))
+                          
+                          
+                        ),
                         
                         mainPanel(
                           
                           tabsetPanel(type = "tabs",
-
+                                      
                                       tabPanel(title = "Selected country and districts", plotOutput("select_country", height = '800px', width = '800px')),
                                       tabPanel(title = "Selected district statistics - map", plotOutput("stats_plot")),
                                       tabPanel(title = "Selected district statistics - ranking", tableOutput("stats_table")))
                           
-
+                          
                         )
                         
-                      ), 
-                      
-                      # event to observe re statistics/ranking generation
-                      actionButton(inputId = "processStats", label = "Generate statistics"),
-                      # tooltip for 'Generate statistics'
-                      bsTooltip(id = "processStats", 
-                                title = "Run generation of statistics and ranking system. This will produce results which feature in the tabs to the right.", 
-                                placement = "right", trigger = "hover", options = list(container = "body")),
-                      
-                      # event to observe the generation of a summary report featuring stats outputs
-                      actionButton(inputId = "genReport", label = "Generate a summary report")
+                      )
                           )),
            tabPanel("Help",
-                    column(12, includeMarkdown("help.md"))),
-           tabPanel("About",
-                    column(12, includeMarkdown("about.md"))),
-           tabPanel("Methodology",
-                    column(12, includeMarkdown("methodology.md")))
-)
+                    tabsetPanel(type = 'tabs',
+                                tabPanel(title='Help', includeMarkdown('help.md')),
+                                tabPanel(title='About', includeMarkdown('about.md')),
+                                tabPanel(title='Methodology', includeMarkdown('methodology.md'))))
+           
+                      )
