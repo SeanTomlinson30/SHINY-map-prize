@@ -94,33 +94,19 @@ function(input, output, session) {
          lty = 3)
     
   })
-
-  my_max=4
-  my_min=1
-  observe({
-    if(length(input$select_raster) > my_max)
-    {
-      shinyalert("Oops!", "We are currently limited to a max of 4 rasters selections \n Please adjust raster selections", type = "warning")
-      #showNotification('Please only select a maximum of 4 surfaces', type = 'warning')
-    }})
-    # if(length(input$select_raster) < )
-    # {
-    #   print('Error')
-    # }
-    # })
   
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
     
-    updateTabsetPanel(session=session, inputId = 'main0', selected = 'tab3')
-  
     # check for max four inputs   
-    observe({
-      if(length(input$select_raster) > my_max)
-      {
-        shinyalert("Oops!", "We are currently limited to a max of 4 rasters selections \n Please adjust raster selections", type = "warning")
+      if(length(input$select_raster) == 0){
+        shinyalert("Oops!", "Please select a raster", type = "warning")
         #showNotification('Please only select a maximum of 4 surfaces', type = 'warning')
-      }})
+      }
+    
+      else{
+    
+    updateTabsetPanel(session=session, inputId = 'main0', selected = 'tab3')
     
     # generate tables as a markdown
     output$report <- downloadHandler(
@@ -149,7 +135,7 @@ function(input, output, session) {
       }
     )
   }
+  }
   )
-
 }
 
