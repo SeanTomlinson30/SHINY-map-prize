@@ -47,6 +47,11 @@ if(!require(shinythemes)){
   library(shinythemes)
 }
 
+if(!require(shinycssloaders)){
+  install.packages("shinycssloaders")
+  library(shinycssloaders)
+}
+
 # generate a list of countries for which MAP data exists
 africa <- shapefile('data/countries/Africa.shp')
 africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
@@ -101,7 +106,7 @@ navbarPage("Malaria Atlas Project - District comparison",
                                     placement = "right", trigger = "hover", options = list(container = "body")),
                           
                           # dynamic district selection
-                          uiOutput("select_raster"),
+                          uiOutput("select_raster") %>% withSpinner(type = '7', color="#0dc5c1"),
                           
                           # hover-over tooltip
                           bsTooltip(id = "select_raster", 
@@ -128,11 +133,11 @@ navbarPage("Malaria Atlas Project - District comparison",
                         )
                         
                       )
-                          )),
+                          ) ),
            tabPanel("Help",
                     tabsetPanel(type = 'tabs',
                                 tabPanel(title='Help', includeMarkdown('help.md')),
                                 tabPanel(title='About', includeMarkdown('about.md')),
                                 tabPanel(title='Methodology', includeMarkdown('methodology.md'))))
            
-                      )
+                      ) 
