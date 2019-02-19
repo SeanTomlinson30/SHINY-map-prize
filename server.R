@@ -108,32 +108,69 @@ function(input, output, session) {
     
     updateTabsetPanel(session=session, inputId = 'main0', selected = 'tab3')
     
+        # sub to get names aligned
+        lookup_processed$surface_name <- str_replace_all(lookup_processed$surface_name, '\\.', ' ')
+          
+        stats_list <- NULL
+        
+        for(i in 1:length(input$select_raster)){
+          
+          # grab csv with the stats
+          # 1. get a path to the stats csv
+          stats_i_idx <- which(lookup_processed$surface_name == input$select_raster[[i]])
+          stats_i_path <- lookup_processed$stats_path[stats_i_idx]
+          
+          # 2. read in the csv 
+          stats_i <- read.csv(stats_i_path, stringsAsFactors = FALSE)
+          
+          # 3. subset csv to only retain selected_dist
+          # create a selection based off of input
+          country_select <- countries[countries$name == input$country, ]
+          country_id <- country_select$COUNTRY_ID
+          dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
+          dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
+          
+          # subset
+          stats_i_sub <- stats_i[stats_i$zone %in% dist_select$GAUL_CODE, ]
+          
+          # add a variable which is the district name
+          index <- which(dist_select$GAUL_CODE == stats_i_sub$zone)
+          stats_i_sub$District <- dist_select$NAME[index]
+          dist_select$mean <- stats_i$mean[index]
+          
+          # reorder stats_i_sub
+          stats_i_sub <- stats_i_sub[c(6, 2:5)]
+          names(stats_i_sub) <- c('District',
+                                       paste0(input$select_raster[[i]], " (mean)"),
+                                       paste0(input$select_raster[[i]], " (max)"),
+                                       paste0(input$select_raster[[i]], " (min)"),
+                                       paste0(input$select_raster[[i]], " (sd)"))
+          
+          stats_list[[i]] <- stats_i_sub
+          
+        }
+        
     # generate tables as a markdown
-    output$report <- downloadHandler(
+    # copy the report file to a temporary directory before processing it, in
+    # case we don't have write permissions to the current working dir (which
+    # can happen when deployed).
+    tempReport <- file.path(tempdir(), "render_stats.Rmd")
+    file.copy("render_stats.Rmd", tempReport, overwrite = TRUE)
+        
+    # Set up parameters to pass to Rmd document
+    params <- list(stats_list = stats_list)
+        
+    # Knit the document, passing in the `params` list, and eval it in a
+    # child of the global environment (this isolates the code in the document
+    # from the code in this app).
+    rmarkdown::render(tempReport,
+                      output_file = paste0(tempdir(), "/pop_stats.html"),
+                      output_format = "html_document",
+                      params = params,
+                      envir = globalenv())
+        
       
-      # For PDF output, change this to "report.pdf"
-      filename = "report.html",
-      content = function(file) {
-        # Copy the report file to a temporary directory before processing it, in
-        # case we don't have write permissions to the current working dir (which
-        # can happen when deployed).
-        tempReport <- file.path(tempdir(), "render_stats.Rmd")
-        file.copy("render_stats.Rmd", tempReport, overwrite = TRUE)
-        
-        # Set up parameters to pass to Rmd document
-        params <- list(select_raster = input$select_raster,
-                       country = input$country,
-                       selected_dist = input$selected_dist)
-        
-        # Knit the document, passing in the `params` list, and eval it in a
-        # child of the global environment (this isolates the code in the document
-        # from the code in this app).
-        markdown::markdownToHTML(tempReport, output_file = file,
-                                 params = params,
-                                 envir = new.env(parent = globalenv())
-        )
-      }
-    )
+    
   }
   }
   )
