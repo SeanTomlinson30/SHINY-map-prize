@@ -9,6 +9,7 @@ library(shinydashboard)
 library(shinyBS)
 library(stringr)
 library(shinyalert)
+library(shinythemes)
 
 # generate a list of countries for which MAP data exists
 africa <- shapefile('data/countries/Africa.shp')
@@ -21,7 +22,7 @@ africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
 navbarPage("Malaria Atlas Project - District comparison",
            tabPanel("Application",
-                    fluidPage(
+                    fluidPage(theme = shinytheme("flatly"),
                       useShinyalert(),
                       # set a margin for the checkbox
                       tags$head(

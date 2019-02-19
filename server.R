@@ -9,6 +9,7 @@ library(shinydashboard)
 library(stringr)
 library(shinyalert)
 library(shinyBS)
+library(shinythemes)
 
 # generate a list of countries for which MAP data exists
 countries <- shapefile('data/countries/admin2013_0.shp')
