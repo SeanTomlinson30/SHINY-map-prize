@@ -1,15 +1,51 @@
 # load required libraries
 #pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyBS, stringr)
 
-library(raster)
-library(shiny)
-library(RColorBrewer)
-library(malariaAtlas)
-library(shinydashboard)
-library(shinyBS)
-library(stringr)
-library(shinyalert)
-library(shinythemes)
+#### load required libraries ####
+if(!require(raster)){
+  install.packages("raster")
+  library(raster)
+}
+
+if(!require(shiny)){
+  install.packages("shiny")
+  library(shiny)
+}
+
+if(!require(RColorBrewer)){
+  install.packages("RColorBrewer")
+  library(RColorBrewer)
+}
+
+if(!require(malariaAtlas)){
+  install.packages("malariaAtlas")
+  library(malariaAtlas)
+}
+
+if(!require(shinydashboard)){
+  install.packages("shinydashboard")
+  library(shinydashboard)
+}
+
+if(!require(stringr)){
+  install.packages("stringr")
+  library(stringr)
+}
+
+if(!require(shinyalert)){
+  install.packages("shinyalert")
+  library(shinyalert)
+}
+
+if(!require(shinyBS)){
+  install.packages("shinyBS")
+  library(shinyBS)
+}
+
+if(!require(shinythemes)){
+  install.packages("shinythemes")
+  library(shinythemes)
+}
 
 # generate a list of countries for which MAP data exists
 africa <- shapefile('data/countries/Africa.shp')
