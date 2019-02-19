@@ -168,9 +168,15 @@ function(input, output, session) {
                       output_format = "html_document",
                       params = params,
                       envir = globalenv())
-        
-      
     
+    getPage <- function() {
+      
+      return(includeHTML(paste0(tempdir(), "/pop_stats.html")))
+    
+    }
+    
+    output$report <- renderUI({getPage()})
+
   }
   }
   )
