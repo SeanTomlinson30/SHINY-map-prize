@@ -12,18 +12,41 @@ require(raster)
 ```
 
 
-```{r pop_stats, results = "axis", echo = FALSE}
+```{r pop_stat_1, results = "axis", echo = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 stats_list <- params$stats_list
 
 knitr::kable(stats_list[[1]],
              row.names = FALSE)
-knitr::kable(stats_list[[2]],
-             row.names = FALSE)
-knitr::kable(stats_list[[3]],
-             row.names = FALSE)
-knitr::kable(stats_list[[4]],
-             row.names = FALSE)
 
 ```
+
+```{r pop_stats_2, results = "axis", echo = FALSE}
+if(length(stats_list) > 1){
+
+  knitr::kable(stats_list[[2]],
+             row.names = FALSE)
+  
+}
+
+```
+
+```{r pop_stats_3, results = "axis", echo = FALSE}
+if(length(stats_list) > 2){
+
+knitr::kable(stats_list[[3]],
+             row.names = FALSE)
+  
+}
+```
+
+```{r pop_stats_4, results = "axis", echo = FALSE}
+if(length(stats_list) > 3){
+
+knitr::kable(stats_list[[4]],
+             row.names = FALSE)
+  
+}
+```
+
