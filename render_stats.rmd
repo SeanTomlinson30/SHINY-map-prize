@@ -22,6 +22,8 @@ knitr::kable(stats_list[[1]],
 
 ```
 
+</br>
+
 ```{r pop_stats_2, results = "axis", echo = FALSE}
 if(length(stats_list) > 1){
 
@@ -32,6 +34,8 @@ if(length(stats_list) > 1){
 
 ```
 
+</br>
+
 ```{r pop_stats_3, results = "axis", echo = FALSE}
 if(length(stats_list) > 2){
 
@@ -40,6 +44,8 @@ knitr::kable(stats_list[[3]],
   
 }
 ```
+
+</br>
 
 ```{r pop_stats_4, results = "axis", echo = FALSE}
 if(length(stats_list) > 3){
