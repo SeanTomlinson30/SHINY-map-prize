@@ -154,8 +154,8 @@ function(input, output, session) {
     # copy the report file to a temporary directory before processing it, in
     # case we don't have write permissions to the current working dir (which
     # can happen when deployed).
-    tempReport <- file.path(tempdir(), "render_stats.Rmd")
-    file.copy("render_stats.Rmd", tempReport, overwrite = TRUE)
+    tempReport <- file.path(tempdir(), "render_stats.rmd")
+    file.copy("render_stats.rmd", tempReport, overwrite = TRUE)
         
     # Set up parameters to pass to Rmd document
     params <- list(stats_list = stats_list)
