@@ -11,7 +11,7 @@
 |E-mail: sean.tomlinson@lstmed.ac.uk |
 |URL: https://github.com/SeanTomlinson30 |
 |Twitter: [@seantomlinson30](https://twitter.com/seantomlinson30) |
->>>>>>> master
+
 
 </br>
 
