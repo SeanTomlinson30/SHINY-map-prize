@@ -1,0 +1,29 @@
+---
+title: "Summary statistics"
+output: html_document
+params:
+    stats_list: NA
+---
+
+
+```{r gen_tables, echo=FALSE}    
+require(raster)
+
+```
+
+
+```{r pop_stats, results = "axis", echo = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+stats_list <- params$stats_list
+
+knitr::kable(stats_list[[1]],
+             row.names = FALSE)
+knitr::kable(stats_list[[2]],
+             row.names = FALSE)
+knitr::kable(stats_list[[3]],
+             row.names = FALSE)
+knitr::kable(stats_list[[4]],
+             row.names = FALSE)
+
+```
