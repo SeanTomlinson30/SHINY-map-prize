@@ -2,6 +2,8 @@
 
 **AppName** is a **Shiny** web application that allows users to generate summary statistics and visualise surfaces from the **Malaria Atlas Project** without the need to interact with the R coding language.
 
+**App** is a **Shiny** web application that allows the visualisation of data hosted by the [Malaria Atlas Project](https://map.ox.ac.uk/).
+
 The application allows selection of up to one country, all available districts within that country and up to four rasters for summary statistics generation and surface visualisation.
 
 The application allows users to download a formatted **R Markdown** file for the generated statistics.
@@ -17,14 +19,18 @@ The 'Application' page is comprised of two main sections:
 
 When the generate statistics button is clicked, the application retrives summary statistics and raster layer visualisations for the selected input and renders them in the three output tabs on the right-hand side of the application
 
+The application generates district-level summary statistics for a range of malaria indicators/malariometric data, as available by MAP. The aggregated district-level statistics enable the interpretation of disaggregated, high-spatial resolution trends (5 km x 5 km), at the administrative level.
+
+The application allows user interaction and creates interactive visualizations such as maps displaying mean values for each district selected by the user.
 
 **Download Report Button**
-
 TBC
 
 ### Dependencies
 
+
 **AppName** has been developed using **R** and **Shiny** and is dependent on the following software and **R** packages:
+
 
 
 |  |   |
