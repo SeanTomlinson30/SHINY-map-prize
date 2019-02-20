@@ -1,27 +1,26 @@
-### Developer
+### Developers
 
-**SpatialEpiApp** has been developed by
+**App** has been developed by
 
 
 |     |
 | --- |
-|Paula Moraga |
-|Lancaster Medical School |
-|Lancaster University |
-|Lancaster, LA1 4YG, United Kingdom |
-|E-mail: p.e.moraga-serrano@lancaster.ac.uk |
-|URL: http://Paula-Moraga.github.io |
-|Twitter: @\_PaulaMoraga\_ |
+|Mr Sean Tomlinson |
+|Department of Vector Biology |
+|Liverpool School of Tropical Medicine |
+|Liverpool, L3 5QA, United Kingdom |
+|E-mail: sean.tomlinson@lstmed.ac.uk |
+|URL: https://github.com/SeanTomlinson30 |
+|Twitter: [@seantomlinson30](https://twitter.com/seantomlinson30) |
 
-### Citation
+</br>
 
-To cite **SpatialEpiApp** in publications use:
-
-Paula Moraga (2017), SpatialEpiApp: A Shiny web application for the analysis of spatial and spatio-temporal disease data. Spatial and Spatio-temporal Epidemiology, 23:47-57
-DOI: https://doi.org/10.1016/j.sste.2017.08.001
-
-
-<!-- Paula Moraga (2017). SpatialEpiApp: A Shiny web application for the analysis of spatial and spatio-temporal disease data. R package version 0.1, URL https://CRAN.R-project.org/package=SpatialEpiApp.
--->
-
-
+|     |
+| --- |
+|Mr Joshua Longbottom |
+|Department of Vector Biology |
+|Liverpool School of Tropical Medicine |
+|Liverpool, L3 5QA, United Kingdom |
+|E-mail: joshua.longbottom@lstmed.ac.uk |
+|URL: http://github.com/joshlongbottom |
+|Twitter: [@josh_longbottom](https://twitter.com/josh_longbottom) |
