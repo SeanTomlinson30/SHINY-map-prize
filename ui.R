@@ -121,13 +121,15 @@ navbarPage(
                                   title = "Please select the rasters to compare.",
                                   placement = "right", trigger = "hover", options = list(container = "body")),
                         
-                        useShinyjs(),
-                        actionButton("download", "Download Report"),
                         
                         actionButton(inputId = "processStats", label = "Generate statistics"),
                         bsTooltip(id = "processStats",
                                   title = "Run generation of statistics and ranking system. This will produce results which feature in the tabs to the right.",
-                                  placement = "right", trigger = "hover", options = list(container = "body"))),
+                                  placement = "right", trigger = "hover", options = list(container = "body")),
+                        
+                        useShinyjs(),
+                        downloadButton("download", "Download Report")
+                        ),
                       
                       mainPanel(
                         

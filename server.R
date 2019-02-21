@@ -80,7 +80,7 @@ africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
 # define the server logic
 function(input, output, session) {
-  hide("action")
+  hide("download")
   # create dynamic reactive list of districts, per input country
   output$select_dist <- renderUI({
     
@@ -149,7 +149,7 @@ function(input, output, session) {
   
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
-    show("action")
+    show("download")
     # check for max four inputs   
     if(length(input$selected_dist) == 0){
       shinyalert("Oops!", "Please select a district", type = "warning")
@@ -237,6 +237,15 @@ function(input, output, session) {
     }
   }
   )
-  observeEvent(input$download, {print('test')})
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste0(tempdir(), "/pop_stats.rmd")
+    },
+    content = function(file) {
+      write(datasetInput(), file, row.names = FALSE)
+    }
+  )
+    
+
 }
 
