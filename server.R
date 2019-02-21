@@ -135,14 +135,19 @@ function(input, output, session) {
   
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
-    
+
     # check for max four inputs   
-      if(length(input$select_raster) == 0){
+    if(length(input$selected_dist) == 0){
+      shinyalert("Oops!", "Please select a district", type = "warning")
+      #showNotification('Please only select a maximum of 4 surfaces', type = 'warning')
+    }    
+    # check for max four inputs   
+    else if (length(input$select_raster) == 0){
         shinyalert("Oops!", "Please select a raster", type = "warning")
         #showNotification('Please only select a maximum of 4 surfaces', type = 'warning')
       }
     
-      else{
+    else{
     
     updateTabsetPanel(session=session, inputId = 'main0', selected = 'tab3')
     
