@@ -1,6 +1,6 @@
 ---
 title: "Summary statistics"
-output: html_document
+output: md_document
 params:
     stats_list: NA
     dist_select: NA

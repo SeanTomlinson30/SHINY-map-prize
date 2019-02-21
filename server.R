@@ -248,7 +248,7 @@ function(input, output, session) {
       
       getPage <- function() {
         
-        return(includeHTML(paste0(tempdir(), "/pop_stats.rmd")))
+        return(includeMarkdown(paste0(tempdir(), "/pop_stats.rmd")))
         
       }
       
