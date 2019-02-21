@@ -52,6 +52,11 @@ if(!require(shinycssloaders)){
   library(shinycssloaders)
 }
 
+if(!require(shinyjs)){
+  install.packages("shinyjs")
+  library(shinyjs)
+}
+
 # generate a list of countries for which MAP data exists
 africa <- shapefile('data/countries/Africa.shp')
 africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
@@ -116,17 +121,21 @@ navbarPage(
                                   title = "Please select the rasters to compare.",
                                   placement = "right", trigger = "hover", options = list(container = "body")),
                         
+                        
                         actionButton(inputId = "processStats", label = "Generate statistics"),
                         bsTooltip(id = "processStats",
                                   title = "Run generation of statistics and ranking system. This will produce results which feature in the tabs to the right.",
-                                  placement = "right", trigger = "hover", options = list(container = "body"))),
+                                  placement = "right", trigger = "hover", options = list(container = "body")),
+                        
+                        useShinyjs(),
+                        downloadButton("download", "Download Report")
+                        ),
                       
                       mainPanel(
                         
                         tabsetPanel(id='main0', type = "tabs",
                                     tabPanel(value ='tab1', title = "Selected country and districts", plotOutput("select_country", height = '800px', width = '800px')),
-                                    tabPanel(value ='tab2', title = "Selected district statistics - map", plotOutput("stats_plot")),
-                                    tabPanel(value ='tab3', title = "Summary statistics", htmlOutput("report")))
+                                    tabPanel(value ='tab2', title = "Output", htmlOutput("report")))
                         ) # enf of main panel
                       ) # end of sidebar layout
                     ) # end of fluid page
@@ -134,6 +143,5 @@ navbarPage(
           tabPanel("Help",
           tabsetPanel(type = 'tabs',
                       tabPanel(title='Help', includeMarkdown('help.md')),
-                      tabPanel(title='About', includeMarkdown('about.md')),
-                      tabPanel(title='Methodology', includeMarkdown('methodology.md'))))
+                      tabPanel(title='About', includeMarkdown('about.md'))))
           )

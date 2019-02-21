@@ -57,6 +57,11 @@ if(!require(kableExtra)){
   library(kableExtra)
 }
 
+if(!require(shinyjs)){
+  install.packages("shinyjs")
+  library(shinyjs)
+}
+
 # generate a list of countries for which MAP data exists
 countries <- shapefile('data/countries/admin2013_0.shp')
 admin_1 <- shapefile('data/districts/admin_1.shp')
@@ -75,7 +80,7 @@ africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
 # define the server logic
 function(input, output, session) {
-  
+  hide("download")
   # create dynamic reactive list of districts, per input country
   output$select_dist <- renderUI({
     
@@ -142,7 +147,7 @@ function(input, output, session) {
     plot(countries[countries$COUNTRY_ID == country_id, ],
          axes = FALSE,
          col = "#d9d9d9",
-         main = "Selected country")
+         main = input$country)
     
     plot(dist_select,
          add = TRUE,
@@ -153,8 +158,12 @@ function(input, output, session) {
   
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
+
     
     # check for district selection inputs   
+
+    show("download")
+    # check for max four inputs   
     if(length(input$selected_dist) == 0){
       
       shinyalert("Oops!", "Please select a district", type = "warning")
@@ -168,7 +177,7 @@ function(input, output, session) {
 
     } else {
       
-      updateTabsetPanel(session=session, inputId = 'main0', selected = 'tab3')
+      updateTabsetPanel(session=session, inputId = 'main0', selected = 'tab2')
       
       # sub to get names aligned
       lookup_processed$surface_name <- str_replace_all(lookup_processed$surface_name, '\\.', ' ')
@@ -257,5 +266,15 @@ function(input, output, session) {
     }
   }
   )
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste0(tempdir(), "/pop_stats.rmd")
+    },
+    content = function(file) {
+      write(datasetInput(), file, row.names = FALSE)
+    }
+  )
+    
+
 }
 
