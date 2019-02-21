@@ -3,6 +3,8 @@ title: "Summary statistics"
 output: html_document
 params:
     stats_list: NA
+    dist_select: NA
+    country_select: NA
 always_allow_html: yes
 ---
 
@@ -10,6 +12,7 @@ always_allow_html: yes
 
 require(kableExtra)
 require(knitr)
+require(RColorBrewer)
 
 ```
 
@@ -17,6 +20,8 @@ require(knitr)
 knitr::opts_chunk$set(echo = TRUE)
 
 stats_list <- params$stats_list
+
+dist_select <- params$dist_select
 
 # subset to get specified table
 table_one <- stats_list[[1]]
@@ -44,6 +49,31 @@ x <- kable(table_one,
 
 column_spec(x, 1:5, width = "10em")
 
+```
+
+</br>
+
+```{r pop_plot_2, echo = FALSE, results = "hide"}
+# generate shapefile for the plot
+# first create an index
+dist_index <- which(dist_select$NAME == table_one$District)
+dist_select$mean <- table_one$Mean[dist_index]
+
+# create a bespoke palette
+colour_p <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select$mean))
+dist_select$colours <- colour_p[as.numeric(cut(dist_select$mean, breaks = (length(dist_select$mean))))]
+
+country_select <- params$country_select
+
+print(plot(country_select,
+           axes = FALSE,
+           col = "#d9d9d9",
+           main = "Selected country"))
+
+print(plot(dist_select,
+           add = TRUE,
+           col = dist_select$colours,
+           lty = 3))
 ```
 
 </br>
