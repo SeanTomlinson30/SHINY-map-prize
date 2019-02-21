@@ -67,13 +67,17 @@ country_select <- params$country_select
 
 print(plot(country_select,
            axes = FALSE,
-           col = "#d9d9d9",
-           main = "Selected country"))
+           col = "#d9d9d9"))
 
 print(plot(dist_select,
            add = TRUE,
            col = dist_select$colours,
            lty = 3))
+
+title(variable_n, 
+      cex.main = 1, col.main = "#18c8cf",
+      adj = 0)
+
 ```
 
 </br>
