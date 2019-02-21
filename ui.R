@@ -52,6 +52,11 @@ if(!require(shinycssloaders)){
   library(shinycssloaders)
 }
 
+if(!require(shinyjs)){
+  install.packages("shinyjs")
+  library(shinyjs)
+}
+
 # generate a list of countries for which MAP data exists
 africa <- shapefile('data/countries/Africa.shp')
 africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
@@ -115,6 +120,9 @@ navbarPage(
                         bsTooltip(id = "select_raster",
                                   title = "Please select the rasters to compare.",
                                   placement = "right", trigger = "hover", options = list(container = "body")),
+                        
+                        useShinyjs(),
+                        actionButton("download", "Download Report"),
                         
                         actionButton(inputId = "processStats", label = "Generate statistics"),
                         bsTooltip(id = "processStats",

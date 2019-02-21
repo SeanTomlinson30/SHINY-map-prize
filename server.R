@@ -57,6 +57,11 @@ if(!require(kableExtra)){
   library(kableExtra)
 }
 
+if(!require(shinyjs)){
+  install.packages("shinyjs")
+  library(shinyjs)
+}
+
 # generate a list of countries for which MAP data exists
 countries <- shapefile('data/countries/admin2013_0.shp')
 admin_1 <- shapefile('data/districts/admin_1.shp')
@@ -75,7 +80,7 @@ africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
 # define the server logic
 function(input, output, session) {
-  
+  hide("action")
   # create dynamic reactive list of districts, per input country
   output$select_dist <- renderUI({
     
@@ -144,7 +149,7 @@ function(input, output, session) {
   
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
-    
+    show("action")
     # check for max four inputs   
     if(length(input$selected_dist) == 0){
       shinyalert("Oops!", "Please select a district", type = "warning")
@@ -232,5 +237,6 @@ function(input, output, session) {
     }
   }
   )
+  observeEvent(input$download, {print('test')})
 }
 
