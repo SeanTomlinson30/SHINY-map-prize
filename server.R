@@ -267,22 +267,16 @@ function(input, output, session) {
   }
   )
   
-  observeEvent(input$download, {
-  
     output$download <- downloadHandler(
-
-    filename = "report.pdf",
-    content = function(file) {
-      # Copy the report file to a temporary directory before processing it, in
-      # case we don't have write permissions to the current working dir (which
-      # can happen when deployed).
-      rmarkdown::render(input = paste0(tempdir(), "/pop_stats.rmd"),
-                        output_file = file,
-                        output_format = "pdf_document")
-          }
-        )
-    }
-  )
-
+      filename = "pop_output.pdf",
+      content = content <- function(file) {
+        rmarkdown::render(input = file.path(tempdir(), "pop_stats.rmd"),
+                          output_file = file.path(tempdir(), "pop_output.pdf"),
+                          output_format = "pdf_document")
+        
+        file.copy(file.path(tempdir(), "pop_output.pdf"), file)
+      },
+      contentType = "document/pdf"
+    )
 }
 
