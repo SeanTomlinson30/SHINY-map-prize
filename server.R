@@ -138,7 +138,7 @@ function(input, output, session) {
     plot(countries[countries$name == input$country, ],
          axes = FALSE,
          col = "#d9d9d9",
-         main = "Selected country")
+         main = input$country)
     
     plot(dist_select,
          add = TRUE,
@@ -163,7 +163,7 @@ function(input, output, session) {
     
     else{
       
-      updateTabsetPanel(session=session, inputId = 'main0', selected = 'tab3')
+      updateTabsetPanel(session=session, inputId = 'main0', selected = 'tab2')
       
       # sub to get names aligned
       lookup_processed$surface_name <- str_replace_all(lookup_processed$surface_name, '\\.', ' ')
