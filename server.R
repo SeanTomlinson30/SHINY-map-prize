@@ -122,20 +122,29 @@ function(input, output, session) {
     c_rasters = str_replace_all(c_rasters, '\\.', ' ') # Replace periods with spaces
     
     selectizeInput("select_raster", "Select rasters:", c_rasters, multiple = TRUE, options = list(maxItems = 4))
-    # checkboxGroupInput("select_raster", "Select rasters:",
-    #                    choices = c_rasters,
-    #                    inline = TRUE)
+
   })
   
   # plot selected country, with selected districts overlayed
   output$select_country <- renderPlot({
     
-    country_select <- countries[countries$name == input$country, ]
-    country_id <- country_select$COUNTRY_ID
+    select_id <- as.character(input$country)
+    
+    # fix for CIV plot
+    if(select_id == "Cote d`Ivoire"){
+      
+      country_id <- "CIV"
+      
+    } else {
+    
+      country_id <- countries$COUNTRY_ID[countries$name == select_id][1]
+    
+    }
+    
     dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
     dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
     
-    plot(countries[countries$name == input$country, ],
+    plot(countries[countries$COUNTRY_ID == country_id, ],
          axes = FALSE,
          col = "#d9d9d9",
          main = input$country)
@@ -149,26 +158,51 @@ function(input, output, session) {
   
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
+
+    
+    # check for district selection inputs   
+
     show("download")
     # check for max four inputs   
     if(length(input$selected_dist) == 0){
+      
       shinyalert("Oops!", "Please select a district", type = "warning")
-      #showNotification('Please only select a maximum of 4 surfaces', type = 'warning')
+
     }    
-    # check for max four inputs   
-    else if (length(input$select_raster) == 0){
-      shinyalert("Oops!", "Please select a raster", type = "warning")
-      #showNotification('Please only select a maximum of 4 surfaces', type = 'warning')
-    }
     
-    else{
+    # check for max four variable inputs   
+    else if (length(input$select_raster) == 0){
+      
+      shinyalert("Oops!", "Please select a raster", type = "warning")
+
+    } else {
       
       updateTabsetPanel(session=session, inputId = 'main0', selected = 'tab2')
       
       # sub to get names aligned
       lookup_processed$surface_name <- str_replace_all(lookup_processed$surface_name, '\\.', ' ')
       
+      # define empty vector to populate with stats tables
       stats_list <- NULL
+      
+      # create a selection based off of input
+      select_id <- as.character(input$country)
+      
+      # fix for CIV plot
+      if(select_id == "Cote d`Ivoire"){
+        
+        country_id <- "CIV"
+        
+      } else {
+        
+        country_id <- countries$COUNTRY_ID[countries$name == select_id][1]
+        
+      }
+      
+      country_select <- countries[countries$COUNTRY_ID == country_id, ]
+      
+      dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
+      dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
       
       for(i in 1:length(input$select_raster)){
         
@@ -181,13 +215,6 @@ function(input, output, session) {
         stats_i <- read.csv(stats_i_path, stringsAsFactors = FALSE)
         
         # 3. subset csv to only retain selected_dist
-        # create a selection based off of input
-        country_select <- countries[countries$name == input$country, ]
-        country_id <- country_select$COUNTRY_ID
-        dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
-        dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
-        
-        # subset
         stats_i_sub <- stats_i[stats_i$zone %in% dist_select$GAUL_CODE, ]
         
         # add a variable which is the district name
@@ -215,7 +242,9 @@ function(input, output, session) {
       file.copy("render_stats.rmd", tempReport, overwrite = TRUE)
       
       # Set up parameters to pass to Rmd document
-      params <- list(stats_list = stats_list)
+      params <- list(stats_list = stats_list,
+                     dist_select = dist_select,
+                     country_select = country_select)
       
       # Knit the document, passing in the `params` list, and eval it in a
       # child of the global environment (this isolates the code in the document
@@ -228,7 +257,7 @@ function(input, output, session) {
       
       getPage <- function() {
         
-        return(includeHTML(paste0(tempdir(), "/pop_stats.rmd")))
+        return(includeMarkdown(paste0(tempdir(), "/pop_stats.rmd")))
         
       }
       
