@@ -47,6 +47,15 @@ if(!require(shinythemes)){
   library(shinythemes)
 }
 
+if(!require(knitr)){
+  install.packages("knitr")
+  library(knitr)
+}
+
+if(!require(kableExtra)){
+  install.packages("kableExtra")
+  library(kableExtra)
+}
 
 # generate a list of countries for which MAP data exists
 countries <- shapefile('data/countries/admin2013_0.shp')

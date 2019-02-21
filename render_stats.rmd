@@ -3,22 +3,46 @@ title: "Summary statistics"
 output: html_document
 params:
     stats_list: NA
+always_allow_html: yes
 ---
 
+```{r load_packages, echo = FALSE}
 
-```{r gen_tables, echo=FALSE}    
-require(raster)
+require(kableExtra)
+require(knitr)
 
 ```
-
 
 ```{r pop_stat_1, results = "axis", echo = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 stats_list <- params$stats_list
 
-knitr::kable(stats_list[[1]],
-             row.names = FALSE)
+# subset to get specified table
+table_one <- stats_list[[1]]
+
+# get variable names
+variable_n <- names(table_one)[2]
+variable_n <- substr(variable_n, 1, nchar(variable_n)-7)
+
+names(table_one) <- c("District",
+                      "Mean",
+                      "Max",
+                      "Min",
+                      "Standard Deviation")
+
+# round so that values aren't ridiculously long
+table_one$Mean <- round(table_one$Mean, 2)
+table_one$Max <- round(table_one$Max, 2)
+table_one$Min <- round(table_one$Min, 2)
+table_one$`Standard Deviation` <- round(table_one$`Standard Deviation`, 2)
+
+x <- kable(table_one,
+           row.names = FALSE,
+           caption = variable_n,
+           align = "c")
+
+column_spec(x, 1:5, width = "10em")
 
 ```
 
@@ -27,9 +51,32 @@ knitr::kable(stats_list[[1]],
 ```{r pop_stats_2, results = "axis", echo = FALSE}
 if(length(stats_list) > 1){
 
-  knitr::kable(stats_list[[2]],
-             row.names = FALSE)
-  
+# subset to get specified table
+table_two <- stats_list[[2]]
+
+# get variable names
+variable_n <- names(table_two)[2]
+variable_n <- substr(variable_n, 1, nchar(variable_n)-7)
+
+names(table_two) <- c("District",
+                      "Mean",
+                      "Max",
+                      "Min",
+                      "Standard Deviation")
+
+# round so that values aren't ridiculously long
+table_two$Mean <- round(table_two$Mean, 2)
+table_two$Max <- round(table_two$Max, 2)
+table_two$Min <- round(table_two$Min, 2)
+table_two$`Standard Deviation` <- round(table_two$`Standard Deviation`, 2)
+
+y <- kable(table_two,
+           row.names = FALSE,
+           caption = variable_n,
+           align = "c")
+
+column_spec(y, 1:5, width = "10em")
+
 }
 
 ```
@@ -39,8 +86,31 @@ if(length(stats_list) > 1){
 ```{r pop_stats_3, results = "axis", echo = FALSE}
 if(length(stats_list) > 2){
 
-knitr::kable(stats_list[[3]],
-             row.names = FALSE)
+# subset to get specified table
+table_three <- stats_list[[3]]
+
+# get variable names
+variable_n <- names(table_three)[2]
+variable_n <- substr(variable_n, 1, nchar(variable_n)-7)
+
+names(table_three) <- c("District",
+                      "Mean",
+                      "Max",
+                      "Min",
+                      "Standard Deviation")
+
+# round so that values aren't ridiculously long
+table_three$Mean <- round(table_three$Mean, 2)
+table_three$Max <- round(table_three$Max, 2)
+table_three$Min <- round(table_three$Min, 2)
+table_three$`Standard Deviation` <- round(table_three$`Standard Deviation`, 2)
+
+z <- kable(table_three,
+           row.names = FALSE,
+           caption = variable_n,
+           align = "c")
+
+column_spec(z, 1:5, width = "10em")
   
 }
 ```
@@ -50,9 +120,32 @@ knitr::kable(stats_list[[3]],
 ```{r pop_stats_4, results = "axis", echo = FALSE}
 if(length(stats_list) > 3){
 
-knitr::kable(stats_list[[4]],
-             row.names = FALSE)
-  
+# subset to get specified table
+table_four <- stats_list[[4]]
+
+# get variable names
+variable_n <- names(table_four)[2]
+variable_n <- substr(variable_n, 1, nchar(variable_n)-7)
+
+names(table_four) <- c("District",
+                      "Mean",
+                      "Max",
+                      "Min",
+                      "Standard Deviation")
+
+# round so that values aren't ridiculously long
+table_four$Mean <- round(table_four$Mean, 2)
+table_four$Max <- round(table_four$Max, 2)
+table_four$Min <- round(table_four$Min, 2)
+table_four$`Standard Deviation` <- round(table_four$`Standard Deviation`, 2)
+
+aa <- kable(table_four,
+            row.names = FALSE,
+            caption = variable_n,
+            align = "c")
+
+column_spec(aa, 1:5, width = "10em")
+
 }
 ```
 
