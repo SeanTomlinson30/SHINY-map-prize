@@ -250,14 +250,14 @@ function(input, output, session) {
       # child of the global environment (this isolates the code in the document
       # from the code in this app).
       rmarkdown::render(tempReport,
-                        output_file = paste0(tempdir(), "/pop_stats.rmd"),
+                        output_file = file.path(tempdir(), "pop_stats.rmd"),
                         output_format = "md_document",
                         params = params,
                         envir = globalenv())
       
       getPage <- function() {
         
-        return(includeMarkdown(paste0(tempdir(), "/pop_stats.rmd")))
+        return(includeMarkdown(file.path(tempdir(), "pop_stats.rmd")))
         
       }
       
@@ -266,15 +266,17 @@ function(input, output, session) {
     }
   }
   )
-  output$downloadData <- downloadHandler(
-    filename = function() {
-      paste0(tempdir(), "/pop_stats.rmd")
-    },
-    content = function(file) {
-      write(datasetInput(), file, row.names = FALSE)
-    }
-  )
-    
-
+  
+    output$download <- downloadHandler(
+      filename = "pop_output.pdf",
+      content = content <- function(file) {
+        rmarkdown::render(input = file.path(tempdir(), "pop_stats.rmd"),
+                          output_file = file.path(tempdir(), "pop_output.pdf"),
+                          output_format = "pdf_document")
+        
+        file.copy(file.path(tempdir(), "pop_output.pdf"), file)
+      },
+      contentType = "document/pdf"
+    )
 }
 
