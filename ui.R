@@ -122,13 +122,14 @@ navbarPage(
                                   placement = "right", trigger = "hover", options = list(container = "body")),
                         
                         
-                        actionButton(inputId = "processStats", label = "Generate statistics"),
+                        actionButton(inputId = "processStats", label = "Generate statistics", class='butt'),
+                        tags$head(tags$style(".butt{margin-bottom:5px;}")),
+                        
                         bsTooltip(id = "processStats",
                                   title = "Run generation of statistics and ranking system. This will produce results which feature in the tabs to the right.",
                                   placement = "right", trigger = "hover", options = list(container = "body")),
                         
-                        useShinyjs(),
-                        downloadButton("download", "Download Report")
+                        uiOutput("downloadbutton")
                         ),
                       
                       mainPanel(

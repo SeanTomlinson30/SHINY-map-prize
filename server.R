@@ -80,7 +80,7 @@ africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
 # define the server logic
 function(input, output, session) {
-  hide("download")
+  
   # create dynamic reactive list of districts, per input country
   output$select_dist <- renderUI({
     
@@ -156,10 +156,15 @@ function(input, output, session) {
     
   })
   
+  
+  
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
-
     
+    output$downloadbutton <- renderUI({
+      downloadButton('download', 'Download Output File')
+    })
+
     # check for district selection inputs   
 
     show("download")
@@ -266,17 +271,16 @@ function(input, output, session) {
     }
   }
   )
-  
+    # 
     output$download <- downloadHandler(
-      filename = "pop_output.pdf",
-      content = content <- function(file) {
-        rmarkdown::render(input = file.path(tempdir(), "pop_stats.rmd"),
-                          output_file = file.path(tempdir(), "pop_output.pdf"),
-                          output_format = "pdf_document")
-        
-        file.copy(file.path(tempdir(), "pop_output.pdf"), file)
+    filename = "pop_output.pdf",
+    content = content <- function(file) {
+      rmarkdown::render(input = file.path(tempdir(), "pop_stats.rmd"),
+      output_file = file.path(tempdir(), "pop_output.pdf"),
+      output_format = "pdf_document")
+ 
+      file.copy(file.path(tempdir(), "pop_output.pdf"), file)
       },
-      contentType = "document/pdf"
-    )
+      contentType = "document/pdf")
 }
 
