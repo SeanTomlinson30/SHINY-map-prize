@@ -98,7 +98,7 @@ function(input, output, session) {
     
     selected_dist <- admin_1$NAME[admin_1$COUNTRY_ID == country_id]
     
-    checkboxGroupInput("selected_dist", "Select first-level administrative division:",
+    checkboxGroupInput("selected_dist", "Select first-level administrative division (min 2):",
                        choices = selected_dist,
                        inline = TRUE)
   })
@@ -121,7 +121,7 @@ function(input, output, session) {
     c_rasters <- colnames(c_lookup)[which(c_lookup==1)]
     c_rasters = str_replace_all(c_rasters, '\\.', ' ') # Replace periods with spaces
     
-    selectizeInput("select_raster", "Select rasters:", c_rasters, multiple = TRUE, options = list(maxItems = 4))
+    selectizeInput("select_raster", "Select rasters (max 4):", c_rasters, multiple = TRUE, options = list(maxItems = 4, placeholder='Select desired rasters by clicking or typing in this search box'))
 
   })
   
@@ -155,23 +155,21 @@ function(input, output, session) {
          lty = 3)
     
   })
-  
-  
-  
+
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
     
     output$downloadbutton <- renderUI({
-      downloadButton('download', 'Download Output File')
+      downloadButton('download', 'Download File ...')
     })
 
     # check for district selection inputs   
 
     show("download")
     # check for max four inputs   
-    if(length(input$selected_dist) == 0){
+    if(length(input$selected_dist) < 2){
       
-      shinyalert("Oops!", "Please select a district", type = "warning")
+      shinyalert("Oops!", "Please select at least 2 districts to compare", type = "warning")
 
     }    
     

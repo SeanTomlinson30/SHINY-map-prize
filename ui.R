@@ -1,6 +1,3 @@
-# load required libraries
-#pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyBS, stringr)
-
 #### load required libraries ####
 if(!require(raster)){
   install.packages("raster")
@@ -135,8 +132,8 @@ navbarPage(
                       mainPanel(
                         
                         tabsetPanel(id='main0', type = "tabs",
-                                    tabPanel(value ='tab1', title = "Selected country and districts", plotOutput("select_country", height = '800px', width = '800px')),
-                                    tabPanel(value ='tab2', title = "Output", htmlOutput("report")))
+                                    tabPanel(value ='tab1', title = "Selected country and districts", div(style = 'overflow-y:scroll;height:750px;',plotOutput("select_country", height = '750px', width = '750px'))),
+                                    tabPanel(value ='tab2', title = "Output", div(style = 'overflow-y:scroll;height:750px;',htmlOutput("report"))))
                         ) # enf of main panel
                       ) # end of sidebar layout
                     ) # end of fluid page
