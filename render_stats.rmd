@@ -23,7 +23,9 @@ dist_names <- unique(dist_select$NAME)
 
 ```
 
-### This document contains summary statistics for `r country_select$name`, and the following selected districts: `r dist_names`.
+## AppName Output Report
+#### This document contains summary statistics for `r country_select$name`, and the following selected districts: `r dist_names`. 
+
 #### Summary statistics for each selected variable appear below, and were generated using the "zonal" function within the "raster" R package.
 
 </br>
