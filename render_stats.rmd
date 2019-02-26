@@ -16,7 +16,17 @@ require(knitr)
 require(RColorBrewer)
 require(plotfunctions)
 
+country_select <- params$country_select
+dist_select <- params$dist_select
+
+dist_names <- unique(dist_select$NAME)
+
 ```
+
+### This document contains summary statistics for `r country_select$name`, and the following selected districts: `r dist_names`.
+#### Summary statistics for each selected variable appear below, and were generated using the "zonal" function within the "raster" R package.
+
+</br>
 
 ```{r pop_stat_1, results = "axis", echo = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
