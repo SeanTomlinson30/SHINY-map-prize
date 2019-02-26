@@ -199,7 +199,7 @@ if(length(stats_list) == 1){
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
-                 color = colour_p, 
+                 color = colour_p_v1, 
                  nCol = length(dist_select_v1$mean), 
                  pos = 0.5, 
                  side = 4,
