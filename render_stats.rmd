@@ -6,6 +6,7 @@ params:
     dist_select: NA
     country_select: NA
 always_allow_html: yes
+
 ---
 
 ```{r load_packages, echo = FALSE}
@@ -157,7 +158,7 @@ column_spec(aa, 1:5, width = "10em")
 
 </br>
 
-```{r stat_plots, echo = FALSE, results = "hide"}
+```{r stat_plots, echo = FALSE, results = "hide", fig.height = 10, fig.width = 10}
 # generate shapefile for the plot
 if(length(stats_list) == 1){
   
@@ -184,6 +185,21 @@ if(length(stats_list) == 1){
         cex.main = 1, col.main = "#18c8cf",
         adj = 0)
   
+  gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
+                 color = colour_p_v1, 
+                 nCol = length(dist_select_v1$mean), 
+                 pos = 0.5, 
+                 side = 4,
+                 length = 0.25, 
+                 depth = 0.05, 
+                 inside = TRUE, 
+                 coords = FALSE,
+                 pos.num = NULL, 
+                 n.seg = 3, 
+                 border.col = "black", 
+                 dec = 2,
+                 fit.margin = TRUE)
+  
   }
 
 if(length(stats_list) == 2){
@@ -206,6 +222,7 @@ if(length(stats_list) == 2){
   
   country_select <- params$country_select
 
+  # plot first stat
   print(plot(country_select,
              axes = FALSE,
              col = "#d9d9d9")) 
@@ -234,7 +251,7 @@ if(length(stats_list) == 2){
                  dec = 2,
                  fit.margin = TRUE)
   
-  
+  # plot second stat
   print(plot(country_select,
              axes = FALSE,
              col = "#d9d9d9")) 
@@ -263,5 +280,265 @@ if(length(stats_list) == 2){
                  dec = 2,
                  fit.margin = TRUE)
   
+}
+
+if(length(stats_list) == 3){
+  
+  dist_index <- which(dist_select$NAME == table_one$District)
+  
+  dist_select_v1 <- dist_select
+  dist_select_v2 <- dist_select
+  dist_select_v3 <- dist_select
+  dist_select_v1$mean <- table_one$Mean[dist_index]
+  dist_select_v2$mean <- table_two$Mean[dist_index]
+  dist_select_v3$mean <- table_three$Mean[dist_index]
+  
+  # create a bespoke palette
+  colour_p_v1 <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select_v1$mean))
+  colour_p_v2 <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select_v2$mean))
+  colour_p_v3 <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select_v3$mean))
+  dist_select_v1$colours <- colour_p_v1[as.numeric(cut(dist_select_v1$mean, breaks = (length(dist_select_v1$mean))))]
+  dist_select_v2$colours <- colour_p_v2[as.numeric(cut(dist_select_v2$mean, breaks = (length(dist_select_v2$mean))))]
+  dist_select_v3$colours <- colour_p_v3[as.numeric(cut(dist_select_v3$mean, breaks = (length(dist_select_v3$mean))))]
+  
+  # define plotting parameters
+  par(mfrow = c(2,2))
+  
+  country_select <- params$country_select
+
+  # plot first stat
+  print(plot(country_select,
+             axes = FALSE,
+             col = "#d9d9d9")) 
+
+  print(plot(dist_select_v1,
+             add = TRUE,
+             col = dist_select_v1$colours,
+             lty = 3))
+
+  title(variable_n, 
+        cex.main = 1, col.main = "#18c8cf",
+        adj = 0)
+  
+  gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
+                 color = colour_p_v1, 
+                 nCol = length(dist_select_v1$mean), 
+                 pos = 0.5, 
+                 side = 4,
+                 length = 0.25, 
+                 depth = 0.05, 
+                 inside = TRUE, 
+                 coords = FALSE,
+                 pos.num = NULL, 
+                 n.seg = 3, 
+                 border.col = "black", 
+                 dec = 2,
+                 fit.margin = TRUE)
+
+  # plot second stat
+  print(plot(country_select,
+             axes = FALSE,
+             col = "#d9d9d9")) 
+
+  print(plot(dist_select_v2,
+             add = TRUE,
+             col = dist_select_v2$colours,
+             lty = 3))
+
+  title(variable_n2, 
+        cex.main = 1, col.main = "#18c8cf",
+        adj = 0)
+  
+  gradientLegend(valRange = c(min(dist_select_v2$mean), max(dist_select_v2$mean)), 
+                 color = colour_p_v2, 
+                 nCol = length(dist_select_v2$mean), 
+                 pos = 0.5, 
+                 side = 4,
+                 length = 0.25, 
+                 depth = 0.05, 
+                 inside = TRUE, 
+                 coords = FALSE,
+                 pos.num = NULL, 
+                 n.seg = 3, 
+                 border.col = "black", 
+                 dec = 2,
+                 fit.margin = TRUE)
+  
+  # plot third stat
+  print(plot(country_select,
+             axes = FALSE,
+             col = "#d9d9d9")) 
+  
+  print(plot(dist_select_v3,
+             add = TRUE,
+             col = dist_select_v3$colours,
+             lty = 3))
+
+  title(variable_n3, 
+        cex.main = 1, col.main = "#18c8cf",
+        adj = 0)
+  
+  gradientLegend(valRange = c(min(dist_select_v3$mean), max(dist_select_v3$mean)), 
+                 color = colour_p_v3, 
+                 nCol = length(dist_select_v3$mean), 
+                 pos = 0.5, 
+                 side = 4,
+                 length = 0.25, 
+                 depth = 0.05, 
+                 inside = TRUE, 
+                 coords = FALSE,
+                 pos.num = NULL, 
+                 n.seg = 3, 
+                 border.col = "black", 
+                 dec = 2,
+                 fit.margin = TRUE)
+  
   }
+
+if(length(stats_list) == 4){
+  
+  dist_index <- which(dist_select$NAME == table_one$District)
+  
+  dist_select_v1 <- dist_select
+  dist_select_v2 <- dist_select
+  dist_select_v3 <- dist_select
+  dist_select_v4 <- dist_select
+  dist_select_v1$mean <- table_one$Mean[dist_index]
+  dist_select_v2$mean <- table_two$Mean[dist_index]
+  dist_select_v3$mean <- table_three$Mean[dist_index]
+  dist_select_v4$mean <- table_four$Mean[dist_index]
+  
+  # create a bespoke palette
+  colour_p_v1 <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select_v1$mean))
+  colour_p_v2 <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select_v2$mean))
+  colour_p_v3 <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select_v3$mean))
+  colour_p_v4 <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select_v4$mean))
+  dist_select_v1$colours <- colour_p_v1[as.numeric(cut(dist_select_v1$mean, breaks = (length(dist_select_v1$mean))))]
+  dist_select_v2$colours <- colour_p_v2[as.numeric(cut(dist_select_v2$mean, breaks = (length(dist_select_v2$mean))))]
+  dist_select_v3$colours <- colour_p_v3[as.numeric(cut(dist_select_v3$mean, breaks = (length(dist_select_v3$mean))))]
+  dist_select_v4$colours <- colour_p_v4[as.numeric(cut(dist_select_v4$mean, breaks = (length(dist_select_v4$mean))))]
+  
+  # define plotting parameters
+  par(mfrow = c(2,2))
+  
+  country_select <- params$country_select
+
+  # plot first stat
+  print(plot(country_select,
+             axes = FALSE,
+             col = "#d9d9d9")) 
+
+  print(plot(dist_select_v1,
+             add = TRUE,
+             col = dist_select_v1$colours,
+             lty = 3))
+
+  title(variable_n, 
+        cex.main = 1, col.main = "#18c8cf",
+        adj = 0)
+  
+  gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
+                 color = colour_p_v1, 
+                 nCol = length(dist_select_v1$mean), 
+                 pos = 0.5, 
+                 side = 4,
+                 length = 0.25, 
+                 depth = 0.05, 
+                 inside = TRUE, 
+                 coords = FALSE,
+                 pos.num = NULL, 
+                 n.seg = 3, 
+                 border.col = "black", 
+                 dec = 2,
+                 fit.margin = TRUE)
+
+  # plot second stat
+  print(plot(country_select,
+             axes = FALSE,
+             col = "#d9d9d9")) 
+
+  print(plot(dist_select_v2,
+             add = TRUE,
+             col = dist_select_v2$colours,
+             lty = 3))
+
+  title(variable_n2, 
+        cex.main = 1, col.main = "#18c8cf",
+        adj = 0)
+  
+  gradientLegend(valRange = c(min(dist_select_v2$mean), max(dist_select_v2$mean)), 
+                 color = colour_p_v2, 
+                 nCol = length(dist_select_v2$mean), 
+                 pos = 0.5, 
+                 side = 4,
+                 length = 0.25, 
+                 depth = 0.05, 
+                 inside = TRUE, 
+                 coords = FALSE,
+                 pos.num = NULL, 
+                 n.seg = 3, 
+                 border.col = "black", 
+                 dec = 2,
+                 fit.margin = TRUE)
+  
+  # plot third stat
+  print(plot(country_select,
+             axes = FALSE,
+             col = "#d9d9d9")) 
+  
+  print(plot(dist_select_v3,
+             add = TRUE,
+             col = dist_select_v3$colours,
+             lty = 3))
+
+  title(variable_n3, 
+        cex.main = 1, col.main = "#18c8cf",
+        adj = 0)
+  
+  gradientLegend(valRange = c(min(dist_select_v3$mean), max(dist_select_v3$mean)), 
+                 color = colour_p_v3, 
+                 nCol = length(dist_select_v3$mean), 
+                 pos = 0.5, 
+                 side = 4,
+                 length = 0.25, 
+                 depth = 0.05, 
+                 inside = TRUE, 
+                 coords = FALSE,
+                 pos.num = NULL, 
+                 n.seg = 3, 
+                 border.col = "black", 
+                 dec = 2,
+                 fit.margin = TRUE)
+  
+  # plot fourth stat
+  print(plot(country_select,
+             axes = FALSE,
+             col = "#d9d9d9")) 
+  
+  print(plot(dist_select_v4,
+             add = TRUE,
+             col = dist_select_v4$colours,
+             lty = 3))
+
+  title(variable_n4, 
+        cex.main = 1, col.main = "#18c8cf",
+        adj = 0)
+  
+  gradientLegend(valRange = c(min(dist_select_v4$mean), max(dist_select_v4$mean)), 
+                 color = colour_p_v4, 
+                 nCol = length(dist_select_v4$mean), 
+                 pos = 0.5, 
+                 side = 4,
+                 length = 0.25, 
+                 depth = 0.05, 
+                 inside = TRUE, 
+                 coords = FALSE,
+                 pos.num = NULL, 
+                 n.seg = 3, 
+                 border.col = "black", 
+                 dec = 2,
+                 fit.margin = TRUE)
+  
+  }
+
 ```
