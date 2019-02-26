@@ -181,7 +181,7 @@ if(length(stats_list) == 1){
   
   # create a bespoke palette
   colour_p_v1 <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select$mean))
-  dist_select$colours <- colour_p_v1[as.numeric(cut(dist_select_v1$mean, breaks = (length(dist_select_v1$mean))))]
+  dist_select_v1$colours <- colour_p_v1[as.numeric(cut(dist_select_v1$mean, breaks = (length(dist_select_v1$mean))))]
 
   country_select <- params$country_select
 
