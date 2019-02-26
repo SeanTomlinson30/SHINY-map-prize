@@ -176,11 +176,12 @@ if(length(stats_list) == 1){
   
   # first create an index
   dist_index <- which(dist_select$NAME == table_one$District)
-  dist_select$mean <- table_one$Mean[dist_index]
+  dist_select_v1 <- dist_select
+  dist_select_v1$mean <- table_one$Mean[dist_index]
   
   # create a bespoke palette
-  colour_p <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select$mean))
-  dist_select$colours <- colour_p[as.numeric(cut(dist_select$mean, breaks = (length(dist_select$mean))))]
+  colour_p_v1 <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select$mean))
+  dist_select$colours <- colour_p_v1[as.numeric(cut(dist_select_v1$mean, breaks = (length(dist_select_v1$mean))))]
 
   country_select <- params$country_select
 
@@ -188,9 +189,9 @@ if(length(stats_list) == 1){
              axes = FALSE,
              col = "#d9d9d9")) 
 
-  print(plot(dist_select,
+  print(plot(dist_select_v1,
              add = TRUE,
-             col = dist_select$colours,
+             col = dist_select_v1$colours,
              lty = 3))
 
   title(variable_n, 
@@ -198,7 +199,7 @@ if(length(stats_list) == 1){
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
-                 color = colour_p_v1, 
+                 color = colour_p, 
                  nCol = length(dist_select_v1$mean), 
                  pos = 0.5, 
                  side = 4,
