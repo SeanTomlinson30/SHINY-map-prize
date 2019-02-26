@@ -62,6 +62,11 @@ if(!require(shinyjs)){
   library(shinyjs)
 }
 
+if(!require(plotfunctions)){
+  install.packages("plotfunctions")
+  library(plotfunctions)
+}
+
 # generate a list of countries for which MAP data exists
 countries <- shapefile('data/countries/admin2013_0.shp')
 admin_1 <- shapefile('data/districts/admin_1.shp')
@@ -271,16 +276,21 @@ function(input, output, session) {
     }
   }
   )
-    # 
+    # download generated statistics as a html document
     output$download <- downloadHandler(
-    filename = "pop_output.pdf",
-    content = content <- function(file) {
-      rmarkdown::render(input = file.path(tempdir(), "pop_stats.rmd"),
-      output_file = file.path(tempdir(), "pop_output.pdf"),
-      output_format = "pdf_document")
- 
-      file.copy(file.path(tempdir(), "pop_output.pdf"), file)
-      },
-      contentType = "document/pdf")
+        
+      filename = paste0("MAP_output_", Sys.Date(), ".html"),
+      
+      content = content <- function(file) {
+          
+        rmarkdown::render(input = file.path(tempdir(), "pop_stats.rmd"),
+                            output_file = paste0(tempdir(), "/MAP_output_", Sys.Date(), ".html"),
+                            output_format = "html_document")
+          
+        file.copy(paste0(tempdir(), "/MAP_output_", Sys.Date(), ".html"), file)
+        
+        },
+        
+      contentType = "text/html")
 }
 

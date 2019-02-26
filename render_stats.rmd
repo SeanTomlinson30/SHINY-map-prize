@@ -13,6 +13,7 @@ always_allow_html: yes
 require(kableExtra)
 require(knitr)
 require(RColorBrewer)
+require(plotfunctions)
 
 ```
 
@@ -53,35 +54,6 @@ column_spec(x, 1:5, width = "10em")
 
 </br>
 
-```{r pop_plot_2, echo = FALSE, results = "hide"}
-# generate shapefile for the plot
-# first create an index
-dist_index <- which(dist_select$NAME == table_one$District)
-dist_select$mean <- table_one$Mean[dist_index]
-
-# create a bespoke palette
-colour_p <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select$mean))
-dist_select$colours <- colour_p[as.numeric(cut(dist_select$mean, breaks = (length(dist_select$mean))))]
-
-country_select <- params$country_select
-
-print(plot(country_select,
-           axes = FALSE,
-           col = "#d9d9d9"))
-
-print(plot(dist_select,
-           add = TRUE,
-           col = dist_select$colours,
-           lty = 3))
-
-title(variable_n, 
-      cex.main = 1, col.main = "#18c8cf",
-      adj = 0)
-
-```
-
-</br>
-
 ```{r pop_stats_2, results = "axis", echo = FALSE}
 if(length(stats_list) > 1){
 
@@ -89,8 +61,8 @@ if(length(stats_list) > 1){
 table_two <- stats_list[[2]]
 
 # get variable names
-variable_n <- names(table_two)[2]
-variable_n <- substr(variable_n, 1, nchar(variable_n)-7)
+variable_n2 <- names(table_two)[2]
+variable_n2 <- substr(variable_n2, 1, nchar(variable_n2)-7)
 
 names(table_two) <- c("District",
                       "Mean",
@@ -106,7 +78,7 @@ table_two$`Standard Deviation` <- round(table_two$`Standard Deviation`, 2)
 
 y <- kable(table_two,
            row.names = FALSE,
-           caption = variable_n,
+           caption = variable_n2,
            align = "c")
 
 column_spec(y, 1:5, width = "10em")
@@ -124,8 +96,8 @@ if(length(stats_list) > 2){
 table_three <- stats_list[[3]]
 
 # get variable names
-variable_n <- names(table_three)[2]
-variable_n <- substr(variable_n, 1, nchar(variable_n)-7)
+variable_n3 <- names(table_three)[2]
+variable_n3 <- substr(variable_n3, 1, nchar(variable_n3)-7)
 
 names(table_three) <- c("District",
                       "Mean",
@@ -141,7 +113,7 @@ table_three$`Standard Deviation` <- round(table_three$`Standard Deviation`, 2)
 
 z <- kable(table_three,
            row.names = FALSE,
-           caption = variable_n,
+           caption = variable_n3,
            align = "c")
 
 column_spec(z, 1:5, width = "10em")
@@ -158,8 +130,8 @@ if(length(stats_list) > 3){
 table_four <- stats_list[[4]]
 
 # get variable names
-variable_n <- names(table_four)[2]
-variable_n <- substr(variable_n, 1, nchar(variable_n)-7)
+variable_n4 <- names(table_four)[2]
+variable_n4 <- substr(variable_n4, 1, nchar(variable_n4)-7)
 
 names(table_four) <- c("District",
                       "Mean",
@@ -175,7 +147,7 @@ table_four$`Standard Deviation` <- round(table_four$`Standard Deviation`, 2)
 
 aa <- kable(table_four,
             row.names = FALSE,
-            caption = variable_n,
+            caption = variable_n4,
             align = "c")
 
 column_spec(aa, 1:5, width = "10em")
@@ -183,3 +155,113 @@ column_spec(aa, 1:5, width = "10em")
 }
 ```
 
+</br>
+
+```{r stat_plots, echo = FALSE, results = "hide"}
+# generate shapefile for the plot
+if(length(stats_list) == 1){
+  
+  # first create an index
+  dist_index <- which(dist_select$NAME == table_one$District)
+  dist_select$mean <- table_one$Mean[dist_index]
+  
+  # create a bespoke palette
+  colour_p <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select$mean))
+  dist_select$colours <- colour_p[as.numeric(cut(dist_select$mean, breaks = (length(dist_select$mean))))]
+
+  country_select <- params$country_select
+
+  print(plot(country_select,
+             axes = FALSE,
+             col = "#d9d9d9")) 
+
+  print(plot(dist_select,
+             add = TRUE,
+             col = dist_select$colours,
+             lty = 3))
+
+  title(variable_n, 
+        cex.main = 1, col.main = "#18c8cf",
+        adj = 0)
+  
+  }
+
+if(length(stats_list) == 2){
+  
+  dist_index <- which(dist_select$NAME == table_one$District)
+  
+  dist_select_v1 <- dist_select
+  dist_select_v2 <- dist_select
+  dist_select_v1$mean <- table_one$Mean[dist_index]
+  dist_select_v2$mean <- table_two$Mean[dist_index]
+  
+  # create a bespoke palette
+  colour_p_v1 <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select_v1$mean))
+  colour_p_v2 <- colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))(length(dist_select_v2$mean))
+  dist_select_v1$colours <- colour_p_v1[as.numeric(cut(dist_select_v1$mean, breaks = (length(dist_select_v1$mean))))]
+  dist_select_v2$colours <- colour_p_v2[as.numeric(cut(dist_select_v2$mean, breaks = (length(dist_select_v2$mean))))]
+  
+  # define plotting parameters
+  par(mfrow = c(1,2))
+  
+  country_select <- params$country_select
+
+  print(plot(country_select,
+             axes = FALSE,
+             col = "#d9d9d9")) 
+
+  print(plot(dist_select_v1,
+             add = TRUE,
+             col = dist_select_v1$colours,
+             lty = 3))
+
+  title(variable_n, 
+        cex.main = 1, col.main = "#18c8cf",
+        adj = 0)
+  
+  gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
+                 color = colour_p_v1, 
+                 nCol = length(dist_select_v1$mean), 
+                 pos = 0.5, 
+                 side = 4,
+                 length = 0.25, 
+                 depth = 0.05, 
+                 inside = TRUE, 
+                 coords = FALSE,
+                 pos.num = NULL, 
+                 n.seg = 3, 
+                 border.col = "black", 
+                 dec = 2,
+                 fit.margin = TRUE)
+  
+  
+  print(plot(country_select,
+             axes = FALSE,
+             col = "#d9d9d9")) 
+
+  print(plot(dist_select_v2,
+             add = TRUE,
+             col = dist_select_v2$colours,
+             lty = 3))
+
+  title(variable_n2, 
+        cex.main = 1, col.main = "#18c8cf",
+        adj = 0)
+  
+  gradientLegend(valRange = c(min(dist_select_v2$mean), max(dist_select_v2$mean)), 
+                 color = colour_p_v2, 
+                 nCol = length(dist_select_v2$mean), 
+                 pos = 0.5, 
+                 side = 4,
+                 length = 0.25, 
+                 depth = 0.05, 
+                 inside = TRUE, 
+                 coords = FALSE,
+                 pos.num = NULL, 
+                 n.seg = 3, 
+                 border.col = "black", 
+                 dec = 2,
+                 fit.margin = TRUE)
+  
+  }
+```
