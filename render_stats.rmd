@@ -21,6 +21,104 @@ dist_select <- params$dist_select
 
 dist_names <- unique(dist_select$NAME)
 
+# create a lookup table for the variable names
+var_name_orig <- c("A global friction surface enumerating land based travel speed for a nominal year 2015",
+                   "A global map of travel time to cities to assess inequalities in accessibility in 2015",
+                   "All cause fever",                                                                      
+                   "Artemisinin based combination therapy  ACT  coverage",                                 
+                   "Dominant Vectors",                                                                     
+                   "Duffy Negativity Phenotype Frequency",                                                 
+                   "G6PD Deficiency Allele Frequency",                                                     
+                   "HbS  Sickle Haemoglobin  Allele Frequency",                                            
+                   "Indoor residual spraying  IRS  coverage",                                              
+                   "Insecticide treated bednet  ITN  coverage",                                            
+                   "Malaria attributable fever as a proportion of all cause fever",                        
+                   "Malaria attributable fever as a proportion of malaria positive fever",                 
+                   "Malaria positive fever as a proportion of all cause fever",                            
+                   "Non malarial fever",                                                                   
+                   "Plasmodium falciparum Incidence",                                                      
+                   "Plasmodium falciparum PR2 10",                                                         
+                   "Plasmodium falciparum Spatial Limits",                                                 
+                   "Plasmodium falciparum Support",                                                        
+                   "Plasmodium falciparum Temperature Suitability",                                        
+                   "Plasmodium knowlesi Risk",                                                             
+                   "Plasmodium vivax Endemicity",                                                          
+                   "Plasmodium vivax Relapse",                                                             
+                   "Plasmodium vivax Spatial Limits",                                                      
+                   "Plasmodium vivax Support",                                                             
+                   "Plasmodium vivax Temperature Suitability",                                             
+                   "Secondary Dominant Vectors")
+
+var_name_new <- c("Global friction surface (2015)",
+                  "Global accessibility (2015)",
+                  "All cause fever",                                                                      
+                  "ACT coverage",                                 
+                  "Dominant Vectors",                                                                     
+                  "Duffy Negativity",                                                 
+                  "G6PD Deficiency",                                                     
+                  "HbS Sickle",                                            
+                  "IRS coverage",                                              
+                  "ITN coverage",                                            
+                  "Malaria attributable fever (prop ACF)",                        
+                  "Malaria attributable fever (prop malaria +ve fever)",                 
+                  "Malaria positive fever (proportion ACF)",                            
+                  "Non malarial fever",                                                                   
+                  "Plasmodium falciparum Incidence",                                                      
+                  "Plasmodium falciparum PR2 10",                                                         
+                  "Plasmodium falciparum Spatial Limits",                                                 
+                  "Plasmodium falciparum Support",                                                        
+                  "Plasmodium falciparum temp. suitability",                                        
+                  "Plasmodium knowlesi Risk",                                                             
+                  "Plasmodium vivax Endemicity",                                                          
+                  "Plasmodium vivax Relapse",                                                             
+                  "Plasmodium vivax Spatial Limits",                                                      
+                  "Plasmodium vivax Support",                                                             
+                  "Plasmodium vivax temp. suitability",                                             
+                  "Secondary Dominant Vectors")
+
+var_name_units <- c("Land-based travel speed (minutes)",
+                    "Time to travel to the nearest city (minutes)",
+                    "All-cause fever prevalence within the limits of stable Pf transmission, in children under 5 years of age", 
+                    "Percentage of cases of fever in under-5 year olds that were treated with ACT",                                 
+                    "Probability (0-1)",                                                                     
+                    "Proportion of the population predicted to be Duffy negative",                                                 
+                    "Allele frequency (median) for G6PD deficiency",                                                     
+                    "Allele frequency (mean) of sickle haemoglobin alleles",                                            
+                    "Percentage of the population protected by IRS",                                              
+                    "Proportion of the population who were protected by ITNs",                                            
+                    "Predicted malaria attributable fevers (MAF) as a proportion of all fevers, for children under 5",                        
+                    "Predicted malaria attributable fevers as a proportion of malaria positive fevers, for children under 5",                 
+                    "Predicted malaria-positive fevers as a proportion of all fevers, for children under 5",                            
+                    "Non-malarial fever prevalence is defined as the sum of the prevalence of febrile illness without a P. falciparum malaria infection and the prevalence of febrile illness coincident with, but not caused by, a P. falciparum malaria infection, for children under 5", 
+                    "All-age incidence rate (clinical cases per 1,000 population per annum) of Plasmodium falciparum malaria",
+                    "Age-standardised parasite rate for Plasmodium falciparum malaria for children two to ten years of age (PfPR2-10)",
+                    "Plasmodium falciparum Spatial Limits",                                                 
+                    "Number of days per year which could support infectious vectors",                                                        
+                    "The index of suitability is a relative, not absolute, measure of the effect of temperature on vectorial capacity and reproductive number",
+                    "Modelled relative risk of zoonotic Plasmodium knowlesi infecting humans on a scale 0 (low) to 1.0 (high)",
+                    "Predicted all-age parasite prevalence rate for Plasmodium vivax malaria",                                                          
+                    "Predicted prevalence of Plasmodium vivax relapse",                                                             
+                    "Plasmodium vivax Spatial Limits",                                                      
+                    "Number of days per year which could support infectious vectors",                                                             
+                    "The index of suitability is a relative, not absolute, measure of the effect of temperature on vectorial capacity and reproductive number",
+                    "Secondary Dominant Vectors")
+
+var_lookup <- data.frame(original = var_name_orig,
+                         new = var_name_new,
+                         units = var_name_units)
+
+```
+
+```{r caption_css, results = "asis", echo = FALSE}
+cat("
+<style>
+caption {
+      color: #0dc5c1;
+      font-weight: bold;
+      font-size: 1.20em;
+    }
+</style>
+")
 ```
 
 ## AppName Output Report
@@ -44,6 +142,11 @@ table_one <- stats_list[[1]]
 variable_n <- names(table_one)[2]
 variable_n <- substr(variable_n, 1, nchar(variable_n)-7)
 
+# get units and shorter variable name
+idx <- which(variable_n == var_lookup$original)
+units_n <- as.character(var_lookup$units[idx])
+variable_trim_n <- as.character(var_lookup$new[idx])
+
 names(table_one) <- c("District",
                       "Mean",
                       "Max",
@@ -59,7 +162,8 @@ table_one$`Standard Deviation` <- round(table_one$`Standard Deviation`, 2)
 x <- kable(table_one,
            row.names = FALSE,
            caption = variable_n,
-           align = "c")
+           align = "c") %>% 
+           add_footnote(label = units_n)
 
 column_spec(x, 1:5, width = "10em")
 
@@ -77,6 +181,11 @@ table_two <- stats_list[[2]]
 variable_n2 <- names(table_two)[2]
 variable_n2 <- substr(variable_n2, 1, nchar(variable_n2)-7)
 
+# get units and shorter variable name
+idx <- which(variable_n2 == var_lookup$original)
+units_n2 <- as.character(var_lookup$units[idx])
+variable_trim_n2 <- as.character(var_lookup$new[idx])
+
 names(table_two) <- c("District",
                       "Mean",
                       "Max",
@@ -92,7 +201,8 @@ table_two$`Standard Deviation` <- round(table_two$`Standard Deviation`, 2)
 y <- kable(table_two,
            row.names = FALSE,
            caption = variable_n2,
-           align = "c")
+           align = "c") %>% 
+           add_footnote(label = units_n2)
 
 column_spec(y, 1:5, width = "10em")
 
@@ -112,6 +222,11 @@ table_three <- stats_list[[3]]
 variable_n3 <- names(table_three)[2]
 variable_n3 <- substr(variable_n3, 1, nchar(variable_n3)-7)
 
+# get units and shorter variable name
+idx <- which(variable_n3 == var_lookup$original)
+units_n3 <- as.character(var_lookup$units[idx])
+variable_trim_n3 <- as.character(var_lookup$new[idx])
+
 names(table_three) <- c("District",
                       "Mean",
                       "Max",
@@ -127,7 +242,8 @@ table_three$`Standard Deviation` <- round(table_three$`Standard Deviation`, 2)
 z <- kable(table_three,
            row.names = FALSE,
            caption = variable_n3,
-           align = "c")
+           align = "c") %>% 
+           add_footnote(label = units_n3)
 
 column_spec(z, 1:5, width = "10em")
   
@@ -146,6 +262,11 @@ table_four <- stats_list[[4]]
 variable_n4 <- names(table_four)[2]
 variable_n4 <- substr(variable_n4, 1, nchar(variable_n4)-7)
 
+# get units and shorter variable name
+idx <- which(variable_n4 == var_lookup$original)
+units_n4 <- as.character(var_lookup$units[idx])
+variable_trim_n4 <- as.character(var_lookup$new[idx])
+
 names(table_four) <- c("District",
                       "Mean",
                       "Max",
@@ -161,14 +282,14 @@ table_four$`Standard Deviation` <- round(table_four$`Standard Deviation`, 2)
 aa <- kable(table_four,
             row.names = FALSE,
             caption = variable_n4,
-            align = "c")
+            align = "c") %>% 
+           add_footnote(label = units_n4)
 
 column_spec(aa, 1:5, width = "10em")
 
 }
 ```
 
-</br>
 
 ```{r stat_plots, echo = FALSE, results = "hide", fig.height = 10, fig.width = 10}
 # generate shapefile for the plot
@@ -194,8 +315,8 @@ if(length(stats_list) == 1){
              col = dist_select_v1$colours,
              lty = 3))
 
-  title(variable_n, 
-        cex.main = 1, col.main = "#18c8cf",
+  title(variable_trim_n, 
+        cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
@@ -246,8 +367,8 @@ if(length(stats_list) == 2){
              col = dist_select_v1$colours,
              lty = 3))
 
-  title(variable_n, 
-        cex.main = 1, col.main = "#18c8cf",
+  title(variable_trim_n, 
+        cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
@@ -275,8 +396,8 @@ if(length(stats_list) == 2){
              col = dist_select_v2$colours,
              lty = 3))
 
-  title(variable_n2, 
-        cex.main = 1, col.main = "#18c8cf",
+  title(variable_trim_n2, 
+        cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v2$mean), max(dist_select_v2$mean)), 
@@ -331,8 +452,8 @@ if(length(stats_list) == 3){
              col = dist_select_v1$colours,
              lty = 3))
 
-  title(variable_n, 
-        cex.main = 1, col.main = "#18c8cf",
+  title(variable_trim_n, 
+        cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
@@ -360,8 +481,8 @@ if(length(stats_list) == 3){
              col = dist_select_v2$colours,
              lty = 3))
 
-  title(variable_n2, 
-        cex.main = 1, col.main = "#18c8cf",
+  title(variable_trim_n2, 
+        cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v2$mean), max(dist_select_v2$mean)), 
@@ -389,8 +510,8 @@ if(length(stats_list) == 3){
              col = dist_select_v3$colours,
              lty = 3))
 
-  title(variable_n3, 
-        cex.main = 1, col.main = "#18c8cf",
+  title(variable_trim_n3, 
+        cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v3$mean), max(dist_select_v3$mean)), 
@@ -449,8 +570,8 @@ if(length(stats_list) == 4){
              col = dist_select_v1$colours,
              lty = 3))
 
-  title(variable_n, 
-        cex.main = 1, col.main = "#18c8cf",
+  title(variable_trim_n, 
+        cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
@@ -478,8 +599,8 @@ if(length(stats_list) == 4){
              col = dist_select_v2$colours,
              lty = 3))
 
-  title(variable_n2, 
-        cex.main = 1, col.main = "#18c8cf",
+  title(variable_trim_n2, 
+        cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v2$mean), max(dist_select_v2$mean)), 
@@ -507,8 +628,8 @@ if(length(stats_list) == 4){
              col = dist_select_v3$colours,
              lty = 3))
 
-  title(variable_n3, 
-        cex.main = 1, col.main = "#18c8cf",
+  title(variable_trim_n3, 
+        cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v3$mean), max(dist_select_v3$mean)), 
@@ -536,8 +657,8 @@ if(length(stats_list) == 4){
              col = dist_select_v4$colours,
              lty = 3))
 
-  title(variable_n4, 
-        cex.main = 1, col.main = "#18c8cf",
+  title(variable_trim_n4, 
+        cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
   gradientLegend(valRange = c(min(dist_select_v4$mean), max(dist_select_v4$mean)), 

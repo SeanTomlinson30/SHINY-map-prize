@@ -156,7 +156,7 @@ function(input, output, session) {
     
     plot(dist_select,
          add = TRUE,
-         col = "#41b6c4",
+         col = "#0dc5c1",
          lty = 3)
     
   })
