@@ -231,7 +231,8 @@ if(length(stats_list) == 2){
   dist_select_v2$colours <- colour_p_v2[as.numeric(cut(dist_select_v2$mean, breaks = (length(dist_select_v2$mean))))]
   
   # define plotting parameters
-  par(mfrow = c(1,2))
+  par(mfrow = c(1,2),
+      mar = c(5,4,4,2))
   
   country_select <- params$country_select
 
@@ -315,7 +316,8 @@ if(length(stats_list) == 3){
   dist_select_v3$colours <- colour_p_v3[as.numeric(cut(dist_select_v3$mean, breaks = (length(dist_select_v3$mean))))]
   
   # define plotting parameters
-  par(mfrow = c(2,2))
+  par(mfrow = c(2,2),
+      mar = c(5,4,4,2))
   
   country_select <- params$country_select
 
@@ -432,7 +434,8 @@ if(length(stats_list) == 4){
   dist_select_v4$colours <- colour_p_v4[as.numeric(cut(dist_select_v4$mean, breaks = (length(dist_select_v4$mean))))]
   
   # define plotting parameters
-  par(mfrow = c(2,2))
+  par(mfrow = c(2,2),
+      mar = c(5,4,4,2))
   
   country_select <- params$country_select
 
