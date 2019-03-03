@@ -83,6 +83,9 @@ africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
 africa$COUNTRY[africa$COUNTRY == "Democratic Republic of Congo"] <- "Democratic Republic of the Congo"
 africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
+#andy load simplified admin polygons
+load('data/sf_afr_simp.rda')
+
 # define the server logic
 function(input, output, session) {
   
@@ -101,7 +104,8 @@ function(input, output, session) {
       
     }
     
-    selected_dist <- admin_1$NAME[admin_1$COUNTRY_ID == country_id]
+    #selected_dist <- admin_1$NAME[admin_1$COUNTRY_ID == country_id]
+    selected_dist <- sf_afr_simp$name[sf_afr_simp$country_id==country_id & sf_afr_simp$admn_level==1]    
     
     checkboxGroupInput("selected_dist", "Select first-level administrative division (min 2):",
                        choices = selected_dist,
@@ -146,18 +150,29 @@ function(input, output, session) {
     
     }
     
-    dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
-    dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
+    # subset the country (includes districts)
+    sf_cntry <- sf_afr_simp[sf_afr_simp$country_id==country_id,]
     
-    plot(countries[countries$COUNTRY_ID == country_id, ],
-         axes = FALSE,
-         col = "#d9d9d9",
-         main = input$country)
+    plot(sf::st_geometry(sf_cntry))
     
-    plot(dist_select,
-         add = TRUE,
-         col = "#41b6c4",
-         lty = 3)
+    #subset selected districts
+    #BEWARE this relies on district names being same as in existing list
+    sf_dist_select <- sf_cntry[sf_cntry$name %in% input$selected_dist,] 
+    
+    plot(sf::st_geometry(sf_dist_select),col='blue',add=TRUE)
+    
+    # dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
+    # dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
+    # 
+    # plot(countries[countries$COUNTRY_ID == country_id, ],
+    #      axes = FALSE,
+    #      col = "#d9d9d9",
+    #      main = input$country)
+    # 
+    # plot(dist_select,
+    #      add = TRUE,
+    #      col = "#41b6c4",
+    #      lty = 3)
     
   })
 
