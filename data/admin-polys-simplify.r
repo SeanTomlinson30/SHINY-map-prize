@@ -49,6 +49,9 @@ sf_afr_simp <- rmapshaper::ms_simplify(sf_africa, keep_shapes=TRUE)
 
 save(sf_afr_simp, file='data/sf_afr_simp.rda')
 
+#to load
+load('data/sf_afr_simp.rda')
+
 library(mapview)
 mapview(sf_afr_simp, zcol='country_id', legend=FALSE)
 
