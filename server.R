@@ -109,6 +109,7 @@ function(input, output, session) {
     
     checkboxGroupInput("selected_dist", "Select first-level administrative division (min 2):",
                        choices = selected_dist,
+                       selected = selected_dist,
                        inline = TRUE)
   })
   
