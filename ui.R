@@ -55,11 +55,15 @@ if(!require(shinyjs)){
 }
 
 # generate a list of countries for which MAP data exists
-africa <- shapefile('data/countries/Africa.shp')
-africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
-africa$COUNTRY[africa$COUNTRY == "Democratic Republic of Congo"] <- "Democratic Republic of the Congo"
-africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
+# africa <- shapefile('data/countries/Africa.shp')
+# africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
+# africa$COUNTRY[africa$COUNTRY == "Democratic Republic of Congo"] <- "Democratic Republic of the Congo"
+# africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
+# load simplified admin polygons, for country list
+# could prob get country list from server in a better way
+load('data/sf_afr_simp.rda')
+country_names <- sf_afr_simp$name[sf_afr_simp$admn_level==0]
 
 # define a UI use a fluid bootstrap layout
 
@@ -94,7 +98,8 @@ navbarPage(
                         
                         # country of interest selection (only one country allowed at a time)
                         selectInput("country", "Select country of interest:",
-                                    choices = unique(africa$COUNTRY),
+                                    #choices = unique(africa$COUNTRY),
+                                    choices = country_names,
                                     selected = "Benin"),
                         
                         # hover-over tooltip

@@ -19,7 +19,7 @@ require(plotfunctions)
 country_select <- params$country_select
 dist_select <- params$dist_select
 
-dist_names <- unique(dist_select$NAME)
+dist_names <- unique(dist_select$name)
 
 ```
 
