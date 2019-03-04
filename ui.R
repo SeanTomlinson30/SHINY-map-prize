@@ -65,81 +65,83 @@ africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
 
 navbarPage(
-           "Malaria Atlas Project - District comparison",
-           tabPanel("Application",
-                    fluidPage(theme = shinytheme("flatly"),
-                    useShinyalert(),
-                    # set a margin for the checkbox
-                    tags$head(
-                      tags$style(
-                        HTML(".checkbox-inline {
-                          margin-left: 0px;
-                          margin-right: 10px;}
-                          .checkbox-inline+.checkbox-inline {
-                          margin-left: 0px;
-                          margin-right: 10px;
-                          }"))),
+  "Malaria Atlas Project - District comparison",
+  tabPanel("Application",
+           fluidPage(theme = shinytheme("flatly"),
+                     useShinyalert(),
+                     # set a margin for the checkbox
+                     tags$head(
+                       tags$style(
+                         HTML(".checkbox-inline {
+                              margin-left: 0px;
+                              margin-right: 10px;}
+                              .checkbox-inline+.checkbox-inline {
+                              margin-left: 0px;
+                              margin-right: 10px;
+                              }"))),
                     
-                    # page title
-                    #titlePanel(HTML(paste("Malaria Atlas Project - District comparison", " ", " ", sep = "<br/>"))),
-                    
-                    # create a sidebar where the user can select a country, and districts (etc.)
-                    # we may change this to a header once basic functionality is resolved
-                    
-                    sidebarLayout(
-                      
-                      # sidebar panel for the inputs
-                      
-                      sidebarPanel(
-                        
-                        # country of interest selection (only one country allowed at a time)
-                        selectInput("country", "Select country of interest:",
-                                    choices = unique(africa$COUNTRY),
-                                    selected = "Benin"),
-                        
-                        # hover-over tooltip
-                        bsTooltip(id = "country",
-                                  title = "Please select the country of interest, available districts will update based on this selection.",
-                                  placement = "right", trigger = "hover", options = list(container = "body")),
-                        
-                        # dynamic district selection
-                        uiOutput("select_dist"),
-                        
-                        # hover-over tooltip
-                        bsTooltip(id = "select_dist",
-                                  title = "Please select the districts to feature within the comparison/ranking.",
-                                  placement = "right", trigger = "hover", options = list(container = "body")),
-                        
-                        # dynamic district selection
-                        uiOutput("select_raster") %>% withSpinner(type = '7', color="#0dc5c1"),
-                        
-                        # hover-over tooltip
-                        bsTooltip(id = "select_raster",
-                                  title = "Please select the rasters to compare.",
-                                  placement = "right", trigger = "hover", options = list(container = "body")),
-                        
-                        
-                        actionButton(inputId = "processStats", label = "Generate statistics", class='butt'),
-                        tags$head(tags$style(".butt{margin-bottom:5px;}")),
-                        
-                        bsTooltip(id = "processStats",
-                                  title = "Run generation of statistics and ranking system. This will produce results which feature in the tabs to the right.",
-                                  placement = "right", trigger = "hover", options = list(container = "body")),
-                        
-                        uiOutput("downloadbutton")
-                        ),
-                      
-                      mainPanel(
-                        
-                        tabsetPanel(id='main0', type = "tabs",
-                                    tabPanel(value ='tab1', title = "Selected country and districts", div(style = 'overflow-y:scroll;height:750px;',plotOutput("select_country", height = '750px', width = '750px'))),
-                                    tabPanel(value ='tab2', title = "Output", div(style = 'overflow-y:scroll;height:750px;',htmlOutput("report"))))
-                        ) # enf of main panel
-                      ) # end of sidebar layout
-                    ) # end of fluid page
-          ), # end of tab panel
-          tabPanel("Help",
-          tabsetPanel(type = 'tabs',
-                      tabPanel(title='Help', includeMarkdown('help.md')),
-                      tabPanel(title='About', includeMarkdown('about.md'))))
-          )
+                     # page title
+                     #titlePanel(HTML(paste("Malaria Atlas Project - District comparison", " ", " ", sep = "<br/>"))),
+                     
+                     # create a sidebar where the user can select a country, and districts (etc.)
+                     # we may change this to a header once basic functionality is resolved
+                     
+                     sidebarLayout(
+                       
+                       # sidebar panel for the inputs
+                       
+                       sidebarPanel(
+                         
+                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
+                         
+                         # country of interest selection (only one country allowed at a time)
+                         selectInput("country", "Select country of interest:",
+                                     choices = unique(africa$COUNTRY),
+                                     selected = "Benin"),
+                         
+                         # hover-over tooltip
+                         bsTooltip(id = "country",
+                                   title = "Please select the country of interest, available districts will update based on this selection.",
+                                   placement = "right", trigger = "hover", options = list(container = "body")),
+                         
+                         # dynamic district selection
+                         uiOutput("select_dist"),
+                         
+                         # hover-over tooltip
+                         bsTooltip(id = "select_dist",
+                                   title = "Please select the districts to feature within the comparison/ranking.",
+                                   placement = "right", trigger = "hover", options = list(container = "body")),
+                         
+                         # dynamic district selection
+                         uiOutput("select_raster") %>% withSpinner(type = '7', color="#0dc5c1"),
+                         
+                         # hover-over tooltip
+                         bsTooltip(id = "select_raster",
+                                   title = "Please select the rasters to compare.",
+                                   placement = "right", trigger = "hover", options = list(container = "body")),
+                         
+                         
+                         actionButton(inputId = "processStats", label = "Generate statistics", class='butt'),
+                         tags$head(tags$style(".butt{margin-bottom:5px;}")),
+                         
+                         bsTooltip(id = "processStats",
+                                   title = "Run generation of statistics and ranking system. This will produce results which feature in the tabs to the right.",
+                                   placement = "right", trigger = "hover", options = list(container = "body")),
+                         
+                         uiOutput("downloadbutton")
+                       ),
+                       
+                       mainPanel(
+                         
+                         tabsetPanel(id='main0', type = "tabs",
+                                     tabPanel(value ='tab1', title = "Selected country and districts", div(style = 'overflow-y:scroll;height:750px;',plotOutput("select_country", height = '750px', width = '750px'))),
+                                     tabPanel(value ='tab2', title = "Output", div(style = 'overflow-y:scroll;height:750px;',htmlOutput("report"))))
+                       ) # enf of main panel
+                     ) # end of sidebar layout
+                         ) # end of fluid page
+                       ), # end of tab panel
+  tabPanel("Help",
+           tabsetPanel(type = 'tabs',
+                       tabPanel(title='Help', includeMarkdown('help.md')),
+                       tabPanel(title='About', includeMarkdown('about.md'))))
+                     )
