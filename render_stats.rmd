@@ -6,7 +6,7 @@ params:
     dist_select: NA
     country_select: NA
 always_allow_html: yes
-
+geometry: "left = 3cm, right = 3cm, top = 2cm, bottom = 2cm"
 ---
 
 ```{r load_packages, echo = FALSE}
@@ -15,6 +15,7 @@ require(kableExtra)
 require(knitr)
 require(RColorBrewer)
 require(plotfunctions)
+require(DT)
 
 country_select <- params$country_select
 dist_select <- params$dist_select
@@ -119,6 +120,7 @@ caption {
     }
 </style>
 ")
+
 ```
 
 ## MAP-district-comparison Output Report
@@ -159,13 +161,16 @@ table_one$Max <- round(table_one$Max, 2)
 table_one$Min <- round(table_one$Min, 2)
 table_one$`Standard Deviation` <- round(table_one$`Standard Deviation`, 2)
 
-x <- kable(table_one,
-           row.names = FALSE,
-           caption = variable_n,
-           align = "c") %>% 
-           add_footnote(label = units_n)
-
-column_spec(x, 1:5, width = "10em")
+kable(table_one,
+      row.names = FALSE,
+      caption = variable_n,
+      align = "c") %>% 
+      add_footnote(label = units_n) %>%
+      kable_styling(c("striped", "bordered")) %>% 
+      column_spec(1, bold = TRUE, width = "7em") %>%
+      column_spec(2:5, width = "5em") %>%
+      kable_styling(full_width = FALSE,
+                    position = "left")
 
 ```
 
@@ -198,13 +203,16 @@ table_two$Max <- round(table_two$Max, 2)
 table_two$Min <- round(table_two$Min, 2)
 table_two$`Standard Deviation` <- round(table_two$`Standard Deviation`, 2)
 
-y <- kable(table_two,
-           row.names = FALSE,
-           caption = variable_n2,
-           align = "c") %>% 
-           add_footnote(label = units_n2)
-
-column_spec(y, 1:5, width = "10em")
+kable(table_two,
+      row.names = FALSE,
+      caption = variable_n2,
+      align = "c") %>% 
+      add_footnote(label = units_n2) %>%
+      kable_styling(c("striped", "bordered")) %>% 
+      column_spec(1, bold = TRUE, width = "7em") %>%
+      column_spec(2:5, width = "5em") %>%
+      kable_styling(full_width = FALSE,
+                    position = "left")
 
 }
 
@@ -239,13 +247,16 @@ table_three$Max <- round(table_three$Max, 2)
 table_three$Min <- round(table_three$Min, 2)
 table_three$`Standard Deviation` <- round(table_three$`Standard Deviation`, 2)
 
-z <- kable(table_three,
-           row.names = FALSE,
-           caption = variable_n3,
-           align = "c") %>% 
-           add_footnote(label = units_n3)
-
-column_spec(z, 1:5, width = "10em")
+kable(table_three,
+      row.names = FALSE,
+      caption = variable_n3,
+      align = "c") %>% 
+      add_footnote(label = units_n3) %>%
+      kable_styling(c("striped", "bordered")) %>% 
+      column_spec(1, bold = TRUE, width = "7em") %>%
+      column_spec(2:5, width = "5em") %>%
+      kable_styling(full_width = FALSE,
+                    position = "left")
   
 }
 ```
@@ -279,17 +290,19 @@ table_four$Max <- round(table_four$Max, 2)
 table_four$Min <- round(table_four$Min, 2)
 table_four$`Standard Deviation` <- round(table_four$`Standard Deviation`, 2)
 
-aa <- kable(table_four,
-            row.names = FALSE,
-            caption = variable_n4,
-            align = "c") %>% 
-           add_footnote(label = units_n4)
-
-column_spec(aa, 1:5, width = "10em")
+kable(table_four,
+      row.names = FALSE,
+      caption = variable_n4,
+      align = "c") %>% 
+      add_footnote(label = units_n4) %>%
+      kable_styling(c("striped", "bordered")) %>% 
+      column_spec(1, bold = TRUE, width = "7em") %>%
+      column_spec(2:5, width = "5em") %>%
+      kable_styling(full_width = FALSE,
+                    position = "left")
 
 }
 ```
-
 
 ```{r stat_plots, echo = FALSE, results = "hide", fig.height = 10, fig.width = 10}
 # generate shapefile for the plot
@@ -317,7 +330,7 @@ if(length(stats_list) == 1){
 
   title(variable_trim_n, 
         cex.main = 1.2, col.main = "#0dc5c1",
-        adj = 0)
+        adj = 0.5)
   
   gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
                  color = colour_p_v1, 
@@ -333,7 +346,7 @@ if(length(stats_list) == 1){
                  border.col = "black", 
                  dec = 2,
                  fit.margin = TRUE)
-  
+
   }
 
 if(length(stats_list) == 2){
