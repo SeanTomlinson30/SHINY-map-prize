@@ -196,11 +196,18 @@ function(input, output, session) {
         
         # 3. subset csv to only retain selected_dist
         #stats_i_sub <- stats_i[stats_i$zone %in% dist_select$GAUL_CODE, ]
+        #*** PROBLEM HERE ***  
+        #sf_dist_select$gaul_code seems not always the same as stats_i$zone
         stats_i_sub <- stats_i[stats_i$zone %in% sf_dist_select$gaul_code, ]
-                
+        
+        # problem here 
+        #Warning in sf_dist_select$gaul_code == stats_i_sub$zone :
+        #  longer object length is not a multiple of shorter object length
         # add a variable which is the district name
+        # THIS FAILS IF NOT ALL DISTRICTS ARE REPRESENTED
         index <- which(sf_dist_select$gaul_code == stats_i_sub$zone)
         stats_i_sub$District <- sf_dist_select$name[index]
+        
         sf_dist_select$mean <- stats_i$mean[index]
         
         # reorder stats_i_sub
@@ -225,6 +232,7 @@ function(input, output, session) {
       # Set up parameters to pass to Rmd document
       #TODO andy wonder sif change to sf_dist_select is source of report now failing 
       #with Error in [.default: incorrect number of dimensions
+      #Warning: Error in $<-.data.frame: replacement has 7 rows, data has 12
       params <- list(stats_list = stats_list,
                      dist_select = sf_dist_select,
                      country_select = sf_cntry)
@@ -232,20 +240,24 @@ function(input, output, session) {
       # Knit the document, passing in the `params` list, and eval it in a
       # child of the global environment (this isolates the code in the document
       # from the code in this app).
+      
+      # TEMP bughunting error occurs before here when code below commented out
+      
       rmarkdown::render(tempReport,
                         output_file = file.path(tempdir(), "pop_stats.rmd"),
                         output_format = "md_document",
                         params = params,
                         envir = globalenv())
-      
+
       getPage <- function() {
-        
+
         return(includeMarkdown(file.path(tempdir(), "pop_stats.rmd")))
-        
+
       }
-      
+
       output$report <- renderUI({getPage()})
       
+
     }
   }
   )
