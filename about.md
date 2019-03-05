@@ -1,6 +1,6 @@
 ### Developers
 
-**AppName** has been developed through equal contribution by:
+**MAP-district-comparison** has been developed through equal contribution by:
 
 |     |
 | --- |

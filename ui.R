@@ -62,13 +62,41 @@ africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
 
 # define a UI use a fluid bootstrap layout
-
+appCSS <- "
+#loading-content {
+  position: absolute;
+  background: #344151;
+  opacity: 1;
+  z-index: 100;
+  left: 0;
+  right: 0;
+  height: 100%;
+  text-align: center;
+  color: #FFFFFF;
+}
+"
 
 navbarPage(
-  "Malaria Atlas Project - District comparison",
+  "MAP-district-comparison",
   tabPanel("Application",
            fluidPage(theme = shinytheme("flatly"),
                      useShinyalert(),
+                     useShinyalert(),
+                     useShinyjs(),
+                     inlineCSS(appCSS),
+                     
+                     # Loading message
+                     div(
+                       id = "loading-content",
+                       h2("Loading Application...")
+                     ),
+                     
+                     hidden(
+                       div(
+                         id = "app-content",
+                         p(" ")
+                       )
+                     ),
                      # set a margin for the checkbox
                      tags$head(
                        tags$style(
@@ -91,9 +119,12 @@ navbarPage(
                        # sidebar panel for the inputs
                        
                        sidebarPanel(
-                         
-                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-                         
+                         uiOutput("tab"),
+                         br(),
+                         "More information can be found in the help tab.",
+                         br(),
+                         br(),
+
                          # country of interest selection (only one country allowed at a time)
                          selectInput("country", "Select country of interest:",
                                      choices = unique(africa$COUNTRY),
@@ -103,6 +134,7 @@ navbarPage(
                          bsTooltip(id = "country",
                                    title = "Please select the country of interest, available districts will update based on this selection.",
                                    placement = "right", trigger = "hover", options = list(container = "body")),
+                         
                          
                          # dynamic district selection
                          uiOutput("select_dist"),
@@ -137,8 +169,8 @@ navbarPage(
                                      tabPanel(value ='tab1', title = "Selected country and districts", div(style = 'overflow-y:scroll;height:750px;',plotOutput("select_country", height = '750px', width = '750px'))),
                                      tabPanel(value ='tab2', title = "Output", div(style = 'overflow-y:scroll;height:750px;',htmlOutput("report"))))
                        ) # enf of main panel
-                     ) # end of sidebar layout
-                         ) # end of fluid page
+                     ) # end of fluid page # end of sidebar layout
+                         ) 
                        ), # end of tab panel
   tabPanel("Help",
            tabsetPanel(type = 'tabs',

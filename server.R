@@ -85,7 +85,20 @@ africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
 
 # define the server logic
 function(input, output, session) {
+  # Simulate work being done for 1 second
+  Sys.sleep(1)
   
+  # Hide the loading message when the rest of the server function has executed
+  hide(id = "loading-content", anim = TRUE, animType = "fade")    
+  show("app-content")
+
+
+  
+  url <- a("MAP Homepage", href="https://map.ox.ac.uk/")
+  
+  output$tab <- renderUI({
+    tagList("MAP-district-comparison is a shiny app that allows easy interaction with summary statistics and plots for data provided by the Malaria Atlas Project:", url)
+  })
   # create dynamic reactive list of districts, per input country
   output$select_dist <- renderUI({
     
@@ -105,7 +118,8 @@ function(input, output, session) {
     
     checkboxGroupInput("selected_dist", "Select first-level administrative division (min 2):",
                        choices = selected_dist,
-                       inline = TRUE)
+                       inline = TRUE,
+                       selected = selected_dist)
   })
   
   output$select_raster <- renderUI({

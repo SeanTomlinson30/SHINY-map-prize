@@ -121,7 +121,7 @@ caption {
 ")
 ```
 
-## AppName Output Report
+## MAP-district-comparison Output Report
 #### This document contains summary statistics for `r country_select$name`, and the following selected districts: `r dist_names`. 
 
 #### Summary statistics for each selected variable appear below, and were generated using the "zonal" function within the "raster" R package.
