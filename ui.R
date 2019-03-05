@@ -88,7 +88,8 @@ navbarPage(
                      # Loading message
                      div(
                        id = "loading-content",
-                       h2("Loading Application...")
+                       h2("Loading Application..."),
+                       h3("MAP-district-comparison is a shiny app that allows easy interaction with summary statistics and plots for data provided by the Malaria Atlas Project.")
                      ),
                      
                      hidden(
