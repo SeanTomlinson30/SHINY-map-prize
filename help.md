@@ -1,8 +1,8 @@
 ###  Purpose
 
-**AppName** is a **Shiny** web application that allows users to generate summary statistics and visualise surfaces from the **Malaria Atlas Project** without the need to interact with the R coding language.
+**MAP-district-comparison** is a **Shiny** web application that allows users to generate summary statistics and visualise surfaces from the **Malaria Atlas Project** without the need to interact with the R coding language.
 
-**App** is a **Shiny** web application that allows the visualisation of data hosted by the [Malaria Atlas Project](https://map.ox.ac.uk/).
+**MAP-district-comparison** is a **Shiny** web application that allows the visualisation of data hosted by the [Malaria Atlas Project](https://map.ox.ac.uk/).
 
 The application allows selection of up to one country, all available districts within that country and up to four rasters for summary statistics generation and surface visualisation.
 
@@ -29,7 +29,7 @@ TBC
 ### Dependencies
 
 
-**AppName** has been developed using **R** and **Shiny** and is dependent on the following software and **R** packages:
+**MAP-district-comparison** has been developed using **R** and **Shiny** and is dependent on the following software and **R** packages:
 
 
 
