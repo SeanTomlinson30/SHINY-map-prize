@@ -321,10 +321,10 @@ if(length(stats_list) == 1){
   plot(sf::st_geometry(country_select),
            col = "#d9d9d9")
     
-  plot(dist_select_v1["mean"],
-       col = dist_select_v1$colours,
-       lty = 3,
-       add = TRUE)
+  plot(sf::st_geometry(dist_select_v1),
+           col = dist_select_v1$colours,
+           lty = 3,
+           add = TRUE)
   
   title(variable_trim_n, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -370,13 +370,13 @@ if(length(stats_list) == 2){
 
   # plot first stat
   plot(sf::st_geometry(country_select),
-           col = "#d9d9d9")
+             col = "#d9d9d9")
     
-  plot(dist_select_v1["mean"],
-       col = dist_select_v1$colours,
-       lty = 3,
-       add = TRUE)
-
+  plot(sf::st_geometry(dist_select_v1),
+           col = dist_select_v1$colours,
+           lty = 3,
+           add = TRUE)
+  
   title(variable_trim_n, 
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
@@ -400,10 +400,10 @@ if(length(stats_list) == 2){
   plot(sf::st_geometry(country_select),
            col = "#d9d9d9")
     
-  plot(dist_select_v2["mean"],
-       col = dist_select_v2$colours,
-       lty = 3,
-       add = TRUE)
+  plot(sf::st_geometry(dist_select_v2),
+           col = dist_select_v2$colours,
+           lty = 3,
+           add = TRUE)
 
   title(variable_trim_n2, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -455,10 +455,10 @@ if(length(stats_list) == 3){
   plot(sf::st_geometry(country_select),
            col = "#d9d9d9")
     
-  plot(dist_select_v1["mean"],
-       col = dist_select_v1$colours,
-       lty = 3,
-       add = TRUE)
+  plot(sf::st_geometry(dist_select_v1),
+           col = dist_select_v1$colours,
+           lty = 3,
+           add = TRUE)
 
   title(variable_trim_n, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -483,10 +483,10 @@ if(length(stats_list) == 3){
   plot(sf::st_geometry(country_select),
            col = "#d9d9d9")
     
-  plot(dist_select_v2["mean"],
-       col = dist_select_v2$colours,
-       lty = 3,
-       add = TRUE)
+  plot(sf::st_geometry(dist_select_v2),
+           col = dist_select_v2$colours,
+           lty = 3,
+           add = TRUE)
 
   title(variable_trim_n2, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -511,11 +511,11 @@ if(length(stats_list) == 3){
   plot(sf::st_geometry(country_select),
            col = "#d9d9d9")
     
-  plot(dist_select_v3["mean"],
-       col = dist_select_v3$colours,
-       lty = 3,
-       add = TRUE)
- 
+  plot(sf::st_geometry(dist_select_v3),
+           col = dist_select_v3$colours,
+           lty = 3,
+           add = TRUE)
+  
   title(variable_trim_n3, 
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
@@ -567,17 +567,17 @@ if(length(stats_list) == 4){
   country_select <- params$country_select
 
   # plot first stat
-  plot(sf::st_geometry(country_select),
-           col = "#d9d9d9")
+  print(plot(sf::st_geometry(country_select),
+             col = "#d9d9d9"))
     
-  plot(dist_select_v1["mean"],
-       col = dist_select_v1$colours,
-       lty = 3,
-       add = TRUE)
-
+  plot(sf::st_geometry(dist_select_v1),
+           col = dist_select_v1$colours,
+           lty = 3,
+           add = TRUE)
+  
   title(variable_trim_n, 
         cex.main = 1.2, col.main = "#0dc5c1",
-        adj = 0)
+        adj = 0.5)
   
   gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
                  color = colour_p_v1, 
@@ -598,10 +598,10 @@ if(length(stats_list) == 4){
   plot(sf::st_geometry(country_select),
            col = "#d9d9d9")
     
-  plot(dist_select_v2["mean"],
-       col = dist_select_v2$colours,
-       lty = 3,
-       add = TRUE)
+  plot(sf::st_geometry(dist_select_v2),
+           col = dist_select_v2$colours,
+           lty = 3,
+           add = TRUE)
 
   title(variable_trim_n2, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -626,10 +626,10 @@ if(length(stats_list) == 4){
   plot(sf::st_geometry(country_select),
            col = "#d9d9d9")
     
-  plot(dist_select_v3["mean"],
-       col = dist_select_v3$colours,
-       lty = 3,
-       add = TRUE)
+  plot(sf::st_geometry(dist_select_v3),
+           col = dist_select_v3$colours,
+           lty = 3,
+           add = TRUE)
   
   title(variable_trim_n3, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -654,10 +654,10 @@ if(length(stats_list) == 4){
   plot(sf::st_geometry(country_select),
            col = "#d9d9d9")
     
-  plot(dist_select_v4["mean"],
-       col = dist_select_v4$colours,
-       lty = 3,
-       add = TRUE)
+  plot(sf::st_geometry(dist_select_v4),
+           col = dist_select_v4$colours,
+           lty = 3,
+           add = TRUE)
 
   title(variable_trim_n4, 
         cex.main = 1.2, col.main = "#0dc5c1",
