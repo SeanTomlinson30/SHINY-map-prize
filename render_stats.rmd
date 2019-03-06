@@ -15,7 +15,6 @@ require(kableExtra)
 require(knitr)
 require(RColorBrewer)
 require(plotfunctions)
-require(DT)
 
 country_select <- params$country_select
 dist_select <- params$dist_select
@@ -79,29 +78,29 @@ var_name_new <- c("Global friction surface (2015)",
 
 var_name_units <- c("Land-based travel speed (minutes)",
                     "Time to travel to the nearest city (minutes)",
-                    "All-cause fever prevalence within the limits of stable Pf transmission, in children under 5 years of age", 
-                    "Percentage of cases of fever in under-5 year olds that were treated with ACT",                                 
+                    "All-cause fever prevalence within the limits of stable Pf transmission, \nin children under 5 years of age", 
+                    "Percentage of cases of fever in under-5 year olds that were \ntreated with ACT",                                 
                     "Probability (0-1)",                                                                     
                     "Proportion of the population predicted to be Duffy negative",                                                 
                     "Allele frequency (median) for G6PD deficiency",                                                     
                     "Allele frequency (mean) of sickle haemoglobin alleles",                                            
                     "Percentage of the population protected by IRS",                                              
                     "Proportion of the population who were protected by ITNs",                                            
-                    "Predicted malaria attributable fevers (MAF) as a proportion of all fevers, for children under 5",                        
-                    "Predicted malaria attributable fevers as a proportion of malaria positive fevers, for children under 5",                 
-                    "Predicted malaria-positive fevers as a proportion of all fevers, for children under 5",                            
-                    "Non-malarial fever prevalence is defined as the sum of the prevalence of febrile illness without a P. falciparum malaria infection and the prevalence of febrile illness coincident with, but not caused by, a P. falciparum malaria infection, for children under 5", 
-                    "All-age incidence rate (clinical cases per 1,000 population per annum) of Plasmodium falciparum malaria",
-                    "Age-standardised parasite rate for Plasmodium falciparum malaria for children two to ten years of age (PfPR2-10)",
+                    "Predicted malaria attributable fevers (MAF) as a proportion \nof all fevers, for children under 5",                        
+                    "Predicted malaria attributable fevers as a proportion of \nmalaria positive fevers, for children under 5",                 
+                    "Predicted malaria-positive fevers as a proportion of \nall fevers, for children under 5",                            
+                    "Non-malarial fever prevalence is defined as the sum of \nthe prevalence of febrile illness without a P. falciparum malaria \ninfection and the prevalence of febrile illness coincident with, \nbut not caused by, a P. falciparum malaria infection, \nfor children under 5", 
+                    "All-age incidence rate (clinical cases per 1,000 population \nper annum) of Plasmodium falciparum malaria",
+                    "Age-standardised parasite rate for Plasmodium falciparum \nmalaria for children two to ten years of age (PfPR2-10)",
                     "Plasmodium falciparum Spatial Limits",                                                 
                     "Number of days per year which could support infectious vectors",                                                        
-                    "The index of suitability is a relative, not absolute, measure of the effect of temperature on vectorial capacity and reproductive number",
-                    "Modelled relative risk of zoonotic Plasmodium knowlesi infecting humans on a scale 0 (low) to 1.0 (high)",
+                    "The index of suitability is a relative, not absolute, measure of \nthe effect of temperature on vectorial capacity \nand reproductive number",
+                    "Modelled relative risk of zoonotic Plasmodium knowlesi \ninfecting humans on a scale 0 (low) to 1.0 (high)",
                     "Predicted all-age parasite prevalence rate for Plasmodium vivax malaria",                                                          
                     "Predicted prevalence of Plasmodium vivax relapse",                                                             
                     "Plasmodium vivax Spatial Limits",                                                      
                     "Number of days per year which could support infectious vectors",                                                             
-                    "The index of suitability is a relative, not absolute, measure of the effect of temperature on vectorial capacity and reproductive number",
+                    "The index of suitability is a relative, not absolute, measure \nof the effect of temperature on vectorial capacity \nand reproductive number",
                     "Secondary Dominant Vectors")
 
 var_lookup <- data.frame(original = var_name_orig,
