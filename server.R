@@ -75,14 +75,13 @@ lookup <- read.csv('data/combined_lookup.csv', sep = ',', check.names = FALSE)
 lookup_processed <- read.csv('data/raster_stats_paths.csv', stringsAsFactors = FALSE)
 
 #load simplified admin polygons
-load('data/sf_afr_simp.rda')
-
+load('data/sf_afr_simp_fao.rda')
 
 # get the country_id (e.g. CIV) for selected country name
 get_country_id <- function(country_name) {
   
   country_name <- as.character(country_name)
-  country_id <- sf_afr_simp$country_id[sf_afr_simp$name==country_name]
+  country_id <- sf_afr_simp$COUNTRY_ID[sf_afr_simp$name==country_name]
   country_id <- as.character(country_id)
 }
 
@@ -90,7 +89,7 @@ get_country_id <- function(country_name) {
 get_dist_names <- function(country_id) {
   
   country_id <- as.character(country_id)
-  dist_names <- sf_afr_simp$name[sf_afr_simp$country_id==country_id & sf_afr_simp$admn_level==1]    
+  dist_names <- sf_afr_simp$name[sf_afr_simp$COUNTRY_ID==country_id & sf_afr_simp$ADMN_LEVEL==1]    
 }
 
 
@@ -132,7 +131,7 @@ function(input, output, session) {
     country_id <- get_country_id(input$country)
     
     # subset the country (includes districts)
-    sf_cntry <- sf_afr_simp[sf_afr_simp$country_id==country_id,]
+    sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id,]
     
     plot(sf::st_geometry(sf_cntry))
     
@@ -179,7 +178,7 @@ function(input, output, session) {
       # get the country_id (e.g. CIV) for selected country name
       country_id <- get_country_id(input$country)
       
-      sf_cntry <- sf_afr_simp[sf_afr_simp$country_id==country_id,]
+      sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id,]
       #subset selected districts
       #BEWARE this relies on district names being same as in existing list
       sf_dist_select <- sf_cntry[sf_cntry$name %in% input$selected_dist,] 
@@ -198,14 +197,14 @@ function(input, output, session) {
         #stats_i_sub <- stats_i[stats_i$zone %in% dist_select$GAUL_CODE, ]
         #*** PROBLEM HERE ***  
         #sf_dist_select$gaul_code seems not always the same as stats_i$zone
-        stats_i_sub <- stats_i[stats_i$zone %in% sf_dist_select$gaul_code, ]
+        stats_i_sub <- stats_i[stats_i$zone %in% sf_dist_select$GAUL_CODE, ]
         
         # problem here 
         #Warning in sf_dist_select$gaul_code == stats_i_sub$zone :
         #  longer object length is not a multiple of shorter object length
         # add a variable which is the district name
         # THIS FAILS IF NOT ALL DISTRICTS ARE REPRESENTED
-        index <- which(sf_dist_select$gaul_code == stats_i_sub$zone)
+        index <- which(sf_dist_select$GAUL_CODE == stats_i_sub$zone)
         stats_i_sub$District <- sf_dist_select$name[index]
         
         sf_dist_select$mean <- stats_i$mean[index]

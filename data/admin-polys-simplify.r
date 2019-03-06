@@ -16,22 +16,32 @@ library(raster)
 admin_1 <- raster::shapefile('data/districts/admin_1.shp')
 country_ids <- unique(admin_1$COUNTRY_ID)
 
-#get polygons for admin0 and admin1 from as a spatialpolygonsdataframe
-spdf_africa <- malariaAtlas::getShp(ISO=country_ids) 
-#convert to sf 
-library(sf)
-sf_africa <- sf::st_as_sf(spdf_africa)
-#get rid of dodgy countrycodes
-sf_africa <- sf_africa[sf_africa$country_id != 'XXX',]
-#save as an R object that we can then read into the shiny app
-#save(sf_africa, file='test.rda')
-#then to plot the countries or districts just subset by admn_level
-#ad0ago <- sf_africa[sf_africa$admn_level==0 & sf_africa$country_id=='AGO',]
-#st_geometry needed to plot just the polygons
-#plot(sf::st_geometry(ad0ago))
+# get polygons for admin0 and admin1 from as a spatialpolygonsdataframe
+admin_0 <- raster::shapefile('data/countries/admin2013_0.shp')
+admin_0 <- admin_0[admin_0$COUNTRY_ID %in% country_ids, ]
 
-#sf_africa has spain in too !
-#plot(sf::st_geometry(sf_africa))
+# convert to sf 
+library(sf)
+admin_1 <- admin_1[c(2:5, 1)]
+names(admin_1) <- c("COUNTRY_ID",
+                    "GAUL_CODE",
+                    "ADMN_LEVEL",
+                    "PARENT_ID",
+                    "name")
+combined <- rbind(admin_1, admin_0)
+sf_africa <- sf::st_as_sf(combined)
+
+# get rid of dodgy countrycodes
+sf_africa <- sf_africa[sf_africa$country_id != 'XXX',]
+# save as an R object that we can then read into the shiny app
+# save(sf_africa, file='test.rda')
+# then to plot the countries or districts just subset by admn_level
+# ad0ago <- sf_africa[sf_africa$admn_level==0 & sf_africa$country_id=='AGO',]
+# st_geometry needed to plot just the polygons
+# plot(sf::st_geometry(ad0ago))
+
+# sf_africa has spain in too !
+# plot(sf::st_geometry(sf_africa))
 
 #library(mapview)
 #mapview(sf_africa)
@@ -39,7 +49,7 @@ sf_africa <- sf_africa[sf_africa$country_id != 'XXX',]
 #and has much more detail than we need e.g. fiddly islands.
 
 #remove spain
-sf_africa <- sf_africa[sf_africa$country_id!='ESP',]
+sf_africa <- sf_africa[sf_africa$COUNTRY_ID!='ESP',]
 
 # simplify
 library(rmapshaper)
@@ -47,16 +57,16 @@ library(rmapshaper)
 #keep all polygons keep_shapes=TRUE
 sf_afr_simp <- rmapshaper::ms_simplify(sf_africa, keep_shapes=TRUE)
 
-save(sf_afr_simp, file='data/sf_afr_simp.rda')
+save(sf_afr_simp, file='data/sf_afr_simp_fao.rda')
 
-#to load
-load('data/sf_afr_simp.rda')
+# to load
+load('data/sf_afr_simp_fao.rda')
 
 library(mapview)
-mapview(sf_afr_simp, zcol='country_id', legend=FALSE)
+mapview(sf_afr_simp, zcol='COUNTRY_ID', legend=FALSE)
 
 ggplot(sf_afr_simp) +
-geom_sf(aes(fill=country_id))
+geom_sf(aes(fill=COUNTRY_ID))
 
 # subset by country and then plot coloured named districts
 
