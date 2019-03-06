@@ -136,7 +136,6 @@ navbarPage(
                                    title = "Please select the country of interest, available districts will update based on this selection.",
                                    placement = "right", trigger = "hover", options = list(container = "body")),
                          
-                         
                          # dynamic district selection
                          uiOutput("select_dist"),
                          
@@ -144,15 +143,16 @@ navbarPage(
                          bsTooltip(id = "select_dist",
                                    title = "Please select the districts to feature within the comparison/ranking.",
                                    placement = "right", trigger = "hover", options = list(container = "body")),
-                         
+
                          # dynamic district selection
                          uiOutput("select_raster") %>% withSpinner(type = '7', color="#0dc5c1"),
                          
                          # hover-over tooltip
                          bsTooltip(id = "select_raster",
-                                   title = "Please select the rasters to compare.",
+                                   title = "Please select the variables to compare.",
                                    placement = "right", trigger = "hover", options = list(container = "body")),
                          
+                         helpText("Information on variable descriptions can be found within the 'help' tab of this app."),
                          
                          actionButton(inputId = "processStats", label = "Generate statistics", class='butt'),
                          tags$head(tags$style(".butt{margin-bottom:5px;}")),

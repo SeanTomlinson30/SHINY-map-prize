@@ -6,7 +6,7 @@ params:
     dist_select: NA
     country_select: NA
 always_allow_html: yes
-
+geometry: "left = 3cm, right = 3cm, top = 2cm, bottom = 2cm"
 ---
 
 ```{r load_packages, echo = FALSE}
@@ -78,29 +78,29 @@ var_name_new <- c("Global friction surface (2015)",
 
 var_name_units <- c("Land-based travel speed (minutes)",
                     "Time to travel to the nearest city (minutes)",
-                    "All-cause fever prevalence within the limits of stable Pf transmission, in children under 5 years of age", 
-                    "Percentage of cases of fever in under-5 year olds that were treated with ACT",                                 
+                    "All-cause fever prevalence within the limits of stable Pf \ntransmission, in children under 5 years of age", 
+                    "Percentage of cases of fever in under-5 year olds that were \ntreated with ACT",                                 
                     "Probability (0-1)",                                                                     
                     "Proportion of the population predicted to be Duffy negative",                                                 
                     "Allele frequency (median) for G6PD deficiency",                                                     
                     "Allele frequency (mean) of sickle haemoglobin alleles",                                            
                     "Percentage of the population protected by IRS",                                              
                     "Proportion of the population who were protected by ITNs",                                            
-                    "Predicted malaria attributable fevers (MAF) as a proportion of all fevers, for children under 5",                        
-                    "Predicted malaria attributable fevers as a proportion of malaria positive fevers, for children under 5",                 
-                    "Predicted malaria-positive fevers as a proportion of all fevers, for children under 5",                            
-                    "Non-malarial fever prevalence is defined as the sum of the prevalence of febrile illness without a P. falciparum malaria infection and the prevalence of febrile illness coincident with, but not caused by, a P. falciparum malaria infection, for children under 5", 
-                    "All-age incidence rate (clinical cases per 1,000 population per annum) of Plasmodium falciparum malaria",
-                    "Age-standardised parasite rate for Plasmodium falciparum malaria for children two to ten years of age (PfPR2-10)",
+                    "Predicted malaria attributable fevers (MAF) as a proportion \nof all fevers, for children under 5",                        
+                    "Predicted malaria attributable fevers as a proportion of \nmalaria positive fevers, for children under 5",                 
+                    "Predicted malaria-positive fevers as a proportion of all \nfevers, for children under 5",                            
+                    "Non-malarial fever prevalence is defined as the sum of the \nprevalence of febrile illness without a P. falciparum malaria \ninfection and the prevalence of febrile illness coincident \nwith, but not caused by, a P. falciparum malaria infection, \nfor children under 5", 
+                    "All-age incidence rate (clinical cases per 1,000 population \nper annum) of Plasmodium falciparum malaria",
+                    "Age-standardised parasite rate for Plasmodium falciparum \nmalaria for children two to ten years of age (PfPR2-10)",
                     "Plasmodium falciparum Spatial Limits",                                                 
-                    "Number of days per year which could support infectious vectors",                                                        
-                    "The index of suitability is a relative, not absolute, measure of the effect of temperature on vectorial capacity and reproductive number",
-                    "Modelled relative risk of zoonotic Plasmodium knowlesi infecting humans on a scale 0 (low) to 1.0 (high)",
-                    "Predicted all-age parasite prevalence rate for Plasmodium vivax malaria",                                                          
+                    "Number of days per year which could support infectious \nvectors",                                                        
+                    "The index of suitability is a relative, not absolute, \nmeasure of the effect of temperature on vectorial capacity \nand reproductive number",
+                    "Modelled relative risk of zoonotic Plasmodium knowlesi \ninfecting humans on a scale 0 (low) to 1.0 (high)",
+                    "Predicted all-age parasite prevalence rate for Plasmodium \nvivax malaria",                                                          
                     "Predicted prevalence of Plasmodium vivax relapse",                                                             
                     "Plasmodium vivax Spatial Limits",                                                      
-                    "Number of days per year which could support infectious vectors",                                                             
-                    "The index of suitability is a relative, not absolute, measure of the effect of temperature on vectorial capacity and reproductive number",
+                    "Number of days per year which could support infectious \nvectors",                                                             
+                    "The index of suitability is a relative, not absolute, measure \nof the effect of temperature on vectorial capacity \nand reproductive number",
                     "Secondary Dominant Vectors")
 
 var_lookup <- data.frame(original = var_name_orig,
@@ -119,6 +119,7 @@ caption {
     }
 </style>
 ")
+
 ```
 
 ## MAP-district-comparison Output Report
@@ -159,13 +160,16 @@ table_one$Max <- round(table_one$Max, 2)
 table_one$Min <- round(table_one$Min, 2)
 table_one$`Standard Deviation` <- round(table_one$`Standard Deviation`, 2)
 
-x <- kable(table_one,
-           row.names = FALSE,
-           caption = variable_n,
-           align = "c") %>% 
-           add_footnote(label = units_n)
-
-column_spec(x, 1:5, width = "10em")
+kable(table_one,
+      row.names = FALSE,
+      caption = variable_n,
+      align = "c") %>% 
+      add_footnote(label = units_n) %>%
+      kable_styling(c("striped", "bordered")) %>% 
+      column_spec(1, bold = TRUE, width = "7em") %>%
+      column_spec(2:5, width = "5em") %>%
+      kable_styling(full_width = FALSE,
+                    position = "left")
 
 ```
 
@@ -198,13 +202,16 @@ table_two$Max <- round(table_two$Max, 2)
 table_two$Min <- round(table_two$Min, 2)
 table_two$`Standard Deviation` <- round(table_two$`Standard Deviation`, 2)
 
-y <- kable(table_two,
-           row.names = FALSE,
-           caption = variable_n2,
-           align = "c") %>% 
-           add_footnote(label = units_n2)
-
-column_spec(y, 1:5, width = "10em")
+kable(table_two,
+      row.names = FALSE,
+      caption = variable_n2,
+      align = "c") %>% 
+      add_footnote(label = units_n2) %>%
+      kable_styling(c("striped", "bordered")) %>% 
+      column_spec(1, bold = TRUE, width = "7em") %>%
+      column_spec(2:5, width = "5em") %>%
+      kable_styling(full_width = FALSE,
+                    position = "left")
 
 }
 
@@ -239,13 +246,16 @@ table_three$Max <- round(table_three$Max, 2)
 table_three$Min <- round(table_three$Min, 2)
 table_three$`Standard Deviation` <- round(table_three$`Standard Deviation`, 2)
 
-z <- kable(table_three,
-           row.names = FALSE,
-           caption = variable_n3,
-           align = "c") %>% 
-           add_footnote(label = units_n3)
-
-column_spec(z, 1:5, width = "10em")
+kable(table_three,
+      row.names = FALSE,
+      caption = variable_n3,
+      align = "c") %>% 
+      add_footnote(label = units_n3) %>%
+      kable_styling(c("striped", "bordered")) %>% 
+      column_spec(1, bold = TRUE, width = "7em") %>%
+      column_spec(2:5, width = "5em") %>%
+      kable_styling(full_width = FALSE,
+                    position = "left")
   
 }
 ```
@@ -279,17 +289,19 @@ table_four$Max <- round(table_four$Max, 2)
 table_four$Min <- round(table_four$Min, 2)
 table_four$`Standard Deviation` <- round(table_four$`Standard Deviation`, 2)
 
-aa <- kable(table_four,
-            row.names = FALSE,
-            caption = variable_n4,
-            align = "c") %>% 
-           add_footnote(label = units_n4)
-
-column_spec(aa, 1:5, width = "10em")
+kable(table_four,
+      row.names = FALSE,
+      caption = variable_n4,
+      align = "c") %>% 
+      add_footnote(label = units_n4) %>%
+      kable_styling(c("striped", "bordered")) %>% 
+      column_spec(1, bold = TRUE, width = "7em") %>%
+      column_spec(2:5, width = "5em") %>%
+      kable_styling(full_width = FALSE,
+                    position = "left")
 
 }
 ```
-
 
 ```{r stat_plots, echo = FALSE, results = "hide", fig.height = 10, fig.width = 10}
 # generate shapefile for the plot
@@ -317,7 +329,7 @@ if(length(stats_list) == 1){
 
   title(variable_trim_n, 
         cex.main = 1.2, col.main = "#0dc5c1",
-        adj = 0)
+        adj = 0.5)
   
   gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
                  color = colour_p_v1, 
@@ -333,7 +345,7 @@ if(length(stats_list) == 1){
                  border.col = "black", 
                  dec = 2,
                  fit.margin = TRUE)
-  
+
   }
 
 if(length(stats_list) == 2){

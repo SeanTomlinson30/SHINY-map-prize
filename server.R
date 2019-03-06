@@ -140,7 +140,7 @@ function(input, output, session) {
     c_rasters <- colnames(c_lookup)[which(c_lookup==1)]
     c_rasters = str_replace_all(c_rasters, '\\.', ' ') # Replace periods with spaces
     
-    selectizeInput("select_raster", "Select rasters (max 4):", c_rasters, multiple = TRUE, options = list(maxItems = 4, placeholder='Select desired rasters by clicking or typing in this search box'))
+    selectizeInput("select_raster", "Select variables to compare (max 4):", c_rasters, multiple = TRUE, options = list(maxItems = 4, placeholder='Select desired rasters by clicking or typing in this search box'))
 
   })
   
