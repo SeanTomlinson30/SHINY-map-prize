@@ -15,6 +15,7 @@ require(kableExtra)
 require(knitr)
 require(RColorBrewer)
 require(plotfunctions)
+require(sf)
 
 country_select <- params$country_select
 dist_select <- params$dist_select

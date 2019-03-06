@@ -67,6 +67,11 @@ if(!require(plotfunctions)){
   library(plotfunctions)
 }
 
+if(!require(sf)){
+  install.packages("sf")
+  library(sf)
+}
+
 # read in MAP availability lookup table
 lookup <- read.csv('data/combined_lookup.csv', sep = ',', check.names = FALSE)
 
