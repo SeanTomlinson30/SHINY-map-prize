@@ -85,7 +85,11 @@ load('data/sf_afr_simp_fao.rda')
 get_country_id <- function(country_name) {
   
   country_name <- as.character(country_name)
+  if(country_name == "Cote d'Ivoire"){
+    country_id <- "CIV"
+  } else {
   country_id <- sf_afr_simp$COUNTRY_ID[sf_afr_simp$name==country_name]
+  }
   country_id <- as.character(country_id)
   
 }

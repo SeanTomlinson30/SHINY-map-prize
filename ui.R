@@ -56,7 +56,15 @@ if(!require(shinyjs)){
 
 # generate a list of countries for which MAP data exists
 load('data/sf_afr_simp_fao.rda')
+sf_afr_simp <- sf_afr_simp[sf_afr_simp$COUNTRY_ID != "XXX",]
+sf_afr_simp <- sf_afr_simp[sf_afr_simp$COUNTRY_ID != "MYT",]
 country_names <- sf_afr_simp$name[sf_afr_simp$ADMN_LEVEL==0]
+country_names <- country_names[country_names != "Hala'ib triangle"]
+country_names <- country_names[country_names != "Ma'tan al-Sarra"]
+country_names <- country_names[country_names != "Ilemi triangle"]
+country_names <- country_names[country_names != "Abyei"]
+country_names <- sort(country_names)
+country_names[7] <- "Cote d'Ivoire"
 
 # define a UI use a fluid bootstrap layout
 appCSS <- "
