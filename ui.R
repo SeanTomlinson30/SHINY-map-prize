@@ -55,11 +55,8 @@ if(!require(shinyjs)){
 }
 
 # generate a list of countries for which MAP data exists
-africa <- shapefile('data/countries/Africa.shp')
-africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
-africa$COUNTRY[africa$COUNTRY == "Democratic Republic of Congo"] <- "Democratic Republic of the Congo"
-africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
-
+load('data/sf_afr_simp_fao.rda')
+country_names <- sf_afr_simp$name[sf_afr_simp$ADMN_LEVEL==0]
 
 # define a UI use a fluid bootstrap layout
 appCSS <- "
@@ -88,8 +85,7 @@ navbarPage(
                      # Loading message
                      div(
                        id = "loading-content",
-                       h2("Loading Application..."),
-                       h3("MAP-district-comparison is a shiny app that allows easy interaction with summary statistics and plots for data provided by the Malaria Atlas Project.")
+                       h2("Loading Application...")
                      ),
                      
                      hidden(
@@ -128,7 +124,7 @@ navbarPage(
 
                          # country of interest selection (only one country allowed at a time)
                          selectInput("country", "Select country of interest:",
-                                     choices = unique(africa$COUNTRY),
+                                     choices = country_names,
                                      selected = "Benin"),
                          
                          # hover-over tooltip
