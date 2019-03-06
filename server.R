@@ -67,21 +67,31 @@ if(!require(plotfunctions)){
   library(plotfunctions)
 }
 
-# generate a list of countries for which MAP data exists
-countries <- shapefile('data/countries/admin2013_0.shp')
-admin_1 <- shapefile('data/districts/admin_1.shp')
-
 # read in MAP availability lookup table
 lookup <- read.csv('data/combined_lookup.csv', sep = ',', check.names = FALSE)
 
 # read in the processed data lookup table
 lookup_processed <- read.csv('data/raster_stats_paths.csv', stringsAsFactors = FALSE)
 
-# read in Africa shapefile and correct a few naming issues
-africa <- shapefile('data/countries/Africa.shp')
-africa$COUNTRY[africa$COUNTRY == "Congo-Brazzaville"] <- "Congo"
-africa$COUNTRY[africa$COUNTRY == "Democratic Republic of Congo"] <- "Democratic Republic of the Congo"
-africa$COUNTRY[africa$COUNTRY == "Tanzania"] <- "United Republic of Tanzania"
+#load simplified admin polygons
+load('data/sf_afr_simp_fao.rda')
+
+# get the country_id (e.g. CIV) for selected country name
+get_country_id <- function(country_name) {
+  
+  country_name <- as.character(country_name)
+  country_id <- sf_afr_simp$COUNTRY_ID[sf_afr_simp$name==country_name]
+  country_id <- as.character(country_id)
+  
+}
+
+# get district names for selected country id
+get_dist_names <- function(country_id) {
+  
+  country_id <- as.character(country_id)
+  dist_names <- sf_afr_simp$name[sf_afr_simp$COUNTRY_ID==country_id & sf_afr_simp$ADMN_LEVEL==1] 
+  
+}
 
 # define the server logic
 function(input, output, session) {
@@ -92,89 +102,65 @@ function(input, output, session) {
   hide(id = "loading-content", anim = TRUE, animType = "fade")    
   show("app-content")
 
-
-  
   url <- a("MAP Homepage", href="https://map.ox.ac.uk/")
   
   output$tab <- renderUI({
+    
     tagList("MAP-district-comparison is a shiny app that allows easy interaction with summary statistics and plots for data provided by the Malaria Atlas Project:", url)
-  })
+  
+    })
+  
   # create dynamic reactive list of districts, per input country
   output$select_dist <- renderUI({
     
-    select_id <- as.character(input$country)
+    # get the country_id (e.g. CIV) for selected country name
+    country_id <- get_country_id(input$country)
     
-    if(select_id == "Cote d`Ivoire"){
-      
-      country_id <- "CIV"
-      
-    }else{
-      
-      country_id <- countries$COUNTRY_ID[countries$name == select_id][1]
-      
-    }
-    
-    selected_dist <- admin_1$NAME[admin_1$COUNTRY_ID == country_id]
+    # get names of districts in this country
+    selected_dist <- get_dist_names(country_id)    
     
     checkboxGroupInput("selected_dist", "Select first-level administrative division (min 2):",
                        choices = selected_dist,
-                       inline = TRUE,
-                       selected = selected_dist)
+                       selected = selected_dist,
+                       inline = TRUE)
   })
   
   output$select_raster <- renderUI({
     
-    select_id <- as.character(input$country)
-    
-    if(select_id == "Cote d`Ivoire"){
-      
-      country_id <- "CIV"
-      
-    }else{
-      
-      country_id <- countries$COUNTRY_ID[countries$name == select_id][1]
-      
-    }
+    # get the country_id (e.g. CIV) for selected country name
+    country_id <- get_country_id(input$country)
     
     c_lookup <- lookup[lookup$COUNTRY_ID == country_id,]
     c_rasters <- colnames(c_lookup)[which(c_lookup==1)]
     c_rasters = str_replace_all(c_rasters, '\\.', ' ') # Replace periods with spaces
     
-    selectizeInput("select_raster", "Select variables to compare (max 4):", c_rasters, multiple = TRUE, options = list(maxItems = 4, placeholder='Select desired rasters by clicking or typing in this search box'))
-
+    selectizeInput("select_raster", "Select rasters (max 4):", c_rasters, multiple = TRUE, options = list(maxItems = 4, placeholder='Select desired rasters by clicking or typing in this search box'))
+    
   })
   
   # plot selected country, with selected districts overlayed
   output$select_country <- renderPlot({
     
-    select_id <- as.character(input$country)
+    # get the country_id (e.g. CIV) for selected country name
+    country_id <- get_country_id(input$country)
     
-    # fix for CIV plot
-    if(select_id == "Cote d`Ivoire"){
-      
-      country_id <- "CIV"
-      
-    } else {
+    # subset the country (includes districts)
+    sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id,]
     
-      country_id <- countries$COUNTRY_ID[countries$name == select_id][1]
-    
-    }
-    
-    dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
-    dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
-    
-    plot(countries[countries$COUNTRY_ID == country_id, ],
-         axes = FALSE,
+    plot(sf::st_geometry(sf_cntry),
          col = "#d9d9d9",
          main = input$country)
     
-    plot(dist_select,
-         add = TRUE,
+    # subset selected districts
+    sf_dist_select <- sf_cntry[sf_cntry$name %in% input$selected_dist,] 
+    
+    plot(sf::st_geometry(sf_dist_select),
          col = "#0dc5c1",
-         lty = 3)
+         lty = 3,
+         add = TRUE)
     
   })
-
+  
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
     
@@ -207,24 +193,13 @@ function(input, output, session) {
       # define empty vector to populate with stats tables
       stats_list <- NULL
       
-      # create a selection based off of input
-      select_id <- as.character(input$country)
+      # get the country_id (e.g. CIV) for selected country name
+      country_id <- get_country_id(input$country)
       
-      # fix for CIV plot
-      if(select_id == "Cote d`Ivoire"){
-        
-        country_id <- "CIV"
-        
-      } else {
-        
-        country_id <- countries$COUNTRY_ID[countries$name == select_id][1]
-        
-      }
+      sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id,]
       
-      country_select <- countries[countries$COUNTRY_ID == country_id, ]
-      
-      dist_select <- admin_1[admin_1$COUNTRY_ID == country_id, ]
-      dist_select <- dist_select[dist_select$NAME %in% input$selected_dist, ]
+      # subset selected districts
+      sf_dist_select <- sf_cntry[sf_cntry$name %in% input$selected_dist,] 
       
       for(i in 1:length(input$select_raster)){
         
@@ -237,12 +212,12 @@ function(input, output, session) {
         stats_i <- read.csv(stats_i_path, stringsAsFactors = FALSE)
         
         # 3. subset csv to only retain selected_dist
-        stats_i_sub <- stats_i[stats_i$zone %in% dist_select$GAUL_CODE, ]
+        stats_i_sub <- stats_i[stats_i$zone %in% sf_dist_select$GAUL_CODE, ]
         
         # add a variable which is the district name
-        index <- which(dist_select$GAUL_CODE == stats_i_sub$zone)
-        stats_i_sub$District <- dist_select$NAME[index]
-        dist_select$mean <- stats_i$mean[index]
+        index <- which(sf_dist_select$GAUL_CODE == stats_i_sub$zone)
+        stats_i_sub$District <- sf_dist_select$name[index]
+        sf_dist_select$mean <- stats_i$mean[index]
         
         # reorder stats_i_sub
         stats_i_sub <- stats_i_sub[c(6, 2:5)]
@@ -265,8 +240,8 @@ function(input, output, session) {
       
       # Set up parameters to pass to Rmd document
       params <- list(stats_list = stats_list,
-                     dist_select = dist_select,
-                     country_select = country_select)
+                     dist_select = sf_dist_select,
+                     country_select = sf_cntry)
       
       # Knit the document, passing in the `params` list, and eval it in a
       # child of the global environment (this isolates the code in the document

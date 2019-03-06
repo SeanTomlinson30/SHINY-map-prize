@@ -308,7 +308,7 @@ kable(table_four,
 if(length(stats_list) == 1){
   
   # first create an index
-  dist_index <- which(dist_select$NAME == table_one$District)
+  dist_index <- which(dist_select$name == table_one$District)
   dist_select_v1 <- dist_select
   dist_select_v1$mean <- table_one$Mean[dist_index]
   
@@ -317,16 +317,15 @@ if(length(stats_list) == 1){
   dist_select_v1$colours <- colour_p_v1[as.numeric(cut(dist_select_v1$mean, breaks = (length(dist_select_v1$mean))))]
 
   country_select <- params$country_select
-
-  print(plot(country_select,
-             axes = FALSE,
-             col = "#d9d9d9")) 
-
-  print(plot(dist_select_v1,
-             add = TRUE,
-             col = dist_select_v1$colours,
-             lty = 3))
-
+  
+  plot(sf::st_geometry(country_select),
+           col = "#d9d9d9")
+    
+  plot(dist_select_v1["mean"],
+       col = dist_select_v1$colours,
+       lty = 3,
+       add = TRUE)
+  
   title(variable_trim_n, 
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0.5)
@@ -350,7 +349,7 @@ if(length(stats_list) == 1){
 
 if(length(stats_list) == 2){
   
-  dist_index <- which(dist_select$NAME == table_one$District)
+  dist_index <- which(dist_select$name == table_one$District)
   
   dist_select_v1 <- dist_select
   dist_select_v2 <- dist_select
@@ -370,14 +369,13 @@ if(length(stats_list) == 2){
   country_select <- params$country_select
 
   # plot first stat
-  print(plot(country_select,
-             axes = FALSE,
-             col = "#d9d9d9")) 
-
-  print(plot(dist_select_v1,
-             add = TRUE,
-             col = dist_select_v1$colours,
-             lty = 3))
+  plot(sf::st_geometry(country_select),
+           col = "#d9d9d9")
+    
+  plot(dist_select_v1["mean"],
+       col = dist_select_v1$colours,
+       lty = 3,
+       add = TRUE)
 
   title(variable_trim_n, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -399,14 +397,13 @@ if(length(stats_list) == 2){
                  fit.margin = TRUE)
   
   # plot second stat
-  print(plot(country_select,
-             axes = FALSE,
-             col = "#d9d9d9")) 
-
-  print(plot(dist_select_v2,
-             add = TRUE,
-             col = dist_select_v2$colours,
-             lty = 3))
+  plot(sf::st_geometry(country_select),
+           col = "#d9d9d9")
+    
+  plot(dist_select_v2["mean"],
+       col = dist_select_v2$colours,
+       lty = 3,
+       add = TRUE)
 
   title(variable_trim_n2, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -431,7 +428,7 @@ if(length(stats_list) == 2){
 
 if(length(stats_list) == 3){
   
-  dist_index <- which(dist_select$NAME == table_one$District)
+  dist_index <- which(dist_select$name == table_one$District)
   
   dist_select_v1 <- dist_select
   dist_select_v2 <- dist_select
@@ -455,14 +452,13 @@ if(length(stats_list) == 3){
   country_select <- params$country_select
 
   # plot first stat
-  print(plot(country_select,
-             axes = FALSE,
-             col = "#d9d9d9")) 
-
-  print(plot(dist_select_v1,
-             add = TRUE,
-             col = dist_select_v1$colours,
-             lty = 3))
+  plot(sf::st_geometry(country_select),
+           col = "#d9d9d9")
+    
+  plot(dist_select_v1["mean"],
+       col = dist_select_v1$colours,
+       lty = 3,
+       add = TRUE)
 
   title(variable_trim_n, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -484,14 +480,13 @@ if(length(stats_list) == 3){
                  fit.margin = TRUE)
 
   # plot second stat
-  print(plot(country_select,
-             axes = FALSE,
-             col = "#d9d9d9")) 
-
-  print(plot(dist_select_v2,
-             add = TRUE,
-             col = dist_select_v2$colours,
-             lty = 3))
+  plot(sf::st_geometry(country_select),
+           col = "#d9d9d9")
+    
+  plot(dist_select_v2["mean"],
+       col = dist_select_v2$colours,
+       lty = 3,
+       add = TRUE)
 
   title(variable_trim_n2, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -513,15 +508,14 @@ if(length(stats_list) == 3){
                  fit.margin = TRUE)
   
   # plot third stat
-  print(plot(country_select,
-             axes = FALSE,
-             col = "#d9d9d9")) 
-  
-  print(plot(dist_select_v3,
-             add = TRUE,
-             col = dist_select_v3$colours,
-             lty = 3))
-
+  plot(sf::st_geometry(country_select),
+           col = "#d9d9d9")
+    
+  plot(dist_select_v3["mean"],
+       col = dist_select_v3$colours,
+       lty = 3,
+       add = TRUE)
+ 
   title(variable_trim_n3, 
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
@@ -545,7 +539,7 @@ if(length(stats_list) == 3){
 
 if(length(stats_list) == 4){
   
-  dist_index <- which(dist_select$NAME == table_one$District)
+  dist_index <- which(dist_select$name == table_one$District)
   
   dist_select_v1 <- dist_select
   dist_select_v2 <- dist_select
@@ -573,14 +567,13 @@ if(length(stats_list) == 4){
   country_select <- params$country_select
 
   # plot first stat
-  print(plot(country_select,
-             axes = FALSE,
-             col = "#d9d9d9")) 
-
-  print(plot(dist_select_v1,
-             add = TRUE,
-             col = dist_select_v1$colours,
-             lty = 3))
+  plot(sf::st_geometry(country_select),
+           col = "#d9d9d9")
+    
+  plot(dist_select_v1["mean"],
+       col = dist_select_v1$colours,
+       lty = 3,
+       add = TRUE)
 
   title(variable_trim_n, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -602,14 +595,13 @@ if(length(stats_list) == 4){
                  fit.margin = TRUE)
 
   # plot second stat
-  print(plot(country_select,
-             axes = FALSE,
-             col = "#d9d9d9")) 
-
-  print(plot(dist_select_v2,
-             add = TRUE,
-             col = dist_select_v2$colours,
-             lty = 3))
+  plot(sf::st_geometry(country_select),
+           col = "#d9d9d9")
+    
+  plot(dist_select_v2["mean"],
+       col = dist_select_v2$colours,
+       lty = 3,
+       add = TRUE)
 
   title(variable_trim_n2, 
         cex.main = 1.2, col.main = "#0dc5c1",
@@ -631,15 +623,14 @@ if(length(stats_list) == 4){
                  fit.margin = TRUE)
   
   # plot third stat
-  print(plot(country_select,
-             axes = FALSE,
-             col = "#d9d9d9")) 
+  plot(sf::st_geometry(country_select),
+           col = "#d9d9d9")
+    
+  plot(dist_select_v3["mean"],
+       col = dist_select_v3$colours,
+       lty = 3,
+       add = TRUE)
   
-  print(plot(dist_select_v3,
-             add = TRUE,
-             col = dist_select_v3$colours,
-             lty = 3))
-
   title(variable_trim_n3, 
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
@@ -660,14 +651,13 @@ if(length(stats_list) == 4){
                  fit.margin = TRUE)
   
   # plot fourth stat
-  print(plot(country_select,
-             axes = FALSE,
-             col = "#d9d9d9")) 
-  
-  print(plot(dist_select_v4,
-             add = TRUE,
-             col = dist_select_v4$colours,
-             lty = 3))
+  plot(sf::st_geometry(country_select),
+           col = "#d9d9d9")
+    
+  plot(dist_select_v4["mean"],
+       col = dist_select_v4$colours,
+       lty = 3,
+       add = TRUE)
 
   title(variable_trim_n4, 
         cex.main = 1.2, col.main = "#0dc5c1",
