@@ -81,6 +81,10 @@ lookup_processed <- read.csv('data/raster_stats_paths.csv', stringsAsFactors = F
 #load simplified admin polygons
 load('data/sf_afr_simp_fao.rda')
 
+# andy testing plotting a raster layer
+# this is for whole of Africa
+load('data/rasters/PfPR2_10.rda')
+
 # get the country_id (e.g. CIV) for selected country name
 get_country_id <- function(country_name) {
   
@@ -152,16 +156,23 @@ function(input, output, session) {
     # subset the country (includes districts)
     sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id,]
     
+    # andy testing plotting a raster layer
+    # TODO determine which layer by the first selected one from the list
+    # show pfpr2-10 (or whichever other deemed most interesting) as default
+    raster::plot(PfPR2_10,ext=extent(sf_cntry))
+    
     plot(sf::st_geometry(sf_cntry),
-         col = "#d9d9d9",
-         main = input$country)
+         #col = "#d9d9d9",
+         #main = input$country,
+         lty = 3, #dotted here so we can see which selected below, could be done by colour
+         add = TRUE)
     
     # subset selected districts
     sf_dist_select <- sf_cntry[sf_cntry$name %in% input$selected_dist,] 
     
     plot(sf::st_geometry(sf_dist_select),
-         col = "#0dc5c1",
-         lty = 3,
+         #col = "#0dc5c1",
+         #lty = 3,
          add = TRUE)
     
   })
