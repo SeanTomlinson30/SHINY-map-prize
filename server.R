@@ -93,7 +93,9 @@ load('data/sf_afr_simp_fao.rda')
 
 # andy testing plotting a raster layer
 # this is for whole of Africa
-load('data/rasters/PfPR2_10.rda')
+load('data/rasters/pfpr2_10_2015.rda')
+load('data/rasters/time_to_city_2015.rda')
+load('data/rasters/itn_2015.rda')
 
 # get the country_id (e.g. CIV) for selected country name
 get_country_id <- function(country_name) {
@@ -167,7 +169,7 @@ function(input, output, session) {
     # subset the country (includes districts)
     sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id & sf_afr_simp$ADMN_LEVEL==1,]
     
-    m <- mapView(PfPR2_10) + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
+    m <- mapView(pfpr2_10_2015) + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
     
     #trying to set extent of map  
     bbox <- as.vector(sf::st_bbox(sf_cntry))
@@ -189,7 +191,7 @@ function(input, output, session) {
     # andy testing plotting a raster layer
     # TODO determine which layer by the first selected one from the list
     # show pfpr2-10 (or whichever other deemed most interesting) as default
-    raster::plot(PfPR2_10,ext=extent(sf_cntry))
+    raster::plot(pfpr2_10_2015,ext=extent(sf_cntry))
     
     plot(sf::st_geometry(sf_cntry),
          #col = "#d9d9d9",
