@@ -72,6 +72,16 @@ if(!require(sf)){
   library(sf)
 }
 
+if(!require(mapview)){
+  install.packages("mapview")
+  library(mapview)
+}
+
+if(!require(leaflet)){
+  install.packages("leaflet")
+  library(leaflet)
+}
+
 # read in MAP availability lookup table
 lookup <- read.csv('data/combined_lookup.csv', sep = ',', check.names = FALSE)
 
@@ -146,7 +156,27 @@ function(input, output, session) {
     selectizeInput("select_raster", "Select rasters (max 4):", c_rasters, multiple = TRUE, options = list(maxItems = 4, placeholder='Select desired rasters by clicking or typing in this search box'))
     
   })
-  
+
+  # testing replacing plot with mapview
+  #output$mapview_country_raster <- renderMapview({
+  output$mapview_country_raster <- renderLeaflet({
+    
+    # get the country_id (e.g. CIV) for selected country name
+    country_id <- get_country_id(input$country)
+    #
+    # subset the country (includes districts)
+    sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id & sf_afr_simp$ADMN_LEVEL==1,]
+    
+    m <- mapView(PfPR2_10) + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
+    
+    #trying to set extent of map  
+    bbox <- as.vector(sf::st_bbox(sf_cntry))
+    
+    leaflet::fitBounds(m@map, bbox[1], bbox[2], bbox[3], bbox[4])
+
+    
+  })  
+    
   # plot selected country, with selected districts overlayed
   output$select_country <- renderPlot({
     
