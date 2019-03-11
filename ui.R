@@ -132,8 +132,8 @@ navbarPage(
                          br(),
                          br(),
 
-                         # country of interest selection (only one country allowed at a time)
-                         selectInput("country", "Select country of interest:",
+                         # country selection (only one country allowed at a time)
+                         selectInput("country", "Country :",
                                      choices = country_names,
                                      selected = "Benin"),
                          
@@ -142,6 +142,22 @@ navbarPage(
                                    title = "Please select the country of interest, available districts will update based on this selection.",
                                    placement = "right", trigger = "hover", options = list(container = "body")),
                          
+                         # andy choosing limited number raster layers
+                         # maybe should be radio buttons to encourage just one layer
+                         # OR could allow multiple layers and use syncview
+                         # checkboxGroupInput("selected_raster", "Data to show and compare :",
+                         #                    choices = c('Malaria in children (Falciparum)',
+                         #                                'Insecticide Treated Net distribution',
+                         #                                'Travel time to nearest city'),
+                         #                    selected = 'Malaria in children (Falciparum)'),
+                         
+                         radioButtons("selected_raster", "Data to show and compare :",
+                                      choices = list('Malaria in children (Falciparum)' = 1,
+                                                     'Insecticide Treated Net distribution' = 2,
+                                                     'Travel time to nearest city' = 3), 
+                                      selected = 3),
+                         
+                         
                          # dynamic district selection
                          uiOutput("select_dist"),
                          
@@ -149,16 +165,17 @@ navbarPage(
                          bsTooltip(id = "select_dist",
                                    title = "Please select the districts to feature within the comparison/ranking.",
                                    placement = "right", trigger = "hover", options = list(container = "body")),
-
-                         # dynamic district selection
-                         uiOutput("select_raster") %>% withSpinner(type = '7', color="#0dc5c1"),
                          
-                         # hover-over tooltip
-                         bsTooltip(id = "select_raster",
-                                   title = "Please select the variables to compare.",
-                                   placement = "right", trigger = "hover", options = list(container = "body")),
-                         
-                         helpText("Information on variable descriptions can be found within the 'help' tab of this app."),
+                         # andy commented out replaced by selection of fewer layers above
+                         # dynamic raster selection
+                         # uiOutput("select_raster") %>% withSpinner(type = '7', color="#0dc5c1"),
+                         # 
+                         # # hover-over tooltip
+                         # bsTooltip(id = "select_raster",
+                         #           title = "Please select the variables to compare.",
+                         #           placement = "right", trigger = "hover", options = list(container = "body")),
+                         # 
+                         # helpText("Information on variable descriptions can be found within the 'help' tab of this app."),
                          
                          actionButton(inputId = "processStats", label = "Generate statistics", class='butt'),
                          tags$head(tags$style(".butt{margin-bottom:5px;}")),

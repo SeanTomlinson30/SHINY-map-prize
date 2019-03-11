@@ -165,13 +165,32 @@ function(input, output, session) {
     
     # get the country_id (e.g. CIV) for selected country name
     country_id <- get_country_id(input$country)
-    #
+    
+    
     # subset the country (includes districts)
     sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id & sf_afr_simp$ADMN_LEVEL==1,]
     
-    m <- mapView(pfpr2_10_2015) + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
+    #m <- mapView(pfpr2_10_2015) + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
+
+    #just find the first selected raster
+    # raster_id <- switch(input$selected_raster[1],
+    #                     'Malaria in children (Falciparum)' = pfpr2_10_2015,
+    #                     'Insecticide Treated Net distribution' = itn_2015,
+    #                     'Travel time to nearest city' = time_to_city_2015 )
+    # m <- mapView(raster_id) + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
     
-    #trying to set extent of map  
+    
+    raster_id <- switch(input$selected_raster[1],
+                        '1' = m <- mapView(pfpr2_10_2015),
+                        '2' = m <- mapView(itn_2015),
+                        #changed breaks to show more detail at the values in malaria countries
+                        '3' = m <- mapview(time_to_city_2015, at=rev(c(0,200,400,800,1600,3200,6400,10000)), 
+                                           col.regions=rev(viridisLite::inferno(n=7))) )
+    
+    m <- m + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
+    
+        
+    # set extent of map to the selected country 
     bbox <- as.vector(sf::st_bbox(sf_cntry))
     
     leaflet::fitBounds(m@map, bbox[1], bbox[2], bbox[3], bbox[4])
@@ -189,6 +208,8 @@ function(input, output, session) {
     sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id,]
     
     # andy testing plotting a raster layer
+    # DEPRECATED
+    # NOW I think this is better done with mapview_country_raster
     # TODO determine which layer by the first selected one from the list
     # show pfpr2-10 (or whichever other deemed most interesting) as default
     raster::plot(pfpr2_10_2015,ext=extent(sf_cntry))
