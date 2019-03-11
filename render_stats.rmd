@@ -161,6 +161,17 @@ table_one$Max <- round(table_one$Max, 2)
 table_one$Min <- round(table_one$Min, 2)
 table_one$`Standard Deviation` <- round(table_one$`Standard Deviation`, 2)
 
+# replace negative values as NA
+table_one$Mean[table_one$Mean < 0] <- NA
+table_one$Max[table_one$Max < 0] <- NA
+table_one$Min[table_one$Min < 0] <- NA
+table_one$`Standard Deviation`[table_one$`Standard Deviation` < 0] <- NA
+
+table_one$Mean[!complete.cases(table_one)] <- NA
+table_one$Max[!complete.cases(table_one)] <- NA
+table_one$Min[!complete.cases(table_one)] <- NA
+table_one$`Standard Deviation`[!complete.cases(table_one)] <- NA
+
 kable(table_one,
       row.names = FALSE,
       caption = variable_n,
@@ -202,6 +213,17 @@ table_two$Mean <- round(table_two$Mean, 2)
 table_two$Max <- round(table_two$Max, 2)
 table_two$Min <- round(table_two$Min, 2)
 table_two$`Standard Deviation` <- round(table_two$`Standard Deviation`, 2)
+
+# replace negative values as NA
+table_two$Mean[table_two$Mean < 0] <- NA
+table_two$Max[table_two$Max < 0] <- NA
+table_two$Min[table_two$Min < 0] <- NA
+table_two$`Standard Deviation`[table_two$`Standard Deviation` < 0] <- NA
+
+table_two$Mean[!complete.cases(table_two)] <- NA
+table_two$Max[!complete.cases(table_two)] <- NA
+table_two$Min[!complete.cases(table_two)] <- NA
+table_two$`Standard Deviation`[!complete.cases(table_two)] <- NA
 
 kable(table_two,
       row.names = FALSE,
@@ -247,6 +269,17 @@ table_three$Max <- round(table_three$Max, 2)
 table_three$Min <- round(table_three$Min, 2)
 table_three$`Standard Deviation` <- round(table_three$`Standard Deviation`, 2)
 
+# replace negative values as NA
+table_three$Mean[table_three$Mean < 0] <- NA
+table_three$Max[table_three$Max < 0] <- NA
+table_three$Min[table_three$Min < 0] <- NA
+table_three$`Standard Deviation`[table_three$`Standard Deviation` < 0] <- NA
+
+table_three$Mean[!complete.cases(table_three)] <- NA
+table_three$Max[!complete.cases(table_three)] <- NA
+table_three$Min[!complete.cases(table_three)] <- NA
+table_three$`Standard Deviation`[!complete.cases(table_three)] <- NA
+
 kable(table_three,
       row.names = FALSE,
       caption = variable_n3,
@@ -290,6 +323,17 @@ table_four$Max <- round(table_four$Max, 2)
 table_four$Min <- round(table_four$Min, 2)
 table_four$`Standard Deviation` <- round(table_four$`Standard Deviation`, 2)
 
+# replace negative values as NA
+table_four$Mean[table_four$Mean < 0] <- NA
+table_four$Max[table_four$Max < 0] <- NA
+table_four$Min[table_four$Min < 0] <- NA
+table_four$`Standard Deviation`[table_four$`Standard Deviation` < 0] <- NA
+
+table_four$Mean[!complete.cases(table_four)] <- NA
+table_four$Max[!complete.cases(table_four)] <- NA
+table_four$Min[!complete.cases(table_four)] <- NA
+table_four$`Standard Deviation`[!complete.cases(table_four)] <- NA
+
 kable(table_four,
       row.names = FALSE,
       caption = variable_n4,
@@ -331,7 +375,7 @@ if(length(stats_list) == 1){
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0.5)
   
-  gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
+  gradientLegend(valRange = c(min(dist_select_v1$mean, na.rm = TRUE), max(dist_select_v1$mean, na.rm = TRUE)), 
                  color = colour_p_v1, 
                  nCol = length(dist_select_v1$mean), 
                  pos = 0.5, 
@@ -382,7 +426,7 @@ if(length(stats_list) == 2){
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
-  gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
+  gradientLegend(valRange = c(min(dist_select_v1$mean, na.rm = TRUE), max(dist_select_v1$mean, na.rm = TRUE)), 
                  color = colour_p_v1, 
                  nCol = length(dist_select_v1$mean), 
                  pos = 0.5, 
@@ -410,7 +454,7 @@ if(length(stats_list) == 2){
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
-  gradientLegend(valRange = c(min(dist_select_v2$mean), max(dist_select_v2$mean)), 
+  gradientLegend(valRange = c(min(dist_select_v2$mean, na.rm = TRUE), max(dist_select_v2$mean, na.rm = TRUE)), 
                  color = colour_p_v2, 
                  nCol = length(dist_select_v2$mean), 
                  pos = 0.5, 
@@ -465,7 +509,7 @@ if(length(stats_list) == 3){
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
-  gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
+  gradientLegend(valRange = c(min(dist_select_v1$mean, na.rm = TRUE), max(dist_select_v1$mean, na.rm = TRUE)), 
                  color = colour_p_v1, 
                  nCol = length(dist_select_v1$mean), 
                  pos = 0.5, 
@@ -493,7 +537,7 @@ if(length(stats_list) == 3){
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
-  gradientLegend(valRange = c(min(dist_select_v2$mean), max(dist_select_v2$mean)), 
+  gradientLegend(valRange = c(min(dist_select_v2$mean, na.rm = TRUE), max(dist_select_v2$mean, na.rm = TRUE)), 
                  color = colour_p_v2, 
                  nCol = length(dist_select_v2$mean), 
                  pos = 0.5, 
@@ -521,7 +565,7 @@ if(length(stats_list) == 3){
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
-  gradientLegend(valRange = c(min(dist_select_v3$mean), max(dist_select_v3$mean)), 
+  gradientLegend(valRange = c(min(dist_select_v3$mean, na.rm = TRUE), max(dist_select_v3$mean, na.rm = TRUE)), 
                  color = colour_p_v3, 
                  nCol = length(dist_select_v3$mean), 
                  pos = 0.5, 
@@ -580,7 +624,7 @@ if(length(stats_list) == 4){
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0.5)
   
-  gradientLegend(valRange = c(min(dist_select_v1$mean), max(dist_select_v1$mean)), 
+  gradientLegend(valRange = c(min(dist_select_v1$mean, na.rm = TRUE), max(dist_select_v1$mean, na.rm = TRUE)), 
                  color = colour_p_v1, 
                  nCol = length(dist_select_v1$mean), 
                  pos = 0.5, 
@@ -608,7 +652,7 @@ if(length(stats_list) == 4){
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
-  gradientLegend(valRange = c(min(dist_select_v2$mean), max(dist_select_v2$mean)), 
+  gradientLegend(valRange = c(min(dist_select_v2$mean, na.rm = TRUE), max(dist_select_v2$mean, na.rm = TRUE)), 
                  color = colour_p_v2, 
                  nCol = length(dist_select_v2$mean), 
                  pos = 0.5, 
@@ -636,7 +680,7 @@ if(length(stats_list) == 4){
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
-  gradientLegend(valRange = c(min(dist_select_v3$mean), max(dist_select_v3$mean)), 
+  gradientLegend(valRange = c(min(dist_select_v3$mean, na.rm = TRUE), max(dist_select_v3$mean, na.rm = TRUE)), 
                  color = colour_p_v3, 
                  nCol = length(dist_select_v3$mean), 
                  pos = 0.5, 
@@ -664,7 +708,7 @@ if(length(stats_list) == 4){
         cex.main = 1.2, col.main = "#0dc5c1",
         adj = 0)
   
-  gradientLegend(valRange = c(min(dist_select_v4$mean), max(dist_select_v4$mean)), 
+  gradientLegend(valRange = c(min(dist_select_v4$mean, na.rm = TRUE), max(dist_select_v4$mean, na.rm = TRUE)), 
                  color = colour_p_v4, 
                  nCol = length(dist_select_v4$mean), 
                  pos = 0.5, 
