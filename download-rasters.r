@@ -14,6 +14,11 @@ pfpr2_10_2015 <- getRaster(surface = "Plasmodium falciparum PR2-10", extent=exte
 itn_2015 <- getRaster(surface = "Insecticide-treated bednet (ITN) coverage", extent=extent_afr, year = 2015)
 time_to_city_2015 <- getRaster(surface = "A global map of travel time to cities to assess inequalities in accessibility in 2015", extent=extent_afr)
 
+# could sample to reduce num pixels
+# because this is all that are displayed by leaflet anyway
+maxpixels <- 500000
+time_to_city_2015 <- raster::sampleRegular(time_to_city_2015, maxpixels, asRaster = TRUE, useGDAL = TRUE)
+
 #to make sure rasters are in memory
 pfpr2_10_2015 <- readAll(pfpr2_10_2015)
 itn_2015 <- readAll(itn_2015)
