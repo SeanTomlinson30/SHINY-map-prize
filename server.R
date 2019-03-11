@@ -102,6 +102,11 @@ load('data/rasters/pfpr2_10_2015.rda')
 load('data/rasters/time_to_city_2015.rda')
 load('data/rasters/itn_2015.rda')
 
+# to allow checking for map changes
+country_id_last <- FALSE
+raster_id_last <- FALSE
+lastmap <- FALSE
+
 # get the country_id (e.g. CIV) for selected country name
 get_country_id <- function(country_name) {
   
@@ -164,35 +169,53 @@ function(input, output, session) {
     
   })
 
-  # testing replacing plot with mapview
+  # mapview interactive leaflet map plot
   output$mapview_country_raster <- renderLeaflet({
     
     # get the country_id (e.g. CIV) for selected country name
     country_id <- get_country_id(input$country)
+    raster_id <- input$selected_raster[1]
     
+    # exit function if country and layer haven't changed
+    # to reduce waiting time for plot changes
+    if ( !is.null(raster_id))
+    {
+      if (country_id==country_id_last & raster_id==raster_id_last)
+        return(lastmap)      
+    }
+
     # subset the country (includes districts)
     sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id & sf_afr_simp$ADMN_LEVEL==1,]
     
     # add country boundaries to the plot first
-    m <- mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')    
+    m <- mapview(sf_cntry,color='darkgrey',lwd=2,legend=FALSE,alpha.regions=0, zcol='name')    
     
     # add the first selected raster to the plot
     if (!is.null(input$selected_raster))
     {
+
       raster_id <- switch(input$selected_raster[1],
                           'Plasmodium falciparum Incidence' = m <- m + mapView(pfpr2_10_2015),
                           'Insecticide treated bednet ITN coverage' = m <- m + mapView(itn_2015),
                           #changed breaks to show more detail at the values in malaria countries
                           'A global map of travel time to cities to assess inequalities in accessibility in 2015' = m <- m + mapview(time_to_city_2015, at=rev(c(0,200,400,800,1600,3200,6400,10000)), 
-                                                 col.regions=rev(viridisLite::inferno(n=7))) )
+                                                 col.regions=rev(viridisLite::inferno(n=7))))
     }
           
+
+    # record current ids so can check if they change above
+    # set global vars, possibly bad practice
+    country_id_last <<- country_id
+    raster_id_last <<- raster_id    
     
+        
     # set extent of map to the selected country 
     bbox <- as.vector(sf::st_bbox(sf_cntry))
-    leaflet::fitBounds(m@map, bbox[1], bbox[2], bbox[3], bbox[4])
+    m <- leaflet::fitBounds(m@map, bbox[1], bbox[2], bbox[3], bbox[4])
     
-    
+    # save last map to a global var, possibly dodgy
+    # to allow avoiding changing map if it hasn't changed
+    lastmap <<- m
   })  
 
   # DEPRECATED now mapview_country_raster() used instead   
