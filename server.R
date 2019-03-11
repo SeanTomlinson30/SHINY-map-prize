@@ -80,12 +80,19 @@ lookup_processed <- read.csv('data/raster_stats_paths.csv', stringsAsFactors = F
 
 #load simplified admin polygons
 load('data/sf_afr_simp_fao.rda')
+sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "16840"] <- "Goh-Djiboua"
+sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "818"] <- "Extreme-Nord"
+sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "66"] <- "Cote d'Ivoire"
 
 # get the country_id (e.g. CIV) for selected country name
 get_country_id <- function(country_name) {
   
   country_name <- as.character(country_name)
+  if(country_name == "Cote d'Ivoire"){
+    country_id <- "CIV"
+  } else {
   country_id <- sf_afr_simp$COUNTRY_ID[sf_afr_simp$name==country_name]
+  }
   country_id <- as.character(country_id)
   
 }
