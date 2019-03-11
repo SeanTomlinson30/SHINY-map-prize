@@ -194,7 +194,7 @@ function(input, output, session) {
     if (!is.null(input$selected_raster))
     {
 
-      raster_id <- switch(input$selected_raster[1],
+      switch(input$selected_raster[1],
                           'Plasmodium falciparum Incidence' = m <- m + mapView(pfpr2_10_2015),
                           'Insecticide treated bednet ITN coverage' = m <- m + mapView(itn_2015),
                           #changed breaks to show more detail at the values in malaria countries
