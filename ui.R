@@ -145,17 +145,20 @@ navbarPage(
                          # andy choosing limited number raster layers
                          # maybe should be radio buttons to encourage just one layer
                          # OR could allow multiple layers and use syncview
-                         # checkboxGroupInput("selected_raster", "Data to show and compare :",
-                         #                    choices = c('Malaria in children (Falciparum)',
-                         #                                'Insecticide Treated Net distribution',
-                         #                                'Travel time to nearest city'),
-                         #                    selected = 'Malaria in children (Falciparum)'),
+                         checkboxGroupInput("selected_raster", "Data to show and compare :",
+                                     choices = list('Malaria in children (Falciparum)' = 1,
+                                                    'Insecticide Treated Net distribution' = 2,
+                                                    'Travel time to nearest city' = 3), 
+                                     selected = 1),
                          
-                         radioButtons("selected_raster", "Data to show and compare :",
-                                      choices = list('Malaria in children (Falciparum)' = 1,
-                                                     'Insecticide Treated Net distribution' = 2,
-                                                     'Travel time to nearest city' = 3), 
-                                      selected = 3),
+                         helpText("First layer is shown in map, other layers included in 'Output'"),
+                         
+                         
+                         # radioButtons("selected_raster", "Data to show and compare :",
+                         #              choices = list('Malaria in children (Falciparum)' = 1,
+                         #                             'Insecticide Treated Net distribution' = 2,
+                         #                             'Travel time to nearest city' = 3), 
+                         #              selected = 3),
                          
                          
                          # dynamic district selection

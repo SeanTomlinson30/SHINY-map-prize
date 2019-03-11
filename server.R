@@ -172,29 +172,25 @@ function(input, output, session) {
     
     #m <- mapView(pfpr2_10_2015) + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
 
+    m <- mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')    
+    
     #just find the first selected raster
-    # raster_id <- switch(input$selected_raster[1],
-    #                     'Malaria in children (Falciparum)' = pfpr2_10_2015,
-    #                     'Insecticide Treated Net distribution' = itn_2015,
-    #                     'Travel time to nearest city' = time_to_city_2015 )
-    # m <- mapView(raster_id) + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
+    if (!is.null(input$selected_raster))
+    {
+      raster_id <- switch(input$selected_raster[1],
+                          '1' = m <- m + mapView(pfpr2_10_2015),
+                          '2' = m <- m + mapView(itn_2015),
+                          #changed breaks to show more detail at the values in malaria countries
+                          '3' = m <- m + mapview(time_to_city_2015, at=rev(c(0,200,400,800,1600,3200,6400,10000)), 
+                                                 col.regions=rev(viridisLite::inferno(n=7))) )
+    }
+          
     
-    
-    raster_id <- switch(input$selected_raster[1],
-                        '1' = m <- mapView(pfpr2_10_2015),
-                        '2' = m <- mapView(itn_2015),
-                        #changed breaks to show more detail at the values in malaria countries
-                        '3' = m <- mapview(time_to_city_2015, at=rev(c(0,200,400,800,1600,3200,6400,10000)), 
-                                           col.regions=rev(viridisLite::inferno(n=7))) )
-    
-    m <- m + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
-    
-        
     # set extent of map to the selected country 
     bbox <- as.vector(sf::st_bbox(sf_cntry))
     
     leaflet::fitBounds(m@map, bbox[1], bbox[2], bbox[3], bbox[4])
-
+    
     
   })  
     
