@@ -72,7 +72,13 @@ if(!require(sf)){
   library(sf)
 }
 
+# if(!require(devtools)){
+#   install.packages("devtools")
+#   library(devtools)
+# }
+
 if(!require(mapview)){
+  #devtools::install_github("r-spatial/mapview@develop")
   install.packages("mapview")
   library(mapview)
 }
