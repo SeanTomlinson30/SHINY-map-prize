@@ -97,8 +97,7 @@ lookup_processed <- read.csv('data/raster_stats_paths.csv', stringsAsFactors = F
 #load simplified admin polygons
 load('data/sf_afr_simp_fao.rda')
 
-# andy testing plotting a raster layer
-# this is for whole of Africa
+# raster layers for Africa downloaded, simplified and saved in download-rasters.r
 load('data/rasters/pfpr2_10_2015.rda')
 load('data/rasters/time_to_city_2015.rda')
 load('data/rasters/itn_2015.rda')
@@ -166,7 +165,6 @@ function(input, output, session) {
   })
 
   # testing replacing plot with mapview
-  #output$mapview_country_raster <- renderMapview({
   output$mapview_country_raster <- renderLeaflet({
     
     # get the country_id (e.g. CIV) for selected country name
@@ -178,9 +176,10 @@ function(input, output, session) {
     
     #m <- mapView(pfpr2_10_2015) + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
 
+    # add country boundaries to the plot first
     m <- mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')    
     
-    #just find the first selected raster
+    # add the first selected raster to the plot
     if (!is.null(input$selected_raster))
     {
       raster_id <- switch(input$selected_raster[1],
@@ -194,12 +193,12 @@ function(input, output, session) {
     
     # set extent of map to the selected country 
     bbox <- as.vector(sf::st_bbox(sf_cntry))
-    
     leaflet::fitBounds(m@map, bbox[1], bbox[2], bbox[3], bbox[4])
     
     
   })  
-    
+
+  # DEPRECATED now mapview_country_raster() used instead   
   # plot selected country, with selected districts overlayed
   output$select_country <- renderPlot({
     
