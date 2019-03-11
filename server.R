@@ -170,12 +170,9 @@ function(input, output, session) {
     # get the country_id (e.g. CIV) for selected country name
     country_id <- get_country_id(input$country)
     
-    
     # subset the country (includes districts)
     sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id & sf_afr_simp$ADMN_LEVEL==1,]
     
-    #m <- mapView(pfpr2_10_2015) + mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')
-
     # add country boundaries to the plot first
     m <- mapview(sf_cntry,color='grey',legend=FALSE,alpha.regions=0, zcol='name')    
     
@@ -183,10 +180,10 @@ function(input, output, session) {
     if (!is.null(input$selected_raster))
     {
       raster_id <- switch(input$selected_raster[1],
-                          '1' = m <- m + mapView(pfpr2_10_2015),
-                          '2' = m <- m + mapView(itn_2015),
+                          'Plasmodium falciparum Incidence' = m <- m + mapView(pfpr2_10_2015),
+                          'Insecticide treated bednet ITN coverage' = m <- m + mapView(itn_2015),
                           #changed breaks to show more detail at the values in malaria countries
-                          '3' = m <- m + mapview(time_to_city_2015, at=rev(c(0,200,400,800,1600,3200,6400,10000)), 
+                          'A global map of travel time to cities to assess inequalities in accessibility in 2015' = m <- m + mapview(time_to_city_2015, at=rev(c(0,200,400,800,1600,3200,6400,10000)), 
                                                  col.regions=rev(viridisLite::inferno(n=7))) )
     }
           
@@ -249,7 +246,7 @@ function(input, output, session) {
     }    
     
     # check for max four variable inputs   
-    else if (length(input$select_raster) == 0){
+    else if (length(input$selected_raster) == 0){
       
       shinyalert("Oops!", "Please select a raster", type = "warning")
 
@@ -271,11 +268,11 @@ function(input, output, session) {
       # subset selected districts
       sf_dist_select <- sf_cntry[sf_cntry$name %in% input$selected_dist,] 
       
-      for(i in 1:length(input$select_raster)){
+      for(i in 1:length(input$selected_raster)){
         
         # grab csv with the stats
         # 1. get a path to the stats csv
-        stats_i_idx <- which(lookup_processed$surface_name == input$select_raster[[i]])
+        stats_i_idx <- which(lookup_processed$surface_name == input$selected_raster[[i]])
         stats_i_path <- lookup_processed$stats_path[stats_i_idx]
         
         # 2. read in the csv 
@@ -292,10 +289,10 @@ function(input, output, session) {
         # reorder stats_i_sub
         stats_i_sub <- stats_i_sub[c(6, 2:5)]
         names(stats_i_sub) <- c('District',
-                                paste0(input$select_raster[[i]], " (mean)"),
-                                paste0(input$select_raster[[i]], " (max)"),
-                                paste0(input$select_raster[[i]], " (min)"),
-                                paste0(input$select_raster[[i]], " (sd)"))
+                                paste0(input$selected_raster[[i]], " (mean)"),
+                                paste0(input$selected_raster[[i]], " (max)"),
+                                paste0(input$selected_raster[[i]], " (min)"),
+                                paste0(input$selected_raster[[i]], " (sd)"))
         
         stats_list[[i]] <- stats_i_sub
         
