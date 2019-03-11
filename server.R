@@ -178,7 +178,7 @@ function(input, output, session) {
     
     # exit function if country and layer haven't changed
     # to reduce waiting time for plot changes
-    if ( !is.null(raster_id))
+    if ( !is.null(raster_id) & !is.null(raster_id_last))
     {
       if (country_id==country_id_last & raster_id==raster_id_last)
         return(lastmap)      
@@ -202,15 +202,15 @@ function(input, output, session) {
                                                  col.regions=rev(viridisLite::inferno(n=7))))
     }
           
-
+    
+    
     # record current ids so can check if they change above
     # set global vars, possibly bad practice
     country_id_last <<- country_id
     raster_id_last <<- raster_id    
-    
-        
+  
     # set extent of map to the selected country 
-    bbox <- as.vector(sf::st_bbox(sf_cntry))
+    bbox <- as.vector(sf::st_bbox(sf_cntry))      
     m <- leaflet::fitBounds(m@map, bbox[1], bbox[2], bbox[3], bbox[4])
     
     # save last map to a global var, possibly dodgy
