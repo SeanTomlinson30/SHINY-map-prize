@@ -1,3 +1,4 @@
+
 #### load required libraries ####
 if(!require(raster)){
   install.packages("raster")
@@ -203,4 +204,4 @@ navbarPage(
            tabsetPanel(type = 'tabs',
                        tabPanel(title='Help', includeMarkdown('help.md')),
                        tabPanel(title='About', includeMarkdown('about.md'))))
-                     )
+)

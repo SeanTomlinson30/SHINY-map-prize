@@ -6,7 +6,7 @@ raster_lookup <- read.csv('data/raster_paths.csv',
                           stringsAsFactors = FALSE)
 
 # read in a district raster
-districts <- raster('data/getRaster/admin1_raster.flt')
+districts <- raster('data/getRaster/FAO_admin_1.tif')
 districts_shp <- shapefile('data/districts/admin_1.shp')
 
 raster_lookup$stats_path <- NA
@@ -23,6 +23,9 @@ for(i in 1:length(raster_lookup$path)){
     # source raster
     raster_i <- raster(raster_path)
     
+    # if it's the same continent process:
+    if(!is.null(intersect(extent(raster_i), extent(districts)))){
+    
     # crop 'districts' by extent of raster_i
     districts_c <- crop(districts, raster_i)
     raster_i <- crop(raster_i, districts_c)
@@ -31,6 +34,10 @@ for(i in 1:length(raster_lookup$path)){
     if(ncol(raster_i) != ncol(districts_c)){
       
       raster_i <- resample(raster_i, districts_c, method = "bilinear")
+      
+    } else {
+      
+      extent(districts_c) <- extent(raster_i)
       
     }
     
@@ -57,7 +64,7 @@ for(i in 1:length(raster_lookup$path)){
     # add the filepath back into the raster_lookup dataframe
     raster_lookup$stats_path[i] <- paste0("data/processed/", file_name_i)
   }
-  
+  }
 }
 
 # write out the updated filepath document
