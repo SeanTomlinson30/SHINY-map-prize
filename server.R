@@ -108,6 +108,7 @@ get_country_id <- function(country_name) {
   
   country_name <- as.character(country_name)
   
+  # fix for encoding issue
   if(country_name == "Cote d'Ivoire"){
     
     country_id <- "CIV"
@@ -132,8 +133,6 @@ get_dist_names <- function(country_id) {
 
 # define the server logic
 function(input, output, session) {
-  # Simulate work being done for 1 second
-  Sys.sleep(1)
   
   # Hide the loading message when the rest of the server function has executed
   hide(id = "loading-content", anim = TRUE, animType = "fade")    
@@ -162,19 +161,6 @@ function(input, output, session) {
                        inline = TRUE)
   })
   
-  output$select_raster <- renderUI({
-    
-    # get the country_id (e.g. CIV) for selected country name
-    country_id <- get_country_id(input$country)
-    
-    c_lookup <- lookup[lookup$COUNTRY_ID == country_id,]
-    c_rasters <- colnames(c_lookup)[which(c_lookup==1)]
-    c_rasters = str_replace_all(c_rasters, '\\.', ' ') # Replace periods with spaces
-    
-    selectizeInput("select_raster", "Select rasters (max 4):", c_rasters, multiple = TRUE, options = list(maxItems = 4, placeholder='Select desired rasters by clicking or typing in this search box'))
-    
-  })
-
   # mapview interactive leaflet map plot
   output$mapview_country_raster <- renderLeaflet({
     
@@ -225,39 +211,6 @@ function(input, output, session) {
     lastmap <<- m
   })  
 
-  # DEPRECATED now mapview_country_raster() used instead   
-  # plot selected country, with selected districts overlayed
-  output$select_country <- renderPlot({
-    
-    # get the country_id (e.g. CIV) for selected country name
-    country_id <- get_country_id(input$country)
-    
-    # subset the country (includes districts)
-    sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id,]
-    
-    # andy testing plotting a raster layer
-    # DEPRECATED
-    # NOW I think this is better done with mapview_country_raster
-    # TODO determine which layer by the first selected one from the list
-    # show pfpr2-10 (or whichever other deemed most interesting) as default
-    raster::plot(pfpr2_10_2015,ext=extent(sf_cntry))
-    
-    plot(sf::st_geometry(sf_cntry),
-         #col = "#d9d9d9",
-         #main = input$country,
-         lty = 3, #dotted here so we can see which selected below, could be done by colour
-         add = TRUE)
-    
-    # subset selected districts
-    sf_dist_select <- sf_cntry[sf_cntry$name %in% input$selected_dist,] 
-    
-    plot(sf::st_geometry(sf_dist_select),
-         #col = "#0dc5c1",
-         #lty = 3,
-         add = TRUE)
-    
-  })
-  
   # observeEvent for "processStats"
   observeEvent(input$processStats, {
     
@@ -266,8 +219,8 @@ function(input, output, session) {
     })
 
     # check for district selection inputs   
-
     show("download")
+    
     # check for max four inputs   
     if(length(input$selected_dist) < 2){
       
