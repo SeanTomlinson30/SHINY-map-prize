@@ -178,9 +178,8 @@ function(input, output, session) {
     
     # exit function if country and layer haven't changed
     # to reduce waiting time for plot changes
-    if ( !is.null(raster_id) & !is.null(raster_id_last))
-    {
-      if (country_id==country_id_last & raster_id==raster_id_last)
+    if(!is.null(raster_id) & !is.null(raster_id_last)){
+      if(country_id==country_id_last & raster_id==raster_id_last)
         return(lastmap)      
     }
 
@@ -188,21 +187,23 @@ function(input, output, session) {
     sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id & sf_afr_simp$ADMN_LEVEL==1,]
     
     # add country boundaries to the plot first
-    m <- mapview(sf_cntry,color='darkgrey',lwd=2,legend=FALSE,alpha.regions=0, zcol='name')    
+    m <- mapview(sf_cntry,
+                 color = 'darkgrey',
+                 lwd = 2,
+                 legend = FALSE,
+                 alpha.regions = 0, 
+                 zcol = 'name')    
     
     # add the first selected raster to the plot
-    if (!is.null(input$selected_raster))
-    {
+    if(!is.null(input$selected_raster)){
 
       switch(input$selected_raster[1],
-                          'Plasmodium falciparum Incidence' = m <- m + mapView(pfpr2_10_2015),
-                          'Insecticide treated bednet ITN coverage' = m <- m + mapView(itn_2015),
-                          #changed breaks to show more detail at the values in malaria countries
-                          'A global map of travel time to cities to assess inequalities in accessibility in 2015' = m <- m + mapview(time_to_city_2015, at=rev(c(0,200,400,800,1600,3200,6400,10000)), 
-                                                 col.regions=rev(viridisLite::inferno(n=7))))
+            "Plasmodium falciparum Incidence" = m <- m + mapView(pfpr2_10_2015),
+            "Insecticide treated bednet  ITN  coverage" = m <- m + mapView(itn_2015),
+            # changed breaks to show more detail at the values in malaria countries
+            "A global map of travel time to cities to assess inequalities in accessibility in 2015" = m <- m + mapview(time_to_city_2015, at=rev(c(0,200,400,800,1600,3200,6400,10000)), 
+                                                 col.regions = rev(viridisLite::inferno(n=7))))
     }
-          
-    
     
     # record current ids so can check if they change above
     # set global vars, possibly bad practice

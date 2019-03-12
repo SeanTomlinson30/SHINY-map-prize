@@ -146,20 +146,18 @@ navbarPage(
                          # maybe should be radio buttons to encourage just one layer
                          # OR could allow multiple layers and use syncview
                          checkboxGroupInput("selected_raster", "Data to show and compare :",
-                                     choices = list('Malaria in children (Falciparum)' = "Plasmodium falciparum Incidence",
-                                                    'Insecticide Treated Net distribution' = "Insecticide treated bednet ITN coverage",
-                                                    'Travel time to nearest city' = "A global map of travel time to cities to assess inequalities in accessibility in 2015"), 
+                                     choices = list("Malaria in children (Falciparum)" = "Plasmodium falciparum Incidence",
+                                                    "Insecticide Treated Net distribution" = "Insecticide treated bednet  ITN  coverage",
+                                                    "Travel time to nearest city" = "A global map of travel time to cities to assess inequalities in accessibility in 2015"), 
                                      selected = "Plasmodium falciparum Incidence"),
                          
                          helpText("First layer is shown in map, other layers included in 'Output'"),
-                         
                          
                          # radioButtons("selected_raster", "Data to show and compare :",
                          #              choices = list('Malaria in children (Falciparum)' = 1,
                          #                             'Insecticide Treated Net distribution' = 2,
                          #                             'Travel time to nearest city' = 3), 
                          #              selected = 3),
-                         
                          
                          # dynamic district selection
                          uiOutput("select_dist"),
