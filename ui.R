@@ -67,7 +67,13 @@ if(!require(leaflet)){
 
 # generate a list of countries for which MAP data exists
 load('data/sf_afr_simp_fao.rda')
-country_names <- sf_afr_simp$name[sf_afr_simp$ADMN_LEVEL==0]
+sf_afr_simp <- sf_afr_simp[sf_afr_simp$COUNTRY_ID != "XXX",]
+sf_afr_simp <- sf_afr_simp[sf_afr_simp$COUNTRY_ID != "MYT",]	sf_afr_simp <- sf_afr_simp[sf_afr_simp$COUNTRY_ID != "MYT",]
+sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "16840"] <- "Goh-Djiboua"
+sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "818"] <- "Extreme-Nord"
+country_names <- sf_afr_simp$name[sf_afr_simp$ADMN_LEVEL==0]	country_names <- sf_afr_simp$name[sf_afr_simp$ADMN_LEVEL==0]
+country_names <- country_names[country_names != "Hala'ib triangle"]	country_names <- country_names[country_names != "Hala'ib triangle"]
+country_names <- country_names[country_names != "Ma'tan al-Sarra"]	country_names <- country_names[country_names != "Ma'tan al-Sarra"]
 
 # define a UI use a fluid bootstrap layout
 appCSS <- "

@@ -1,7 +1,3 @@
-
-# load required libraries
-#pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyBS, stringr)
-
 #### load required libraries ####
 if(!require(raster)){
   install.packages("raster")
@@ -73,11 +69,6 @@ if(!require(sf)){
   library(sf)
 }
 
-# if(!require(devtools)){
-#   install.packages("devtools")
-#   library(devtools)
-# }
-
 if(!require(mapview)){
   #devtools::install_github("r-spatial/mapview@develop")
   install.packages("mapview")
@@ -95,8 +86,11 @@ lookup <- read.csv('data/combined_lookup.csv', sep = ',', check.names = FALSE)
 # read in the processed data lookup table
 lookup_processed <- read.csv('data/raster_stats_paths.csv', stringsAsFactors = FALSE)
 
-#load simplified admin polygons
+# load simplified admin polygons
 load('data/sf_afr_simp_fao.rda')
+sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "16840"] <- "Goh-Djiboua"
+sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "818"] <- "Extreme-Nord"
+sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "66"] <- "Cote d'Ivoire"
 
 # raster layers for Africa downloaded, simplified and saved in download-rasters.r
 load('data/rasters/pfpr2_10_2015.rda')
