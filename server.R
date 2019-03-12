@@ -190,11 +190,14 @@ function(input, output, session) {
     if(!is.null(input$selected_raster)){
 
       switch(input$selected_raster[1],
-            "Plasmodium falciparum Incidence" = m <- m + mapView(pfpr2_10_2015),
-            "Insecticide treated bednet  ITN  coverage" = m <- m + mapView(itn_2015),
+            "Plasmodium falciparum Incidence" = m <- m + mapView(pfpr2_10_2015,
+                                                                 col.regions = colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))),
+            "Insecticide treated bednet  ITN  coverage" = m <- m + mapView(itn_2015,
+                                                                           col.regions = colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))),
             # changed breaks to show more detail at the values in malaria countries
-            "A global map of travel time to cities to assess inequalities in accessibility in 2015" = m <- m + mapview(time_to_city_2015, at=rev(c(0,200,400,800,1600,3200,6400,10000)), 
-                                                 col.regions = rev(viridisLite::inferno(n=7))))
+            "A global map of travel time to cities to assess inequalities in accessibility in 2015" = m <- m + mapview(time_to_city_2015, 
+                                                                                                                       col.regions = colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu")),
+                                                                                                                       at = rev(c(0,60,120,180,240,400,600,800,1200,1600,2400,3200,6400,10000))))
     }
     
     # record current ids so can check if they change above
