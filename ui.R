@@ -74,6 +74,10 @@ sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "818"] <- "Extreme-Nord"
 country_names <- sf_afr_simp$name[sf_afr_simp$ADMN_LEVEL==0]	
 country_names <- country_names[country_names != "Hala'ib triangle"]	
 country_names <- country_names[country_names != "Ma'tan al-Sarra"]
+country_names <- country_names[country_names != "Ilemi triangle"]
+country_names <- country_names[country_names != "Abyei"]
+country_names <- sort(country_names)
+country_names[7] <- "Cote d'Ivoire
 
 # define a UI use a fluid bootstrap layout
 appCSS <- "
