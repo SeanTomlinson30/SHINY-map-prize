@@ -1,3 +1,4 @@
+
 # load required libraries
 #pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyBS, stringr)
 
@@ -72,6 +73,22 @@ if(!require(sf)){
   library(sf)
 }
 
+# if(!require(devtools)){
+#   install.packages("devtools")
+#   library(devtools)
+# }
+
+if(!require(mapview)){
+  #devtools::install_github("r-spatial/mapview@develop")
+  install.packages("mapview")
+  library(mapview)
+}
+
+if(!require(leaflet)){
+  install.packages("leaflet")
+  library(leaflet)
+}
+
 # read in MAP availability lookup table
 lookup <- read.csv('data/combined_lookup.csv', sep = ',', check.names = FALSE)
 
@@ -80,19 +97,22 @@ lookup_processed <- read.csv('data/raster_stats_paths.csv', stringsAsFactors = F
 
 #load simplified admin polygons
 load('data/sf_afr_simp_fao.rda')
-sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "16840"] <- "Goh-Djiboua"
-sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "818"] <- "Extreme-Nord"
-sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "66"] <- "Cote d'Ivoire"
+
+# raster layers for Africa downloaded, simplified and saved in download-rasters.r
+load('data/rasters/pfpr2_10_2015.rda')
+load('data/rasters/time_to_city_2015.rda')
+load('data/rasters/itn_2015.rda')
+
+# to allow checking for map changes
+country_id_last <- FALSE
+raster_id_last <- FALSE
+lastmap <- FALSE
 
 # get the country_id (e.g. CIV) for selected country name
 get_country_id <- function(country_name) {
   
   country_name <- as.character(country_name)
-  if(country_name == "Cote d'Ivoire"){
-    country_id <- "CIV"
-  } else {
   country_id <- sf_afr_simp$COUNTRY_ID[sf_afr_simp$name==country_name]
-  }
   country_id <- as.character(country_id)
   
 }
@@ -149,7 +169,58 @@ function(input, output, session) {
     selectizeInput("select_raster", "Select rasters (max 4):", c_rasters, multiple = TRUE, options = list(maxItems = 4, placeholder='Select desired rasters by clicking or typing in this search box'))
     
   })
+
+  # mapview interactive leaflet map plot
+  output$mapview_country_raster <- renderLeaflet({
+    
+    # get the country_id (e.g. CIV) for selected country name
+    country_id <- get_country_id(input$country)
+    raster_id <- input$selected_raster[1]
+    
+    # exit function if country and layer haven't changed
+    # to reduce waiting time for plot changes
+    if(!is.null(raster_id) & !is.null(raster_id_last)){
+      if(country_id==country_id_last & raster_id==raster_id_last)
+        return(lastmap)      
+    }
+
+    # subset the country (includes districts)
+    sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id & sf_afr_simp$ADMN_LEVEL==1,]
+    
+    # add country boundaries to the plot first
+    m <- mapview(sf_cntry,
+                 color = 'darkgrey',
+                 lwd = 2,
+                 legend = FALSE,
+                 alpha.regions = 0, 
+                 zcol = 'name')    
+    
+    # add the first selected raster to the plot
+    if(!is.null(input$selected_raster)){
+
+      switch(input$selected_raster[1],
+            "Plasmodium falciparum Incidence" = m <- m + mapView(pfpr2_10_2015),
+            "Insecticide treated bednet  ITN  coverage" = m <- m + mapView(itn_2015),
+            # changed breaks to show more detail at the values in malaria countries
+            "A global map of travel time to cities to assess inequalities in accessibility in 2015" = m <- m + mapview(time_to_city_2015, at=rev(c(0,200,400,800,1600,3200,6400,10000)), 
+                                                 col.regions = rev(viridisLite::inferno(n=7))))
+    }
+    
+    # record current ids so can check if they change above
+    # set global vars, possibly bad practice
+    country_id_last <<- country_id
+    raster_id_last <<- raster_id    
   
+    # set extent of map to the selected country 
+    bbox <- as.vector(sf::st_bbox(sf_cntry))      
+    m <- leaflet::fitBounds(m@map, bbox[1], bbox[2], bbox[3], bbox[4])
+    
+    # save last map to a global var, possibly dodgy
+    # to allow avoiding changing map if it hasn't changed
+    lastmap <<- m
+  })  
+
+  # DEPRECATED now mapview_country_raster() used instead   
   # plot selected country, with selected districts overlayed
   output$select_country <- renderPlot({
     
@@ -159,16 +230,25 @@ function(input, output, session) {
     # subset the country (includes districts)
     sf_cntry <- sf_afr_simp[sf_afr_simp$COUNTRY_ID==country_id,]
     
+    # andy testing plotting a raster layer
+    # DEPRECATED
+    # NOW I think this is better done with mapview_country_raster
+    # TODO determine which layer by the first selected one from the list
+    # show pfpr2-10 (or whichever other deemed most interesting) as default
+    raster::plot(pfpr2_10_2015,ext=extent(sf_cntry))
+    
     plot(sf::st_geometry(sf_cntry),
-         col = "#d9d9d9",
-         main = input$country)
+         #col = "#d9d9d9",
+         #main = input$country,
+         lty = 3, #dotted here so we can see which selected below, could be done by colour
+         add = TRUE)
     
     # subset selected districts
     sf_dist_select <- sf_cntry[sf_cntry$name %in% input$selected_dist,] 
     
     plot(sf::st_geometry(sf_dist_select),
-         col = "#0dc5c1",
-         lty = 3,
+         #col = "#0dc5c1",
+         #lty = 3,
          add = TRUE)
     
   })
@@ -191,7 +271,7 @@ function(input, output, session) {
     }    
     
     # check for max four variable inputs   
-    else if (length(input$select_raster) == 0){
+    else if (length(input$selected_raster) == 0){
       
       shinyalert("Oops!", "Please select a raster", type = "warning")
 
@@ -213,11 +293,11 @@ function(input, output, session) {
       # subset selected districts
       sf_dist_select <- sf_cntry[sf_cntry$name %in% input$selected_dist,] 
       
-      for(i in 1:length(input$select_raster)){
+      for(i in 1:length(input$selected_raster)){
         
         # grab csv with the stats
         # 1. get a path to the stats csv
-        stats_i_idx <- which(lookup_processed$surface_name == input$select_raster[[i]])
+        stats_i_idx <- which(lookup_processed$surface_name == input$selected_raster[[i]])
         stats_i_path <- lookup_processed$stats_path[stats_i_idx]
         
         # 2. read in the csv 
@@ -234,10 +314,10 @@ function(input, output, session) {
         # reorder stats_i_sub
         stats_i_sub <- stats_i_sub[c(6, 2:5)]
         names(stats_i_sub) <- c('District',
-                                paste0(input$select_raster[[i]], " (mean)"),
-                                paste0(input$select_raster[[i]], " (max)"),
-                                paste0(input$select_raster[[i]], " (min)"),
-                                paste0(input$select_raster[[i]], " (sd)"))
+                                paste0(input$selected_raster[[i]], " (mean)"),
+                                paste0(input$selected_raster[[i]], " (max)"),
+                                paste0(input$selected_raster[[i]], " (min)"),
+                                paste0(input$selected_raster[[i]], " (sd)"))
         
         stats_list[[i]] <- stats_i_sub
         
@@ -292,4 +372,3 @@ function(input, output, session) {
         
       contentType = "text/html")
 }
-
