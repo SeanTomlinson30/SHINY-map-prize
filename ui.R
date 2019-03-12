@@ -205,4 +205,3 @@ navbarPage(
            tabsetPanel(type = 'tabs',
                        tabPanel(title='Help', includeMarkdown('help.md')),
                        tabPanel(title='About', includeMarkdown('about.md'))))
-)

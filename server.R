@@ -1,4 +1,5 @@
 
+
 # load required libraries
 #pacman::p_load(raster, shiny, RColorBrewer, malariaAtlas, shinydashboard, shinyBS, stringr)
 
@@ -465,3 +466,4 @@ function(input, output, session) {
         
       contentType = "text/html")
 }
+
