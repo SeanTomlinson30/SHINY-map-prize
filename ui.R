@@ -77,7 +77,7 @@ country_names <- country_names[country_names != "Ma'tan al-Sarra"]
 country_names <- country_names[country_names != "Ilemi triangle"]
 country_names <- country_names[country_names != "Abyei"]
 country_names <- sort(country_names)
-country_names[7] <- "Cote d'Ivoire
+country_names[7] <- "Cote d'Ivoire"
 
 # define a UI use a fluid bootstrap layout
 appCSS <- "
