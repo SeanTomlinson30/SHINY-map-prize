@@ -353,7 +353,7 @@ kable(table_four,
 if(length(stats_list) == 1){
   
   # first create an index
-  dist_index <- which(dist_select$name == table_one$District)
+  dist_index <- match(dist_select$name, table_one$District)
   dist_select_v1 <- dist_select
   dist_select_v1$mean <- table_one$Mean[dist_index]
   
@@ -394,7 +394,7 @@ if(length(stats_list) == 1){
 
 if(length(stats_list) == 2){
   
-  dist_index <- which(dist_select$name == table_one$District)
+  dist_index <- match(dist_select$name, table_one$District)
   
   dist_select_v1 <- dist_select
   dist_select_v2 <- dist_select
@@ -473,7 +473,7 @@ if(length(stats_list) == 2){
 
 if(length(stats_list) == 3){
   
-  dist_index <- which(dist_select$name == table_one$District)
+  dist_index <- match(dist_select$name, table_one$District)
   
   dist_select_v1 <- dist_select
   dist_select_v2 <- dist_select
@@ -584,7 +584,7 @@ if(length(stats_list) == 3){
 
 if(length(stats_list) == 4){
   
-  dist_index <- which(dist_select$name == table_one$District)
+  dist_index <- match(dist_select$name, table_one$District)
   
   dist_select_v1 <- dist_select
   dist_select_v2 <- dist_select
