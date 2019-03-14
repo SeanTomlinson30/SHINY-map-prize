@@ -288,12 +288,14 @@ function(input, output, session) {
         # means
         stats_layer_means <- cbind(stats_layer_means, stats_i_sub[2])   
         # ranks
-        # reverse priority for malaria layers (high malaria=high priority=low rank)
+        # reverse priority for malaria & travel layers (high malaria or travel=high priority=low rank)
         #BEWARE we should create column in lookup_processed specifying whether a high value = high priority
-        if(length(grep("Plasmodium",input$selected_raster[[i]]))>0)
-          priority <- rank(-stats_i_sub[2])
-        else
+        #if(length(grep("Plasmodium",input$selected_raster[[i]]))>0)
+        #ITN is only layer where high=good and priority doesn't need reversing
+        if(length(grep("ITN",input$selected_raster[[i]]))>0)
           priority <- rank(stats_i_sub[2])
+        else
+          priority <- rank(-stats_i_sub[2])
 
         
         stats_layer_means <- cbind(stats_layer_means, priority)  
