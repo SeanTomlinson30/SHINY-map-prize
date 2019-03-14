@@ -151,10 +151,11 @@ navbarPage(
                          
                          # choose raster layers
                          checkboxGroupInput("selected_raster", "Data to show and compare :",
-                                            choices = list("Malaria in children (Falciparum)" = "Plasmodium falciparum Incidence",
+                                            choices = list("Malaria in children (Falciparum)" = "Plasmodium falciparum PR2 10",
+                                                           #"Plasmodium falciparum Incidence",
                                                            "Insecticide Treated Net distribution" = "Insecticide treated bednet  ITN  coverage",
                                                            "Travel time to nearest city" = "A global map of travel time to cities to assess inequalities in accessibility in 2015"), 
-                                            selected = "Plasmodium falciparum Incidence"),
+                                            selected = "Plasmodium falciparum PR2 10"),
                          
                          helpText("First layer is shown in map, other layers included in 'Output'"),
                          
