@@ -295,9 +295,7 @@ function(input, output, session) {
         else
           priority <- rank(stats_i_sub[2])
 
-          
         
-        #names(ranks) <- "(rank)" #this failed to get into table but ranks is cool
         stats_layer_means <- cbind(stats_layer_means, priority)  
         
         
@@ -310,8 +308,10 @@ function(input, output, session) {
     
     #round data same as in reports, not first column
     stats_layer_means[-1] <- round(stats_layer_means[-1],2)
+    
     # replace negative values as NA
-    stats_layer_means[stats_layer_means[] < 0] <- NA
+    # try keeping in the negative values it exposes issues with the data that need to be addressed
+    #stats_layer_means[stats_layer_means[] < 0] <- NA
     
     DT::datatable(stats_layer_means, 
                   rownames=FALSE, 
