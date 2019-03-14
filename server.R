@@ -196,7 +196,8 @@ function(input, output, session) {
     if(!is.null(input$selected_raster)){
 
       switch(input$selected_raster[1],
-            #"Plasmodium falciparum Incidence"
+            "Plasmodium falciparum Incidence" =  m <- m + mapView(pf_incidence_2015,
+                                                                  col.regions = colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))),
             "Plasmodium falciparum PR2 10" = m <- m + mapView(pfpr2_10_2015,
                                                               col.regions = colorRampPalette(brewer.pal(brewer.pal.info["YlGnBu",1], "YlGnBu"))),
             "Insecticide treated bednet  ITN  coverage" = m <- m + mapView(itn_2015,
