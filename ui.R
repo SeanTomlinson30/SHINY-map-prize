@@ -168,7 +168,7 @@ navbarPage(
                                    placement = "right", trigger = "hover", options = list(container = "body")),
                          
                          # button to generate stats
-                         actionButton(inputId = "processStats", label = "Generate statistics", class='butt'),
+                         actionButton(inputId = "processStats", label = "Generate Report", class='butt'),
                          tags$head(tags$style(".butt{margin-bottom:5px;}")),
                          
                          # hover-over tooltip
@@ -187,7 +187,7 @@ navbarPage(
                                      tabPanel(value ='tab1', title = "Map", div(style = 'overflow-y:scroll;height:750px;',leafletOutput("mapview_country_raster", height = '750px', width = '750px'))),
                                      #tabPanel(value ='tab1', title = "Map", leafletOutput("mapview_country_raster")),
                                      tabPanel(value ='tab3', title = "Table", DT::dataTableOutput("activetable")),
-                                     tabPanel(value ='tab2', title = "Output", div(style = 'overflow-y:scroll;height:750px;',htmlOutput("report"))))
+                                     tabPanel(value ='tab2', title = "Output Report", div(style = 'overflow-y:scroll;height:750px;',htmlOutput("report"))))
                        ) # end of main panel
                      ) # end of fluid page # end of sidebar layout
                          ) 
