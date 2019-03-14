@@ -7,7 +7,6 @@ raster_lookup <- read.csv('data/raster_paths.csv',
 
 # read in a district raster
 districts <- raster('data/getRaster/FAO_admin_1.tif')
-districts_shp <- shapefile('data/districts/admin_1.shp')
 
 raster_lookup$stats_path <- NA
 
@@ -16,12 +15,14 @@ for(i in 1:length(raster_lookup$path)){
   
   # get the path for the raster
   raster_path <- raster_lookup$path[[i]]
-  
-  # if the path isn't blank, read in the raster and generate zonal statistics
+
+    # if the path isn't blank, read in the raster and generate zonal statistics
   if(raster_path != ""){
     
     # source raster
     raster_i <- raster(raster_path)
+    raster_i[raster_i == -999] <- NA
+    raster_i[raster_i == -9999] <- NA
     
     # if it's the same continent process:
     if(!is.null(intersect(extent(raster_i), extent(districts)))){
@@ -42,10 +43,10 @@ for(i in 1:length(raster_lookup$path)){
     }
     
     # generate statistics
-    raster_i_mean <- zonal(raster_i, districts_c, fun = 'mean')
-    raster_i_min <- zonal(raster_i, districts_c, fun = 'min')
-    raster_i_max <- zonal(raster_i, districts_c, fun = 'max')
-    raster_i_sd <- zonal(raster_i, districts_c, fun = "sd")
+    raster_i_mean <- zonal(raster_i, districts_c, fun = 'mean', na.rm = TRUE)
+    raster_i_min <- zonal(raster_i, districts_c, fun = 'min', na.rm = TRUE)
+    raster_i_max <- zonal(raster_i, districts_c, fun = 'max', na.rm = TRUE)
+    raster_i_sd <- zonal(raster_i, districts_c, fun = "sd", na.rm = TRUE)
     
     # merge into one dataframe
     raster_i_stats <- merge(raster_i_mean, raster_i_max, by = "zone")
