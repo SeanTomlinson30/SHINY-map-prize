@@ -10,21 +10,23 @@ The application allows users to download a formatted **R Markdown** file for the
 
 ###  Structure
 
-The 'Application' page is comprised of two main sections:
+The 'Application' page is comprised of four main sections:
 
-- 'Inputs' where the user select a single country, any number of districts within that country and up to four surfaces.
-- 'Outputs' Where the rendered results appear under three tabs on the right-hand side of the application page.
+- Side panel. The side panel (left) details where the user select input parameters, such as the country of interest, selected districts within that country and up to four surfaces as produced by MAP.
+- 'Map'. This tab visualises surfaces as provided by MAP, within an interactive plot which details district names and boundaries as provided by the [FAO](http://www.fao.org/home/en/).
+- 'Table'. This tab contains an interactive table ranking selected districts based off of indicator variables, as selected on the side panel.
+- 'Output Report'. This tab contains a rendered report detailing summary statistics and plots as informed by user-selected input parameters.
 
-**Generate Statistic Button**
+**Generate Report Button**
 
-When the generate statistics button is clicked, the application retrives summary statistics and raster layer visualisations for the selected input and renders them in the three output tabs on the right-hand side of the application
+When the "Generate Report" button is clicked, the application retrives summary statistics and raster layer visualisations for the selected input and renders them in the third output tab on the right-hand side of the application ("Output Report").
 
 The application generates district-level summary statistics for a range of malaria indicators/malariometric data, as available by MAP. The aggregated district-level statistics enable the interpretation of disaggregated, high-spatial resolution trends (5 km x 5 km), at the administrative level.
 
-The application allows user interaction and creates interactive visualizations such as maps displaying mean values for each district selected by the user.
+The application allows user interaction and creates interactive visualizations such as maps displaying mean values for each district selected by the user, and interactive tables ranking values.
 
 **Download Report Button**
-TBC
+To download the report generated and displayed in the "Output Report" tab, users can press this button to select a folder within their computer in which to download the report
 
 ### Dependencies
 
