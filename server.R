@@ -101,6 +101,7 @@ sf_afr_simp$name[sf_afr_simp$GAUL_CODE == "66"] <- "Cote d'Ivoire"
 
 # raster layers for Africa downloaded, simplified and saved in download-rasters.r
 load('data/rasters/pfpr2_10_2015.rda')
+load('data/rasters/pf_incidence_2015.rda')
 load('data/rasters/time_to_city_2015.rda')
 load('data/rasters/itn_2015.rda')
 
