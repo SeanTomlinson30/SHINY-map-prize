@@ -264,7 +264,7 @@ function(input, output, session) {
         stats_i_sub <- stats_i[stats_i$zone %in% sf_dist_select$GAUL_CODE, ]
         
         # add a variable which is the district name
-        index <- match(sf_dist_select$GAUL_CODE, stats_i_sub$zone)
+        index <- match(stats_i_sub$zone, sf_dist_select$GAUL_CODE)
         stats_i_sub$District <- sf_dist_select$name[index]
         sf_dist_select$mean <- stats_i$mean[index]
         
@@ -364,7 +364,7 @@ function(input, output, session) {
         stats_i_sub <- stats_i[stats_i$zone %in% sf_dist_select$GAUL_CODE, ]
         
         # add a variable which is the district name
-        index <- match(sf_dist_select$GAUL_CODE, stats_i_sub$zone)
+        index <- match(stats_i_sub$zone, sf_dist_select$GAUL_CODE)
         stats_i_sub$District <- sf_dist_select$name[index]
         sf_dist_select$mean <- stats_i$mean[index]
         
