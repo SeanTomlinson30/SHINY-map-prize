@@ -80,7 +80,6 @@ country_names <- country_names[country_names != "Cape Verde"]
 country_names <- country_names[country_names != "Djibouti"]
 country_names <- country_names[country_names != "Gambia"]
 country_names <- country_names[country_names != "Seychelles"]
-country_names <- country_names[country_names != "South Africa"]
 country_names <- sort(country_names)
 country_names[7] <- "Cote d'Ivoire"
 
