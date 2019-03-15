@@ -76,6 +76,10 @@ country_names <- country_names[country_names != "Hala'ib triangle"]
 country_names <- country_names[country_names != "Ma'tan al-Sarra"]
 country_names <- country_names[country_names != "Ilemi triangle"]
 country_names <- country_names[country_names != "Abyei"]
+country_names <- country_names[country_names != "Cape Verde"]
+country_names <- country_names[country_names != "Djibouti"]
+country_names <- country_names[country_names != "Gambia"]
+country_names <- country_names[country_names != "Seychelles"]
 country_names <- sort(country_names)
 country_names[7] <- "Cote d'Ivoire"
 
