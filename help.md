@@ -12,10 +12,10 @@ The application allows users to download a formatted **R Markdown** file for the
 
 The 'Application' page is comprised of four main sections:
 
-- Side panel. The side panel (left) details where the user select input parameters, such as the country of interest, selected districts within that country and up to four surfaces as produced by MAP.
+- Side panel. The side panel (left) details where the user may select input parameters, such as the country of interest, selected districts within that country and up to four surfaces to compare as produced by MAP.
 - 'Map'. This tab visualises surfaces as provided by MAP, within an interactive plot which details district names and boundaries as provided by the [FAO](http://www.fao.org/home/en/).
-- 'Table'. This tab contains an interactive table ranking selected districts based off of indicator variables, as selected on the side panel.
-- 'Output Report'. This tab contains a rendered report detailing summary statistics and plots as informed by user-selected input parameters.
+- 'Table'. This tab contains an interactive table ranking selected districts based off of select indicator variables, as selected on the side panel.
+- 'Output Report'. This tab contains a rendered report detailing summary statistics and plots as informed by user-selected input parameters. This tab is initiated by a button press (see "Generate Report Button")
 
 **Generate Report Button**
 
