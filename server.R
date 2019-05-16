@@ -187,7 +187,7 @@ function(input, output, session) {
     
     # add country boundaries to the plot first
     m <- mapview(sf_cntry,
-                 color = 'darkgrey',
+                 color = 'black',
                  lwd = 2,
                  legend = FALSE,
                  alpha.regions = 0, 
