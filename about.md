@@ -1,6 +1,6 @@
 ### Developers
 
-**MAP-district-comparison** has been developed through equal contribution by:
+MaDD has been developed through equal contribution by:
 
 |     |
 | --- |

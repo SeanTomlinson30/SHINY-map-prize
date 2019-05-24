@@ -149,7 +149,7 @@ function(input, output, session) {
   
   output$tab <- renderUI({
     
-    tagList("MAP-district-comparison is a shiny app that allows easy interaction with summary statistics and plots for data provided by the Malaria Atlas Project:", url)
+    tagList("MaDD is a shiny app that allows easy interaction with summary statistics and plots for data provided by the Malaria Atlas Project:", url)
   
     })
   
