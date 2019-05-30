@@ -98,7 +98,7 @@ appCSS <- "
 "
 
 navbarPage(
-  "MAP-district-comparison",
+  "MaDD - Malaria Data by District",
   tabPanel("Application",
            fluidPage(theme = shinytheme("flatly"),
                      useShinyalert(),

@@ -123,7 +123,7 @@ caption {
 
 ```
 
-## MAP-district-comparison Output Report
+## MaDD - Malaria Data by District Output Report
 #### This document contains summary statistics for `r country_select$name`. 
 
 #### Summary statistics for each selected variable appear below, and were generated using the "zonal" function within the "raster" R package.

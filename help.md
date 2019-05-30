@@ -1,6 +1,6 @@
 ###  Purpose
 
-**MAP-district-comparison** is a **Shiny** web application that allows users to generate summary statistics and visualise surfaces from the **Malaria Atlas Project** without the need to interact with the R coding language. The application generates district-level summary statistics for a range of malaria indicators/malariometric data, as available by MAP. The aggregated district-level statistics enable the interpretation of disaggregated, high-spatial resolution trends (5 km x 5 km), at the administrative level.
+**MaDD** is a **Shiny** web application that allows users to generate summary statistics and visualise surfaces from the **Malaria Atlas Project** without the need to interact with the R coding language. The application generates district-level summary statistics for a range of malaria indicators/malariometric data, as available by MAP. The aggregated district-level statistics enable the interpretation of disaggregated, high-spatial resolution trends (5 km x 5 km), at the administrative level.
 
 The application allows user interaction and creates interactive visualizations such as maps displaying mean values for each district selected by the user, and interactive tables ranking values. Users may select one country to analyse, all available districts within that country and up to four rasters for summary statistics generation and surface visualisation.
 
@@ -25,7 +25,7 @@ To download the report generated and displayed in the "Output Report" tab, users
 ### Dependencies
 
 
-**MAP-district-comparison** has been developed using **R** and **Shiny** and is dependent on the following software and **R** packages:
+**MaDD** has been developed using **R** and **Shiny** and is dependent on the following software and **R** packages:
 
 
 
